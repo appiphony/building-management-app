@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Employees__c</fullName>
+    <externalId>false</externalId>
+    <label>Total # of Employees</label>
+    <summarizedField>Floor__c.Employees__c</summarizedField>
+    <summaryForeignKey>Floor__c.Building__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

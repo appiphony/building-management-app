@@ -10,3 +10,8 @@ package.xml
 
 # LWC Jest
 **/__tests__/**
+
+force-app/main/default/profiles/*
+!force-app/main/default/profiles/Admin*
+
+**appMenus

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Building__c</fullName>
+    <fullName>Floor__c</fullName>
     <externalId>false</externalId>
-    <label>Building</label>
-    <referenceTo>Building__c</referenceTo>
-    <relationshipLabel>Floors</relationshipLabel>
-    <relationshipName>Floors</relationshipName>
+    <label>Floor</label>
+    <referenceTo>Floor__c</referenceTo>
+    <relationshipLabel>Employees</relationshipLabel>
+    <relationshipName>Employees</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>true</reparentableMasterDetail>
     <trackTrending>false</trackTrending>

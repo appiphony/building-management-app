@@ -4,8 +4,8 @@
     <externalId>false</externalId>
     <label>Floor</label>
     <referenceTo>Floor__c</referenceTo>
-    <relationshipLabel>Cleaning Schedules</relationshipLabel>
-    <relationshipName>Cleaning_Schedules</relationshipName>
+    <relationshipLabel>Cleanings</relationshipLabel>
+    <relationshipName>Cleanings</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>
     <trackTrending>false</trackTrending>

@@ -153,12 +153,13 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
-    <label>Cleaning Schedule</label>
+    <label>Employee</label>
     <nameField>
-        <label>Cleaning Schedule Name</label>
-        <type>Text</type>
+        <displayFormat>E-{00000}</displayFormat>
+        <label>Employee Name</label>
+        <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Cleaning Schedules</pluralLabel>
+    <pluralLabel>Employees</pluralLabel>
     <searchLayouts/>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>

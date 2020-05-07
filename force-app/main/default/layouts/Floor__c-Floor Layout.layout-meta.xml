@@ -82,10 +82,15 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Cleaning_Time__c</fields>
+        <fields>CREATEDBY_USER</fields>
         <relatedList>Cleaning__c.Floor__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>First_Name__c</fields>
+        <fields>Last_Name__c</fields>
+        <fields>Status__c</fields>
         <relatedList>Employee__c.Floor__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

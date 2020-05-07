@@ -149,7 +149,7 @@
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>false</enableReports>
-    <enableSearch>false</enableSearch>
+    <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
@@ -159,7 +159,13 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Floors</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Building__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Total_Employees__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Last_Cleaning_Time__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Cleaning_Frequency_Days__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Cleaning_Overdue__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

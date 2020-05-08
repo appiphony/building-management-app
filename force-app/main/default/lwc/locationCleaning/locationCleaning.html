@@ -11,15 +11,15 @@
                 </h4>
             </div>
             <div class="slds-col slds-no-flex">
-                <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
-                    <lightning-menu-item value="viewRecord" label="View Location Record"></lightning-menu-item>
+                <lightning-button-menu variant="border-filled" menu-alignment="right">
+                    <lightning-menu-item value="viewRecord" label="View Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
                 </lightning-button-menu>
             </div>
         </div>
         <!-- /Header -->
     
         <!-- Body -->
-        <div class="slds-card__body slds-card__body_inner">
+        <div class="slds-card__body slds-card__body_inner slds-scrollable_y">
             <!-- No Location Selected -->
             <template if:true={noLocationView}>
                 
@@ -29,7 +29,45 @@
     
             <!-- Location View -->
             <template if:true={locationView}>
-                
+                <table class="wdc-location-list slds-table slds-table_header-hidden">
+                    <!-- <thead class="">
+                        <tr class="slds-line-height_reset">
+                            <th scope="col" style="max-width: 1px;">
+                                <div class="slds-truncate" title="Sub-Location Name">Sub-Location Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Sub-Location Progress">Sub-Location Progress</div>
+                            </th>
+                            <th scope="col" style="max-width: 1px;">
+                                <div class="slds-truncate" title="Sub-Location Status">Sub-Location Status</div>
+                            </th>
+                        </tr>
+                    </thead> -->
+                    <tbody>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Floor 1</div>
+                            </td>
+                            <td>
+                                <lightning-progress-bar size="large" value="75" variant="circular"></lightning-progress-bar>
+                            </td>
+                            <td style="width: 1px;">
+
+                            </td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Floor 2</div>
+                            </td>
+                            <td>
+                                <lightning-progress-bar size="large" value="55" variant="circular"></lightning-progress-bar>
+                            </td>
+                            <td style="width: 1px;">
+                                <lightning-icon icon-name="utility:warning" size="x-small"></lightning-icon>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </template>
             <!-- /Location View -->
     

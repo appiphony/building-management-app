@@ -24,4 +24,19 @@
 
 .slds-card__body {
     padding: var(--lwc-spacingMedium, 1rem);
+    margin: 0;
+}
+
+/* Custom Table Styles */
+.wdc-location-list tbody tr {
+    cursor: pointer;
+}
+.wdc-location-list tbody tr td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.wdc-location-list tbody tr td:first-child,
+.wdc-location-list tbody tr td:last-child {
+    width: 1px;
 }

@@ -1,0 +1,45 @@
+<template>
+    <article class="slds-card">
+        <!-- Header -->
+        <div class="slds-card__header slds-grid">
+            <div class="slds-col">
+                <h2 class="slds-card__header-title">
+                    Location Cleanliness
+                </h2>
+                <h4 class="wdc-subtitle">
+                    Location Name
+                </h4>
+            </div>
+            <div class="slds-col slds-no-flex">
+                <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
+                    <lightning-menu-item value="viewRecord" label="View Location Record"></lightning-menu-item>
+                </lightning-button-menu>
+            </div>
+        </div>
+        <!-- /Header -->
+    
+        <!-- Body -->
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- No Location Selected -->
+            <template if:true={noLocationView}>
+                
+            </template>
+            <!-- /No Location Selected -->
+    
+    
+            <!-- Location View -->
+            <template if:true={locationView}>
+                
+            </template>
+            <!-- /Location View -->
+    
+    
+            <!-- Sub-location Detail -->
+            <template if:true={subLocationView}>
+                
+            </template>
+            <!-- /Sub-location Detail -->
+        </div>
+        <!-- / Body -->
+    </article>
+</template>

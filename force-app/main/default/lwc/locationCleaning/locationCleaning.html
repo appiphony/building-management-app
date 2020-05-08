@@ -22,7 +22,49 @@
         <div class="slds-card__body slds-card__body_inner slds-scrollable_y">
             <!-- No Location Selected -->
             <template if:true={noLocationView}>
-                
+                <table class="wdc-location-list_all slds-table slds-table_cell-buffer">
+                    <thead class="">
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Location Name">Location Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Employees">Employees</div>
+                            </th>
+                            <th scope="col" style="width: 1px;">
+                                <div class="slds-truncate" title="Clean Status">Clean Status</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="slds-hint-parent" onclick={handleLocationRowClick}>
+                            <td>
+                                <div class="slds-truncate">Appiphony HQ</div>
+                            </td>
+                            <td>
+                                27
+                            </td>
+                            <td>
+                                <span class="slds-badge slds-theme_success">
+                                    Up to Date
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Willis Tower</div>
+                            </td>
+                            <td>
+                                83
+                            </td>
+                            <td>
+                                <span class="slds-badge slds-theme_error">
+                                    Overdue
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </template>
             <!-- /No Location Selected -->
     
@@ -170,7 +212,6 @@
                     </li>
                 </ul>
                 <!-- /Employee List -->
-
             </template>
             <!-- /Sub-location Detail -->
         </div>

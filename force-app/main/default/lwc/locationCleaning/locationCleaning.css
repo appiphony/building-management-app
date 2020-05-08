@@ -34,9 +34,19 @@
 .wdc-location-list tbody tr td {
     padding-top: 1rem;
     padding-bottom: 1rem;
+    width: 1px;
 }
 
-.wdc-location-list tbody tr td:first-child,
-.wdc-location-list tbody tr td:last-child {
-    width: 1px;
+.wdc-location-list tbody tr td:nth-child(2) {
+    width: unset;
+}
+
+
+.wdc-location-list tbody tr td:first-child {
+    font-size: 0.875rem;
+}
+
+/* Sub Location Detail */
+.wdc-employee-list li:hover {
+    background-color: rgb(243, 242, 242);
 }

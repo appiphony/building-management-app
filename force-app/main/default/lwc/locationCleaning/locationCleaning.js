@@ -4,10 +4,16 @@ export default class LocationCleaning extends LightningElement {
     /// DEMO STATES - refactor or remove these ///
     noLocationView = false;
     locationView = true;
-    subLocationView = true;
+    subLocationView = false;
     /// END DEMO STATES ///
 
-    /// DEMO DATA - rafactor or remove this ///
+    handleSubLocationClick() {
+        this.subLocationView = true;
+        this.locationView = false;
+    }
 
-    /// END DEMO DATA ///
+    handleBackClick() {
+        this.locationView = true;
+        this.subLocationView = false;
+    }
 }

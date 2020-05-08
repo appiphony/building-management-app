@@ -36,3 +36,70 @@ export default class testComponent extends LightningElement {
     }
 }
 
+//DUMMY DATA GENERATOR FOR BUILDING APP
+//20 buildings
+List<wdctest__Building__c> buildings = new List<wdctest__Building__c>();
+
+for(Integer i = 1; i < 21; i++) {
+    wdctest__Building__c bldng = new wdctest__Building__c(
+        Name='Location ' + i
+    );
+    buildings.add(bldng);
+}
+insert buildings;
+
+//each building has 1-20 floors
+List<wdctest__Floor__c> floors = new List<wdctest__Floor__c>();
+for(wdctest__Building__c bldng : buildings) {
+    Decimal numFloors = Decimal.valueof((Math.random() * 20) + 2);
+    for(Integer i = 1; i < numFloors && i < 21; i++) {
+        Decimal freq = Decimal.valueof(Math.random() * 5);
+        wdctest__Floor__c flr  = new wdctest__Floor__c(
+            Name = bldng.Name + ' - ' + 'Floor ' + i,
+            wdctest__Building__c = bldng.Id,
+            wdctest__Cleaning_Frequency_Days__c = freq
+        );
+        floors.add(flr);
+    }
+}
+insert floors;
+
+//each floor has a cleaning in last 72 hrs and 5-50 employees
+List<wdctest__Cleaning__c> cleanings = new List<wdctest__Cleaning__c>();
+List<wdctest__Employee__c> employees = new List<wdctest__Employee__c>();
+for(wdctest__Floor__c flr : floors) {
+    Integer hrs = Integer.valueOf((Math.random() * 72)) * -1;
+    DateTime cleaningTime = DateTime.now().addHours(hrs);
+    wdctest__Cleaning__c cleaning = new wdctest__Cleaning__c(
+        wdctest__Cleaning_Time__c = cleaningTime,
+        wdctest__Floor__c = flr.Id
+    );
+    cleanings.add(cleaning);
+
+    List<String> statuses = new List<String> {'Remote', 'Available', 'Unavailable', 'Unknown'};
+    Integer numEmployees = Integer.valueOf((Math.random() * 50) + 6);
+    for(Integer i = 1; i < numEmployees && i < 51; i++) {
+        Integer statusIndex = Integer.valueof((Math.random() * statuses.size()));
+
+        wdctest__Employee__c employee = new wdctest__Employee__c(
+            wdctest__First_Name__c = 'Test ' + i,
+            wdctest__Last_Name__c = flr.Name,
+            wdctest__Floor__c = flr.Id,
+            wdctest__Status__c = statuses.get(statusIndex)
+        );
+        employees.add(employee);
+    }
+}
+insert cleanings;
+insert employees;
+
+Ideas for data migration:
+
+1) Batch to move initial data, triggers to keep synced
+- Batch is kicked off from post-install script that duplicates all data from packaged objs to work.com objs
+- Triggers for each work.com obj and packaged obj to keep data in sync
+
+
+NEW FIELDS
+Floor - Level (Number)
+Business - Location (Geolocation)

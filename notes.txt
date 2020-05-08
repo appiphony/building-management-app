@@ -1,0 +1,38 @@
+Work.com Notes
+
+/********* Subscribing to Command Center messaging in LWC **********/
+import { LightningElement, track } from 'lwc';
+import { createMessageContext, releaseMessageContext, subscribe } from 'lightning/messageService';
+ 
+//will be part of core when GA, remove __c
+import COMMAND_CENTER from "@salesforce/messageChannel/CommandCenterMessageChannel__c";
+ 
+export default class testComponent extends LightningElement {
+    context = createMessageContext();
+    subscription = null;
+   
+    connectedCallback() {
+        if (this.subscription) {
+            return;
+        }
+
+        //subscribe to command center messages
+        this.subscription = subscribe(this.context, COMMAND_CENTER, (message) => {
+            this.handleMessage(message);
+        });
+    }
+ 
+    handleMessage(message) {
+        if(message.EventSource == ‘CommandCenter’ && message.EventType == ‘CC_LOCATION_CHANGE’) {
+            //handle location change from command center
+            let locationId = e.EventPayload.locationId;
+            let locationName = e.EventPayload.locationName;
+       }
+    }
+ 
+    disconnectedCallback() {
+        //unregister subscription
+        releaseMessageContext(this.context);
+    }
+}
+

@@ -91,18 +91,15 @@
                                 <div class="slds-truncate">Floor 1</div>
                             </td>
                             <td class="wdc-gauge">
-                                <lightning-progress-bar size="large" value="75" variant="circular"></lightning-progress-bar>
-                            </td>
-                            <td>
-                                <div class="slds-form-element__label">
-                                    Last Cleaned
+                                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                                    <span>
+                                        <strong>6 Days Until Cleaning Overdue</strong>
+                                    </span>
+                                    <span>Last Cleaned: May 2</span>
                                 </div>
-                                <div class="slds-form-element__control">
-                                    May 6
+                                <div class="wdc-gauge-container">
+                                    <lightning-progress-bar size="large" value="75" variant="circular"></lightning-progress-bar>
                                 </div>
-                            </td>
-                            <td>
-
                             </td>
                         </tr>
                         <tr class="slds-hint-parent">
@@ -110,18 +107,33 @@
                                 <div class="slds-truncate">Floor 2</div>
                             </td>
                             <td class="wdc-gauge">
-                                <lightning-progress-bar size="large" value="10" variant="circular"></lightning-progress-bar>
-                            </td>
-                            <td>
-                                <div class="slds-form-element__label">
-                                    Last Cleaned
+                                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                                    <span>
+                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                        <strong>Cleaning Overdue</strong>
+                                    </span>
+                                    <span>Last Cleaned: Apr 29</span>
                                 </div>
-                                <div class="slds-form-element__control">
-                                    May 2
+                                <div class="wdc-gauge-container">
+                                    <lightning-progress-bar size="large" value="0" variant="circular" class="wdc-gauge__gauge"></lightning-progress-bar>
                                 </div>
                             </td>
+                        </tr>
+                        <tr class="slds-hint-parent" onclick={handleSubLocationClick}>
                             <td>
-                                <lightning-icon icon-name="utility:warning" size="x-small"></lightning-icon>
+                                <div class="slds-truncate">Floor 5</div>
+                            </td>
+                            <td class="wdc-gauge">
+                                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                                    <span>
+                                        <!-- <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon> -->
+                                        <strong>2 Days Until Cleaning Overdue</strong>
+                                    </span>
+                                    <span>Last Cleaned: May 1</span>
+                                </div>
+                                <div class="wdc-gauge-container">
+                                    <lightning-progress-bar size="large" value="15" variant="circular"></lightning-progress-bar>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -132,10 +144,23 @@
     
             <!-- Sub-location Detail -->
             <template if:true={subLocationView}>
-                <lightning-button variant="neutral" label="Floor 1" icon-name="utility:chevronleft" onclick={handleBackClick}></lightning-button>
-                <div class="slds-grid slds-grid_vertical-align-center slds-gutters_direct slds-m-vertical_x-large">
-                    <div class="slds-col slds-grow-none">
-                        <div class="slds-form-element">
+                <!-- Nav -->
+                <lightning-breadcrumbs>
+                    <lightning-breadcrumb
+                        label="Location Name"
+                        onclick={handleBackClick}>
+                    </lightning-breadcrumb>
+                    <lightning-breadcrumb
+                        label="Floor 1"
+                        onclick={handleSubLocationClick}>
+                    </lightning-breadcrumb>
+                </lightning-breadcrumbs>
+                <!-- /Nav -->
+
+                <!-- Field Data -->
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end slds-gutters_direct slds-m-top_large slds-p-horizontal_medium">
+                    <div class="slds-col">
+                        <div class="wdc-field-data slds-form-element">
                             <div class="slds-form-element__label">
                                 Clean Again Before
                             </div>
@@ -145,19 +170,42 @@
                         </div>
                     </div>
                     <div class="slds-col">
-                        <lightning-progress-bar value="35" variant="circular" size="large"></lightning-progress-bar>
-                    </div>
-                    <div class="slds-col slds-grow-none">
-                        <div class="slds-form-element">
+                        <div class="wdc-field-data slds-form-element">
                             <div class="slds-form-element__label">
-                                Last Cleaning
+                                Last Cleaned
                             </div>
                             <div class="slds-form-element__control">
-                                May 6
+                                May 2
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="slds-form-element slds-m-bottom_xx-small">
+                            <div class="slds-form-element__label">
+                                Frequency (days)
+                            </div>
+                            <div class="slds-form-element__control">
+                                10
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- /Field Data -->
+
+                <!-- Gauge -->
+                <div class="slds-m-top_large slds-m-bottom_x-large slds-p-horizontal_medium">
+                    <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                        <span>
+                            <strong>6 Days Until Cleaning Overdue</strong>
+                        </span>
+                        <!-- <span>Last Cleaned: May 2</span> -->
+                    </div>
+                    <div class="wdc-gauge-container">
+                        <lightning-progress-bar value="60" variant="circular" size="large"></lightning-progress-bar>
+                    </div>
+                </div>
+                <!-- /Gauge -->
+    
 
                 <!-- Employee List -->
                 <h4 class="slds-text-title_caps">Employees (4)</h4>

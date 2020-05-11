@@ -2,7 +2,7 @@
     --cc-brand_color: #00A1E0;
     /* Font Colors */
     --cc-card-title_color: #091a3e; 
-    --cc-card-subtitle_color: #335779; 
+    --cc-card-subtitle_color: #335779;
 
 }
 
@@ -39,6 +39,7 @@
 
 .wdc-location-list tbody tr td:nth-child(2) {
     width: unset;
+    padding-left: 1rem;
 }
 
 
@@ -49,4 +50,14 @@
 /* Sub Location Detail */
 .wdc-employee-list li:hover {
     background-color: rgb(243, 242, 242);
+}
+
+.wdc-field-data .slds-form-element__label {
+    color: var(--cc-card-title_color);
+    font-size: 14px;
+}
+
+.wdc-field-data .slds-form-element__control {
+    color: var(--cc-card-title_color);
+    font-size: 24px;
 }

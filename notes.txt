@@ -41,8 +41,17 @@ export default class testComponent extends LightningElement {
 List<wdctest__Building__c> buildings = new List<wdctest__Building__c>();
 
 for(Integer i = 1; i < 21; i++) {
+    //-90 <= lat <= 90, -180 <= long <= 180
+    Integer latMultiplier = Math.random() > .5 ? 1 : -1;
+    Integer longMultiplier = Math.random() > .5 ? 1 : -1;
+
+    Decimal latitude = (Math.random() * 90) * latMultiplier;
+    Decimal longitude = (Math.random() * 180) * longMultiplier;
+
     wdctest__Building__c bldng = new wdctest__Building__c(
-        Name='Location ' + i
+        Name='Location ' + i,
+        wdctest__Location__Latitude__s = latitude,
+        wdctest__Location__Longitude__s = longitude
     );
     buildings.add(bldng);
 }
@@ -57,6 +66,7 @@ for(wdctest__Building__c bldng : buildings) {
         wdctest__Floor__c flr  = new wdctest__Floor__c(
             Name = bldng.Name + ' - ' + 'Floor ' + i,
             wdctest__Building__c = bldng.Id,
+            wdctest__Level__c = i,
             wdctest__Cleaning_Frequency_Days__c = freq
         );
         floors.add(flr);
@@ -98,8 +108,3 @@ Ideas for data migration:
 1) Batch to move initial data, triggers to keep synced
 - Batch is kicked off from post-install script that duplicates all data from packaged objs to work.com objs
 - Triggers for each work.com obj and packaged obj to keep data in sync
-
-
-NEW FIELDS
-Floor - Level (Number)
-Business - Location (Geolocation)

@@ -37,7 +37,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="slds-hint-parent" onclick={handleLocationRowClick}>
+                        <tr class="slds-hint-parent" onclick={handleShowLocation}>
                             <td>
                                 <div class="slds-truncate">Appiphony HQ</div>
                             </td>
@@ -45,9 +45,7 @@
                                 27
                             </td>
                             <td>
-                                <span class="slds-badge slds-theme_success">
-                                    Up to Date
-                                </span>
+                                <span class="slds-text-color_destructive"><strong>Overdue</strong></span>
                             </td>
                         </tr>
                         <tr class="slds-hint-parent">
@@ -58,9 +56,7 @@
                                 83
                             </td>
                             <td>
-                                <span class="slds-badge slds-theme_error">
-                                    Overdue
-                                </span>
+                                <span class="slds-text-color_success"> Up to Date</span>
                             </td>
                         </tr>
                     </tbody>
@@ -71,6 +67,18 @@
     
             <!-- Location View -->
             <template if:true={locationView}>
+                <!-- Nav -->
+                <lightning-breadcrumbs class="slds-m-bottom_small">
+                    <lightning-breadcrumb
+                        label="All Locations"
+                        onclick={handleShowAllLocations}>
+                    </lightning-breadcrumb>
+                    <lightning-breadcrumb
+                        label="Location Name"
+                        onclick={handleShowLocation}>
+                    </lightning-breadcrumb>
+                </lightning-breadcrumbs>
+                <!-- /Nav -->
                 <table class="wdc-location-list slds-table slds-table_cell-buffer slds-table_header-hidden">
                      <thead class="slds-assistive-text">
                         <tr class="slds-line-height_reset">
@@ -83,7 +91,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="slds-hint-parent" onclick={handleSubLocationClick}>
+                        <tr class="slds-hint-parent" onclick={handleShowSubLocation}>
                             <td>
                                 <div class="slds-truncate">Floor 1</div>
                             </td>
@@ -116,7 +124,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="slds-hint-parent" onclick={handleSubLocationClick}>
+                        <tr class="slds-hint-parent">
                             <td>
                                 <div class="slds-truncate">Floor 5</div>
                             </td>
@@ -142,14 +150,18 @@
             <!-- Sub-location Detail -->
             <template if:true={subLocationView}>
                 <!-- Nav -->
-                <lightning-breadcrumbs>
+                <lightning-breadcrumbs class="slds-m-bottom_small">
+                    <lightning-breadcrumb
+                        label="All Locations"
+                        onclick={handleShowAllLocations}>
+                    </lightning-breadcrumb>
                     <lightning-breadcrumb
                         label="Location Name"
-                        onclick={handleBackClick}>
+                        onclick={handleShowLocation}>
                     </lightning-breadcrumb>
                     <lightning-breadcrumb
                         label="Floor 1"
-                        onclick={handleSubLocationClick}>
+                        onclick={handleShowSubLocation}>
                     </lightning-breadcrumb>
                 </lightning-breadcrumbs>
                 <!-- /Nav -->

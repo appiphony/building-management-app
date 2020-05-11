@@ -28,6 +28,12 @@
 }
 
 /* Custom Table Styles */
+.wdc-location-list_all tbody tr td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.wdc-location-list_all tbody tr, 
 .wdc-location-list tbody tr {
     cursor: pointer;
 }

@@ -72,19 +72,16 @@
             <!-- Location View -->
             <template if:true={locationView}>
                 <table class="wdc-location-list slds-table slds-table_cell-buffer slds-table_header-hidden">
-                    <!-- <thead class="">
+                     <thead class="slds-assistive-text">
                         <tr class="slds-line-height_reset">
-                            <th scope="col" style="max-width: 1px;">
+                            <th scope="col">
                                 <div class="slds-truncate" title="Sub-Location Name">Sub-Location Name</div>
                             </th>
                             <th scope="col">
-                                <div class="slds-truncate" title="Sub-Location Progress">Sub-Location Progress</div>
-                            </th>
-                            <th scope="col" style="max-width: 1px;">
                                 <div class="slds-truncate" title="Sub-Location Status">Sub-Location Status</div>
                             </th>
                         </tr>
-                    </thead> -->
+                    </thead>
                     <tbody>
                         <tr class="slds-hint-parent" onclick={handleSubLocationClick}>
                             <td>

@@ -54,10 +54,12 @@
 
 .wdc-field-data .slds-form-element__label {
     color: var(--cc-card-title_color);
+    /* font-size: var(--lwc-fontSize4, 14px); /* Internal Variable */
     font-size: 14px;
 }
 
 .wdc-field-data .slds-form-element__control {
     color: var(--cc-card-title_color);
+    /* font-size: var(--lwc-fontSize8, 24px); /* Internal Variable */
     font-size: 24px;
 }

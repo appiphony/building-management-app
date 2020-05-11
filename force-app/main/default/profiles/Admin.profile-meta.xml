@@ -7,6 +7,11 @@
     </applicationVisibilities>
     <custom>false</custom>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>Building__c.Location__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>Building__c.Total_Employees__c</field>
         <readable>true</readable>
@@ -39,6 +44,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Floor__c.Last_Cleaning_Time__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Floor__c.Level__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

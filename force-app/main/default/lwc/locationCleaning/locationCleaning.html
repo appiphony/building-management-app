@@ -68,7 +68,7 @@
             <!-- Location View -->
             <template if:true={locationView}>
                 <!-- Nav -->
-                <lightning-breadcrumbs class="slds-m-bottom_small">
+                <lightning-breadcrumbs class="slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
                     <lightning-breadcrumb
                         label="All Locations"
                         onclick={handleShowAllLocations}>
@@ -83,10 +83,10 @@
                      <thead class="slds-assistive-text">
                         <tr class="slds-line-height_reset">
                             <th scope="col">
-                                <div class="slds-truncate" title="Sub-Location Name">Sub-Location Name</div>
+                                <div class="slds-truncate" title="Sub-Location Name">Location Name</div>
                             </th>
                             <th scope="col">
-                                <div class="slds-truncate" title="Sub-Location Status">Sub-Location Status</div>
+                                <div class="slds-truncate" title="Sub-Location Status">Location Status</div>
                             </th>
                         </tr>
                     </thead>
@@ -98,12 +98,15 @@
                             <td class="wdc-gauge">
                                 <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
                                     <span>
-                                        <strong>6 Days Until Cleaning Overdue</strong>
+                                        <strong>Next Cleaning in 4 Hours</strong>
                                     </span>
-                                    <span>Last Cleaned: May 2</span>
+                                    <span>Last: Today 9:35AM</span>
                                 </div>
                                 <div class="wdc-gauge-container">
                                     <lightning-progress-bar size="large" value="75" variant="circular"></lightning-progress-bar>
+                                </div>
+                                <div class="slds-p-top_x-small slds-text-title">
+                                    <span>Frequency: 6 Hours</span>
                                 </div>
                             </td>
                         </tr>
@@ -117,10 +120,13 @@
                                         <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon>
                                         <strong>Cleaning Overdue</strong>
                                     </span>
-                                    <span>Last Cleaned: Apr 29</span>
+                                    <span>Last: May 9 12:15PM</span>
                                 </div>
                                 <div class="wdc-gauge-container">
                                     <lightning-progress-bar size="large" value="0" variant="circular" class="wdc-gauge__gauge"></lightning-progress-bar>
+                                </div>
+                                <div class="slds-p-top_x-small slds-text-title">
+                                    <span>Frequency: 2 Hours</span>
                                 </div>
                             </td>
                         </tr>
@@ -132,12 +138,15 @@
                                 <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
                                     <span>
                                         <!-- <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon> -->
-                                        <strong>2 Days Until Cleaning Overdue</strong>
+                                        <strong>Next Cleaning in 2 Hours</strong>
                                     </span>
-                                    <span>Last Cleaned: May 1</span>
+                                    <span>Last: Today 7:15AM </span>
                                 </div>
                                 <div class="wdc-gauge-container">
                                     <lightning-progress-bar size="large" value="15" variant="circular"></lightning-progress-bar>
+                                </div>
+                                <div class="slds-p-top_x-small slds-text-title">
+                                    <span>Frequency: 7 Hours</span>
                                 </div>
                             </td>
                         </tr>
@@ -149,52 +158,51 @@
     
             <!-- Sub-location Detail -->
             <template if:true={subLocationView}>
-                <!-- Nav -->
-                <lightning-breadcrumbs class="slds-m-bottom_small">
-                    <lightning-breadcrumb
-                        label="All Locations"
-                        onclick={handleShowAllLocations}>
-                    </lightning-breadcrumb>
-                    <lightning-breadcrumb
-                        label="Location Name"
-                        onclick={handleShowLocation}>
-                    </lightning-breadcrumb>
-                    <lightning-breadcrumb
-                        label="Floor 1"
-                        onclick={handleShowSubLocation}>
-                    </lightning-breadcrumb>
-                </lightning-breadcrumbs>
-                <!-- /Nav -->
+                <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-p-top_small slds-p-horizontal_small">
+                    <div class="slds-col">
+                        <!-- Nav -->
+                        <lightning-breadcrumbs class="">
+                            <lightning-breadcrumb
+                                label="All Locations"
+                                onclick={handleShowAllLocations}>
+                            </lightning-breadcrumb>
+                            <lightning-breadcrumb
+                                label="Location Name"
+                                onclick={handleShowLocation}>
+                            </lightning-breadcrumb>
+                            <lightning-breadcrumb
+                                label="Floor 1"
+                                onclick={handleShowSubLocation}>
+                            </lightning-breadcrumb>
+                        </lightning-breadcrumbs>
+                        <!-- /Nav -->
+                    </div>
+                    <div class="slds-col">
+                        <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
+                            <lightning-menu-item value="sublocation-record" label="View Sub-Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
+                        </lightning-button-menu>
+                    </div>
+                </div>
 
                 <!-- Field Data -->
-                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end slds-gutters_direct slds-m-top_large slds-p-horizontal_medium">
-                    <div class="slds-col">
-                        <div class="wdc-field-data slds-form-element">
-                            <div class="slds-form-element__label">
-                                Clean Again Before
-                            </div>
-                            <div class="slds-form-element__control">
-                                May 12
-                            </div>
-                        </div>
-                    </div>
+                <div class="slds-grid slds-grid_align-space slds-grid_vertical-align-end slds-gutters_direct slds-p-top_large slds-p-horizontal_medium">
                     <div class="slds-col">
                         <div class="wdc-field-data slds-form-element">
                             <div class="slds-form-element__label">
                                 Last Cleaned
                             </div>
                             <div class="slds-form-element__control">
-                                May 2
+                                Today 9:35AM
                             </div>
                         </div>
                     </div>
                     <div class="slds-col">
-                        <div class="slds-form-element slds-m-bottom_xx-small">
+                        <div class="wdc-field-data slds-form-element slds-m-bottom_xx-small">
                             <div class="slds-form-element__label">
-                                Frequency (days)
+                                Frequency
                             </div>
                             <div class="slds-form-element__control">
-                                10
+                                6 Hours
                             </div>
                         </div>
                     </div>
@@ -205,7 +213,7 @@
                 <div class="slds-m-top_large slds-m-bottom_x-large slds-p-horizontal_medium">
                     <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
                         <span>
-                            <strong>6 Days Until Cleaning Overdue</strong>
+                            <strong>Next Cleaning in 4 Hours</strong>
                         </span>
                         <!-- <span>Last Cleaned: May 2</span> -->
                     </div>
@@ -215,55 +223,46 @@
                 </div>
                 <!-- /Gauge -->
     
-
                 <!-- Employee List -->
-                <h4 class="slds-text-title_caps">Employees (4)</h4>
+                <h4 class="slds-text-title_caps slds-p-horizontal_medium">Employees by Status</h4>
                 <ul class="wdc-employee-list slds-m-top_small">
                     <li>
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
-                                John Doe
+                                Available (30)
                             </div>
                             <div class="slds-col slds-grow-none">
-                                <span class="slds-badge">
-                                    Available
-                                </span>
+                                <lightning-button-icon icon-name="utility:list" variant="bare"></lightning-button-icon>
                             </div>
                         </div>
                     </li>
                     <li>
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
-                                Jane Smith
+                                Remote (10)
                             </div>
                             <div class="slds-col slds-grow-none">
-                                <span class="slds-badge">
-                                    Unavailable
-                                </span>
+                                <lightning-button-icon icon-name="utility:list" variant="bare"></lightning-button-icon>
                             </div>
                         </div>
                     </li>
                     <li>
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
-                                Michael Goldsmith
+                                Unavailable (2)
                             </div>
                             <div class="slds-col slds-grow-none">
-                                <span class="slds-badge">
-                                    Remote
-                                </span>
+                                <lightning-button-icon icon-name="utility:list" variant="bare"></lightning-button-icon>
                             </div>
                         </div>
                     </li>
                     <li>
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
-                                Elizabeth Williamson
+                                Unknown (1)
                             </div>
                             <div class="slds-col slds-grow-none">
-                                <span class="slds-badge">
-                                    Unknown
-                                </span>
+                                <lightning-button-icon icon-name="utility:list" variant="bare"></lightning-button-icon>
                             </div>
                         </div>
                     </li>

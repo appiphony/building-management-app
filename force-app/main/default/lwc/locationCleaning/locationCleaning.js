@@ -2,8 +2,8 @@ import { LightningElement } from 'lwc';
 
 export default class LocationCleaning extends LightningElement {
     /// DEMO STATES - refactor or remove these ///
-    noLocationView = true;
-    locationView = false;
+    noLocationView = false;
+    locationView = true;
     subLocationView = false;
     /// END DEMO STATES ///
 

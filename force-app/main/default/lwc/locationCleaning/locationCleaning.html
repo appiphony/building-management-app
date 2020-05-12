@@ -1,0 +1,277 @@
+<template>
+    <article class="slds-card">
+        <!-- Header -->
+        <div class="slds-card__header slds-grid">
+            <div class="slds-col">
+                <h2 class="slds-card__header-title">
+                    Location Cleanliness
+                </h2>
+                <h4 class="wdc-subtitle">
+                    Location Name
+                </h4>
+            </div>
+            <div class="slds-col slds-no-flex">
+                <lightning-button-menu variant="border-filled" menu-alignment="right">
+                    <lightning-menu-item value="viewRecord" label="View Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
+                </lightning-button-menu>
+            </div>
+        </div>
+        <!-- /Header -->
+    
+        <!-- Body -->
+        <div class="slds-card__body slds-card__body_inner slds-scrollable_y">
+            <!-- No Location Selected -->
+            <template if:true={noLocationView}>
+                <table class="wdc-location-list_all slds-table slds-table_cell-buffer">
+                    <thead class="">
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Location Name">Location Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Employees">Employees</div>
+                            </th>
+                            <th scope="col" style="width: 1px;">
+                                <div class="slds-truncate" title="Clean Status">Clean Status</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="slds-hint-parent" onclick={handleShowLocation}>
+                            <td>
+                                <div class="slds-truncate">Appiphony HQ</div>
+                            </td>
+                            <td>
+                                27
+                            </td>
+                            <td>
+                                <span class="slds-text-color_destructive"><strong>Overdue</strong></span>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Willis Tower</div>
+                            </td>
+                            <td>
+                                83
+                            </td>
+                            <td>
+                                <span class="slds-text-color_success"> Up to Date</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+            <!-- /No Location Selected -->
+    
+    
+            <!-- Location View -->
+            <template if:true={locationView}>
+                <!-- Nav -->
+                <lightning-breadcrumbs class="slds-m-bottom_small">
+                    <lightning-breadcrumb
+                        label="All Locations"
+                        onclick={handleShowAllLocations}>
+                    </lightning-breadcrumb>
+                    <lightning-breadcrumb
+                        label="Location Name"
+                        onclick={handleShowLocation}>
+                    </lightning-breadcrumb>
+                </lightning-breadcrumbs>
+                <!-- /Nav -->
+                <table class="wdc-location-list slds-table slds-table_cell-buffer slds-table_header-hidden">
+                     <thead class="slds-assistive-text">
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Sub-Location Name">Sub-Location Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Sub-Location Status">Sub-Location Status</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="slds-hint-parent" onclick={handleShowSubLocation}>
+                            <td>
+                                <div class="slds-truncate">Floor 1</div>
+                            </td>
+                            <td class="wdc-gauge">
+                                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                                    <span>
+                                        <strong>6 Days Until Cleaning Overdue</strong>
+                                    </span>
+                                    <span>Last Cleaned: May 2</span>
+                                </div>
+                                <div class="wdc-gauge-container">
+                                    <lightning-progress-bar size="large" value="75" variant="circular"></lightning-progress-bar>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Floor 2</div>
+                            </td>
+                            <td class="wdc-gauge">
+                                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                                    <span>
+                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                        <strong>Cleaning Overdue</strong>
+                                    </span>
+                                    <span>Last Cleaned: Apr 29</span>
+                                </div>
+                                <div class="wdc-gauge-container">
+                                    <lightning-progress-bar size="large" value="0" variant="circular" class="wdc-gauge__gauge"></lightning-progress-bar>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Floor 5</div>
+                            </td>
+                            <td class="wdc-gauge">
+                                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                                    <span>
+                                        <!-- <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon> -->
+                                        <strong>2 Days Until Cleaning Overdue</strong>
+                                    </span>
+                                    <span>Last Cleaned: May 1</span>
+                                </div>
+                                <div class="wdc-gauge-container">
+                                    <lightning-progress-bar size="large" value="15" variant="circular"></lightning-progress-bar>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+            <!-- /Location View -->
+    
+    
+            <!-- Sub-location Detail -->
+            <template if:true={subLocationView}>
+                <!-- Nav -->
+                <lightning-breadcrumbs class="slds-m-bottom_small">
+                    <lightning-breadcrumb
+                        label="All Locations"
+                        onclick={handleShowAllLocations}>
+                    </lightning-breadcrumb>
+                    <lightning-breadcrumb
+                        label="Location Name"
+                        onclick={handleShowLocation}>
+                    </lightning-breadcrumb>
+                    <lightning-breadcrumb
+                        label="Floor 1"
+                        onclick={handleShowSubLocation}>
+                    </lightning-breadcrumb>
+                </lightning-breadcrumbs>
+                <!-- /Nav -->
+
+                <!-- Field Data -->
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end slds-gutters_direct slds-m-top_large slds-p-horizontal_medium">
+                    <div class="slds-col">
+                        <div class="wdc-field-data slds-form-element">
+                            <div class="slds-form-element__label">
+                                Clean Again Before
+                            </div>
+                            <div class="slds-form-element__control">
+                                May 12
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="wdc-field-data slds-form-element">
+                            <div class="slds-form-element__label">
+                                Last Cleaned
+                            </div>
+                            <div class="slds-form-element__control">
+                                May 2
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="slds-form-element slds-m-bottom_xx-small">
+                            <div class="slds-form-element__label">
+                                Frequency (days)
+                            </div>
+                            <div class="slds-form-element__control">
+                                10
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Field Data -->
+
+                <!-- Gauge -->
+                <div class="slds-m-top_large slds-m-bottom_x-large slds-p-horizontal_medium">
+                    <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                        <span>
+                            <strong>6 Days Until Cleaning Overdue</strong>
+                        </span>
+                        <!-- <span>Last Cleaned: May 2</span> -->
+                    </div>
+                    <div class="wdc-gauge-container">
+                        <lightning-progress-bar value="60" variant="circular" size="large"></lightning-progress-bar>
+                    </div>
+                </div>
+                <!-- /Gauge -->
+    
+
+                <!-- Employee List -->
+                <h4 class="slds-text-title_caps">Employees (4)</h4>
+                <ul class="wdc-employee-list slds-m-top_small">
+                    <li>
+                        <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                            <div class="slds-col">
+                                John Doe
+                            </div>
+                            <div class="slds-col slds-grow-none">
+                                <span class="slds-badge">
+                                    Available
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                            <div class="slds-col">
+                                Jane Smith
+                            </div>
+                            <div class="slds-col slds-grow-none">
+                                <span class="slds-badge">
+                                    Unavailable
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                            <div class="slds-col">
+                                Michael Goldsmith
+                            </div>
+                            <div class="slds-col slds-grow-none">
+                                <span class="slds-badge">
+                                    Remote
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                            <div class="slds-col">
+                                Elizabeth Williamson
+                            </div>
+                            <div class="slds-col slds-grow-none">
+                                <span class="slds-badge">
+                                    Unknown
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <!-- /Employee List -->
+            </template>
+            <!-- /Sub-location Detail -->
+        </div>
+        <!-- / Body -->
+    </article>
+</template>

@@ -108,3 +108,8 @@ Ideas for data migration:
 1) Batch to move initial data, triggers to keep synced
 - Batch is kicked off from post-install script that duplicates all data from packaged objs to work.com objs
 - Triggers for each work.com obj and packaged obj to keep data in sync
+
+
+Questions:
+1) Can't deploy to org when importing command center message channel. How to get around this?
+(import COMMAND_CENTER from "@salesforce/messageChannel/CommandCenterMessageChannel__c";)

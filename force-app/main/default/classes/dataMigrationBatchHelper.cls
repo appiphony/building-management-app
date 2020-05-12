@@ -35,7 +35,7 @@ public with sharing class dataMigrationBatchHelper {
         try{
             /*
             TODO: 
-                • ext id on location
+                • ext id on location (might need all for triggers)
                 • status mapping(wdctest => back2work)
             */
 
@@ -44,8 +44,8 @@ public with sharing class dataMigrationBatchHelper {
             //create parent location (wdctest__Building__c)
             sObject newParentLocation = (sObject)Type.forName('Location').newInstance();
             newParentLocation.put('Name', sublocation.wdctest__Building__r.Name);
-            newParentLocation.put('Location__Latitude__c', sublocation.wdctest__Building__r.wdctest__Location__Latitude__c);
-            newParentLocation.put('Location__Longitude__c', sublocation.wdctest__Building__r.wdctest__Location__Longitude__c);
+            //newParentLocation.put('Location__Latitude__c', sublocation.wdctest__Building__r.wdctest__Location__c.latitude);
+            //newParentLocation.put('Location__Longitude__c', sublocation.wdctest__Building__r.wdctest__Location__c.longitude);
             insert newParentLocation;
 
             //create sublocation (wdctest__Floor__c)
@@ -59,18 +59,18 @@ public with sharing class dataMigrationBatchHelper {
             List<sObject> newEmployees = new List<sObject>();
             for(wdctest__Employee__c employee : sublocation.wdctest__Employees__r) {
                 sObject newEmployee = (sObject)Type.forName('back2work__Employee__c').newInstance();
-                newEmployee.put('back2work__FirstName__c');
-                newEmployee.put('back2work__LastName__c');
-                newEmployee.put('back2work__WellnessStatus__c');
-                newEmployee.put('back2work__Location__c', newSublocation.ParentLocationId);
+                newEmployee.put('back2work__FirstName__c', employee.wdctest__First_Name__c);
+                newEmployee.put('back2work__LastName__c', employee.wdctest__Last_Name__c);
+                newEmployee.put('back2work__WellnessStatus__c', employee.wdctest__Status__c);
+                newEmployee.put('back2work__Location__c', newSublocation.Id);
             }
             insert newEmployees;
 
             //update existing cleanings to point to new sublocation
-            for(wdctest__Cleaning__c cleaning : sublocation.wdctest__Cleanings__r) {
-                cleaning.wdcext__Location__c = newSublocation.Id;
-            }
-            update sublocation.wdctest__Cleanings__r;
+            //for(wdctest__Cleaning__c cleaning : sublocation.wdctest__Cleanings__r) {
+            //    cleaning.wdcext__Location__c = newSublocation.Id;
+            //}
+            //update sublocation.wdctest__Cleanings__r;
 
         } catch(Exception e) {
 

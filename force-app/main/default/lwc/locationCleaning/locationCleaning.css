@@ -1,0 +1,71 @@
+:host {
+    --cc-brand_color: #00A1E0;
+    /* Font Colors */
+    --cc-card-title_color: #091a3e; 
+    --cc-card-subtitle_color: #335779;
+
+}
+
+.slds-card__header {
+    margin-bottom: 0;
+    padding: var(--lwc-spacingMedium, 1rem);
+    border-bottom: 2px solid var(--cc-brand_color);
+}
+
+.slds-card__header-title {
+    color: var(--cc-card-title_color);
+}
+
+.slds-card__header .wdc-subtitle {
+    /* font-size: var(--lwc-fontSize2, 12px); /* Internal Variable */
+    font-size: 12px;
+    color: var(--cc-card-subtitle_color);
+}
+
+.slds-card__body {
+    padding: var(--lwc-spacingMedium, 1rem);
+    margin: 0;
+}
+
+/* Custom Table Styles */
+.wdc-location-list_all tbody tr td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.wdc-location-list_all tbody tr, 
+.wdc-location-list tbody tr {
+    cursor: pointer;
+}
+.wdc-location-list tbody tr td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    width: 1px;
+}
+
+.wdc-location-list tbody tr td:nth-child(2) {
+    width: unset;
+    padding-left: 1rem;
+}
+
+
+.wdc-location-list tbody tr td:first-child {
+    font-size: 0.875rem;
+}
+
+/* Sub Location Detail */
+.wdc-employee-list li:hover {
+    background-color: rgb(243, 242, 242);
+}
+
+.wdc-field-data .slds-form-element__label {
+    color: var(--cc-card-title_color);
+    /* font-size: var(--lwc-fontSize4, 14px); /* Internal Variable */
+    font-size: 14px;
+}
+
+.wdc-field-data .slds-form-element__control {
+    color: var(--cc-card-title_color);
+    /* font-size: var(--lwc-fontSize8, 24px); /* Internal Variable */
+    font-size: 24px;
+}

@@ -23,7 +23,8 @@
 }
 
 .slds-card__body {
-    padding: var(--lwc-spacingMedium, 1rem);
+    /* padding: var(--lwc-spacingMedium, 1rem); */
+    padding: 0;
     margin: 0;
 }
 

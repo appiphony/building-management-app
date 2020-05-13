@@ -1,4 +1,5 @@
 import { LightningElement, track } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 import { createMessageContext, releaseMessageContext, subscribe } from 'lightning/messageService';
 
 import getLocationData from '@salesforce/apex/locationCleaning.getLocationData';
@@ -48,7 +49,24 @@ export default class LocationCleaning extends LightningElement {
         //     this.handleMessage(message);
         // });
     }
-    
+
+    navigateToListView() {
+        // Navigate to the Contact object's Recent list view.
+        this[NavigationMixin.Navigate]({
+            type: 'standard__objectPage',
+            attributes: {
+                objectApiName: 'wdctest__Employee__c',
+                actionName: 'list'
+            },
+            state: {
+                // 'filterName' is a property on the page 'state'
+                // and identifies the target list view.
+                // It may also be an 18 character list view id.
+                filterName: 'Recent'
+            }
+        });
+    }
+
     handleMessage(message) {
         if(message.EventSource == 'CommandCenter' && message.EventType == 'CC_LOCATION_CHANGE') {
             //handle location change from command center

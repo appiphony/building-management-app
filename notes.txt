@@ -1,15 +1,15 @@
 Work.com Notes
 
 /********* Subscribing to Command Center messaging in LWC **********/
-import { LightningElement, track } from 'lwc';
-import { createMessageContext, releaseMessageContext, subscribe } from 'lightning/messageService';
+import { LightningElement, wire, track } from 'lwc';
+import { subscribe, unsubscribe, MessageContext, APPLICATION_SCOPE } from 'lightning/messageService';
  
 //will be part of core when GA, remove __c
-import COMMAND_CENTER from "@salesforce/messageChannel/CommandCenterMessageChannel__c";
+import COMMAND_CENTER from "@salesforce/messageChannel/back2work__CommandCenterMessageChannel__c";
  
 export default class testComponent extends LightningElement {
-    context = createMessageContext();
-    subscription = null;
+    @wire(MessageContext)
+    messageContext;
    
     connectedCallback() {
         if (this.subscription) {
@@ -17,22 +17,22 @@ export default class testComponent extends LightningElement {
         }
 
         //subscribe to command center messages
-        this.subscription = subscribe(this.context, COMMAND_CENTER, (message) => {
-            this.handleMessage(message);
-        });
+        this.subscription = subscribe(this.messageContext, COMMAND_CENTER, message => {this.handleMessage(message)}, {scope: APPLICATION_SCOPE});
     }
  
     handleMessage(message) {
-        if(message.EventSource == ‘CommandCenter’ && message.EventType == ‘CC_LOCATION_CHANGE’) {
+        if(message.EventSource == 'CommandCenter' && message.EventType == 'CC_LOCATION_CHANGE') {
             //handle location change from command center
-            let locationId = e.EventPayload.locationId;
-            let locationName = e.EventPayload.locationName;
+            let locationId = message.EventPayload.locationId;
+            let locationName = message.EventPayload.locationName;
        }
     }
  
     disconnectedCallback() {
-        //unregister subscription
-        releaseMessageContext(this.context);
+        //unsubscribe on unrender
+        if (this.subscription) {
+            unsubscribe(this.subscription);
+        }
     }
 }
 
@@ -48,24 +48,24 @@ for(Integer i = 1; i < 21; i++) {
     Decimal latitude = (Math.random() * 90) * latMultiplier;
     Decimal longitude = (Math.random() * 180) * longMultiplier;
 
-    wdctest__Building__c bldng = new wdctest__Building__c(
+    wdctest__Building__c bldg = new wdctest__Building__c(
         Name='Location ' + i,
         wdctest__Location__Latitude__s = latitude,
         wdctest__Location__Longitude__s = longitude
     );
-    buildings.add(bldng);
+    buildings.add(bldg);
 }
 insert buildings;
 
 //each building has 1-20 floors
 List<wdctest__Floor__c> floors = new List<wdctest__Floor__c>();
-for(wdctest__Building__c bldng : buildings) {
+for(wdctest__Building__c bldg : buildings) {
     Decimal numFloors = Decimal.valueof((Math.random() * 20) + 2);
     for(Integer i = 1; i < numFloors && i < 21; i++) {
         Decimal freq = Decimal.valueof(Math.random() * 5);
         wdctest__Floor__c flr  = new wdctest__Floor__c(
-            Name = bldng.Name + ' - ' + 'Floor ' + i,
-            wdctest__Building__c = bldng.Id,
+            Name = bldg.Name + ' - ' + 'Floor ' + i,
+            wdctest__Building__c = bldg.Id,
             wdctest__Level__c = i,
             wdctest__Cleaning_Frequency_Days__c = freq
         );
@@ -113,3 +113,18 @@ Ideas for data migration:
 Questions:
 1) Can't deploy to org when importing command center message channel. How to get around this?
 (import COMMAND_CENTER from "@salesforce/messageChannel/CommandCenterMessageChannel__c";)
+
+
+Work.com Required Fields
+----------------------------------
+Location
+    • Name
+
+back2work__Employee__c
+    • back2work__FirstName__c
+    • back2work__LastName__c
+    • back2work__Email__c
+    • back2work__EmployeeNumber__c
+    • back2work__EmployeeStatus__c
+    • back2work__StatusAsOf__c
+    • back2work__WorkerType__c

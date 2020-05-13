@@ -2,7 +2,7 @@ global class dataMigrationBatch implements Database.Batchable<sObject> {
 
     global Database.QueryLocator start(Database.BatchableContext BC) {
         //query for all sublocations
-        String query = 'SELECT Id, wdctest__Building__c, wdctest__Building__r.Name, wdctest__Building__r.wdctest__Location__c,' + 
+        String query = 'SELECT Id, Name, wdctest__Building__c, wdctest__Building__r.Name, wdctest__Building__r.wdctest__Location__c,' + 
                               'wdctest__Cleaning_Frequency_Days__c, wdctest__Cleaning_Overdue__c, wdctest__Days_Since_Last_Cleaning__c,' + 
                               'wdctest__Last_Cleaning_Time__c, wdctest__Total_Employees__c, wdctest__Level__c,' + 
                                   '(' + 

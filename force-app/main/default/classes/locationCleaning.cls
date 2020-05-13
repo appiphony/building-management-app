@@ -2,19 +2,21 @@ public with sharing class locationCleaning {
 
     @AuraEnabled
     public static String getLocationData(String locationId) {
-        String queryString = 'SELECT Id, Name, Building__c, Building__r.wdctest__Total_Employees__c FROM Location';
+        String locationQuery = 'SELECT Id, Building__c ' + 
+                               'FROM Location';
 
         if(String.isNotEmpty(locationId)) {
             //cast to id for safety
             Id recordId = (Id)locationId;
             queryString += ' WHERE Id = :recordId';
+        } else{
+            queryString += ' LIMIT 20';
         }
 
-        queryString += ' LIMIT 20';
 
         List<sObject> locations = Database.query(queryString);
 
-        //need list of business ids so i can query floors to see what needs cleaning
+        //need list of business ids to query floors to see what needs cleaning
         List<String> bldgIds = new List<String>();
         for(sObject loc : locations) {
             if(loc.get('Building__c') != null) {
@@ -22,20 +24,32 @@ public with sharing class locationCleaning {
             }
         }
 
-        Set<String> bldgsNeedingCleaning = new Set<String>();
-        for(wdctest__Floor__c floorNeedingCleaning : [SELECT Id, wdctest__Building__c
-                                                         FROM wdctest__Floor__c
-                                                         WHERE wdctest__Building__c =: bldgIds]) {
-            bldgsNeedingCleaning.add(floorNeedingCleaning.wdctest__Building__c);
+        String buildingQuery = 'SELECT Id, Name ,' +
+                               '(' + 
+                                   'SELECT Id, Name, wdctest__Cleaning_Frequency_Days__c, wdctest__Cleaning_Overdue__c, ' + 
+                                       'wdctest__Days_Since_Last_Cleaning__c, wdctest__Last_Cleaning_Time__c, wdctest__Total_Employees__c ' + 
+                                   'FROM wdctest__Floors__r' + 
+                               ')' + 
+                               'FROM wdctest__Building__c ' + 
+                               'WHERE Id =: bldgIds';
+
+        List<sObject> buildings = Database.query(buildingQuery);
+
+        List<Map<String, Object>> buildingData = new List<Map<String, Object>>();
+        for(sObject bldg : buildings) {
+            Map<String, Object> bldgMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(bldg));
+
+            Boolean needsCleaning = false;
+            for(wdctest__Floor__c flr : bldg.wdctest__Floors__r) {
+                if(flr.wdctest__Cleaning_Overdue__c) {
+                    needsCleaning = true;
+                }
+            }
+            bldgMap.put('needsCleaning', needsCleaning);
+
+            buildingData.add(bldgMap);
         }
 
-        List<Map<String, Object>> locationData = new List<Map<String, Object>>();
-        for(sObject loc : locations) {
-            Map<String, Object> locMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(loc));
-            locMap.put('cleaningOverdue', bldgsNeedingCleaning.contains((String)loc.get('Id')));
-            locationData.add(locMap);
-        }
-
-        return JSON.serialize(locationData);
+        return JSON.serialize(buildingData);
     }
 }

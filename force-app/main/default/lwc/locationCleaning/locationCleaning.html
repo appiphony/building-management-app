@@ -277,7 +277,10 @@
                 <!-- Employee List -->
                 <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-horizontal_medium">
                     <div class="slds-col">
-                        <h4 class="slds-text-title_caps">Employees by Status</h4>
+                        <h4 class="slds-text-title_caps">
+                            Employees by Status
+                            <lightning-helptext content="People who are Available to Work are ready to return to their assigned location workplace. People who are Remote Work Only or Unavailable are not ready to return to their assigned location workplace." class="wdc-helptext slds-is-relative slds-m-left_xx-small"></lightning-helptext>
+                        </h4>
                     </div>
                     <div class="slds-col">
                         <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
@@ -290,9 +293,10 @@
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
                                 Available to Work (30)
+                                <!-- <lightning-helptext content="People who are Available to Work are ready to return to their assigned location workplace." class="wdc-helptext slds-is-relative slds-m-left_x-small"></lightning-helptext> -->
                             </div>
                             <div class="slds-col slds-grow-none">
-                                <lightning-button-icon icon-name="utility:list" variant="bare"></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action"></lightning-button-icon>
                             </div>
                         </div>
                     </li>
@@ -300,9 +304,10 @@
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
                                 Remote Work Only (10)
+                                <!-- <lightning-helptext content="People who are Remote Work Only are not ready to return to their assigned location workplace." class="wdc-helptext slds-is-relative slds-m-left_x-small"></lightning-helptext> -->
                             </div>
                             <div class="slds-col slds-grow-none">
-                                <lightning-button-icon icon-name="utility:list" variant="bare"></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action"></lightning-button-icon>
                             </div>
                         </div>
                     </li>
@@ -310,9 +315,10 @@
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
                                 Unavailable (2)
+                                <!-- <lightning-helptext content="People who are not yet cleared to return to their assigned location workplace." class="wdc-helptext slds-is-relative slds-m-left_x-small"></lightning-helptext> -->
                             </div>
                             <div class="slds-col slds-grow-none">
-                                <lightning-button-icon icon-name="utility:list" variant="bare"></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action"></lightning-button-icon>
                             </div>
                         </div>
                     </li>
@@ -320,9 +326,10 @@
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
                                 Unknown (1)
+                                <!-- <lightning-helptext content="People whose status is not known." class="wdc-helptext slds-is-relative slds-m-left_x-small"></lightning-helptext> -->
                             </div>
                             <div class="slds-col slds-grow-none">
-                                <lightning-button-icon icon-name="utility:list" variant="bare"></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action"></lightning-button-icon>
                             </div>
                         </div>
                     </li>

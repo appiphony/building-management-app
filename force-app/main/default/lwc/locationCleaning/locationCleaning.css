@@ -81,3 +81,15 @@ tr:hover .wdc-icon_drill-in {
     /* font-size: var(--lwc-fontSize8, 24px); /* Internal Variable */
     font-size: 24px;
 }
+
+.wdc-icon_list-action {
+    visibility: hidden;
+}
+
+li:hover .wdc-icon_list-action {
+    visibility: visible;
+}
+
+.wdc-helptext {
+    bottom: 4px;
+}

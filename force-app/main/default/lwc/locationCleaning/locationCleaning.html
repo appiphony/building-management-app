@@ -10,14 +10,8 @@
                     Location Name
                 </h4>
             </div>
-            <!-- <div class="slds-col slds-no-flex">
-                <lightning-button-menu variant="border-filled" menu-alignment="right">
-                    <lightning-menu-item value="viewRecord" label="View Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
-                </lightning-button-menu>
-            </div> -->
         </div>
         <!-- /Header -->
-    
         <!-- Body -->
         <div class="slds-card__body slds-card__body_inner slds-scrollable_y">
             <!-- No Location Selected -->
@@ -25,14 +19,12 @@
                 <!-- Nav -->
                 <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
                     <div class="slds-col">
-                        <!-- Nav -->
-                        <lightning-breadcrumbs class="">
+                        <lightning-breadcrumbs>
                             <lightning-breadcrumb
                                 label="All Locations"
                                 onclick={handleShowAllLocations}>
                             </lightning-breadcrumb>
                         </lightning-breadcrumbs>
-                        <!-- /Nav -->
                     </div>
                     <div class="slds-col">
                         <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
@@ -42,7 +34,7 @@
                 </div>
                 <!-- /Nav -->
                 <table class="wdc-location-list_all slds-table slds-table_cell-buffer">
-                    <thead class="">
+                    <thead>
                         <tr class="slds-line-height_reset">
                             <th scope="col">
                                 <div class="slds-truncate" title="Location Name">Location Name</div>
@@ -50,10 +42,10 @@
                             <th scope="col">
                                 <div class="slds-truncate" title="Employees">Employees</div>
                             </th>
-                            <th scope="col" style="width: 1px;">
-                                <div class="slds-truncate" title="Clean Status">Clean Status</div>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Cleaning Status">Cleaning Status</div>
                             </th>
-                            <th scope="col" style="width: 1px;">
+                            <th scope="col">
                                 <!-- Action Icon -->
                             </th>
                         </tr>
@@ -98,8 +90,7 @@
                 <!-- Nav -->
                 <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
                     <div class="slds-col">
-                        <!-- Nav -->
-                        <lightning-breadcrumbs class="">
+                        <lightning-breadcrumbs>
                             <lightning-breadcrumb
                                 label="All Locations"
                                 onclick={handleShowAllLocations}>
@@ -109,7 +100,6 @@
                                 onclick={handleShowLocation}>
                             </lightning-breadcrumb>
                         </lightning-breadcrumbs>
-                        <!-- /Nav -->
                     </div>
                     <div class="slds-col">
                         <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
@@ -145,7 +135,6 @@
                                     </span>
                                     <span>Last: Today 9:35AM</span>
                                 </div>
-                                <!-- <lightning-progress-bar size="large" value="75" variant="circular"></lightning-progress-bar> -->
                                 <!-- Gauge -->
                                 <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
                                     <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
@@ -174,11 +163,8 @@
                                     </span>
                                     <span>Last: May 9 12:15PM</span>
                                 </div>
-                                <!-- <div class="wdc-gauge-container">
-                                    <lightning-progress-bar size="large" value="0" variant="circular" class="wdc-gauge__gauge"></lightning-progress-bar>
-                                </div> -->
                                 <!-- Gauge -->
-                                <div class="wdc-gauge_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
                                     <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
                                     <span class="slds-progress-bar__value" style="width:0">
                                       <span class="slds-assistive-text">Cleaning Overdue</span>
@@ -204,10 +190,6 @@
                                     </span>
                                     <span>Last: Today 7:15AM </span>
                                 </div>
-                                <!-- <div class="wdc-gauge-container">
-                                    <lightning-progress-bar size="large" value="15" variant="circular"></lightning-progress-bar>
-                                </div> -->
-                                <!-- Gauge -->
                                 <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
                                     <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
                                     <span class="slds-progress-bar__value" style="width:25%">
@@ -229,12 +211,12 @@
             <!-- /Location View -->
     
     
-            <!-- Sub-location Detail -->
+            <!-- Sublocation Detail -->
             <template if:true={subLocationView}>
+                <!-- Nav -->
                 <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
                     <div class="slds-col">
-                        <!-- Nav -->
-                        <lightning-breadcrumbs class="">
+                        <lightning-breadcrumbs>
                             <lightning-breadcrumb
                                 label="All Locations"
                                 onclick={handleShowAllLocations}>
@@ -244,64 +226,60 @@
                                 onclick={handleShowLocation}>
                             </lightning-breadcrumb>
                             <lightning-breadcrumb
-                                label="Floor 1"
+                                label="Sublocation Name"
                                 onclick={handleShowSubLocation}>
                             </lightning-breadcrumb>
                         </lightning-breadcrumbs>
-                        <!-- /Nav -->
                     </div>
                     <div class="slds-col">
                         <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
-                            <lightning-menu-item value="sublocation-record" label="View Sub-Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
+                            <lightning-menu-item value="sublocation-record" label="View Sublocation Record" prefix-icon-name="utility:open"></lightning-menu-item>
                             <lightning-menu-item value="locations-list" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
                         </lightning-button-menu>
                     </div>
                 </div>
-
+                <!-- /Nav -->
                 <!-- Field Data -->
-                <div class="slds-grid slds-grid_align-space slds-grid_vertical-align-end slds-gutters_direct slds-p-top_large slds-p-horizontal_medium">
-                    <div class="slds-col">
-                        <div class="wdc-field-data slds-form-element">
-                            <div class="slds-form-element__label">
-                                Last Cleaned
+                <div class="slds-p-horizontal_medium slds-m-top_large slds-m-bottom_x-large">
+                    <div class="slds-grid slds-grid_align-space slds-grid_vertical-align-end slds-gutters_direct">
+                        <div class="slds-col">
+                            <div class="wdc-field-data slds-form-element">
+                                <div class="slds-form-element__label">
+                                    Last Cleaned
+                                </div>
+                                <div class="slds-form-element__control">
+                                    Today 9:35AM
+                                </div>
                             </div>
-                            <div class="slds-form-element__control">
-                                Today 9:35AM
+                        </div>
+                        <div class="slds-col">
+                            <div class="wdc-field-data slds-form-element slds-m-bottom_xx-small">
+                                <div class="slds-form-element__label">
+                                    Frequency
+                                </div>
+                                <div class="slds-form-element__control">
+                                    6 Hours
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="slds-col">
-                        <div class="wdc-field-data slds-form-element slds-m-bottom_xx-small">
-                            <div class="slds-form-element__label">
-                                Frequency
-                            </div>
-                            <div class="slds-form-element__control">
-                                6 Hours
-                            </div>
+                    <!-- Gauge -->
+                    <div class="slds-m-top_large">
+                        <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                            <span>
+                                <strong>Next Cleaning in 4 Hours</strong>
+                            </span>
+                        </div>
+                        <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                            <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
+                            <span class="slds-progress-bar__value" style="width:66%">
+                              <span class="slds-assistive-text">Next Cleaning in 4 Hours</span>
+                            </span>
                         </div>
                     </div>
+                    <!-- /Gauge -->
                 </div>
                 <!-- /Field Data -->
-
-                <!-- Gauge -->
-                <div class="slds-m-top_large slds-m-bottom_x-large slds-p-horizontal_medium">
-                    <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
-                        <span>
-                            <strong>Next Cleaning in 4 Hours</strong>
-                        </span>
-                    </div>
-                    <!-- <div class="wdc-gauge-container">
-                        <lightning-progress-bar value="60" variant="circular" size="large"></lightning-progress-bar>
-                    </div> -->
-                    <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
-                        <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
-                        <span class="slds-progress-bar__value" style="width:66%">
-                          <span class="slds-assistive-text">Next Cleaning in 4 Hours</span>
-                        </span>
-                    </div>
-                </div>
-                <!-- /Gauge -->
-    
                 <!-- Employee List -->
                 <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-horizontal_medium">
                     <div class="slds-col">
@@ -321,7 +299,6 @@
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
                                 Available to Work (30)
-                                <!-- <lightning-helptext content="People who are Available to Work are ready to return to their assigned location workplace." class="wdc-helptext slds-is-relative slds-m-left_x-small"></lightning-helptext> -->
                             </div>
                             <div class="slds-col slds-grow-none">
                                 <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action"></lightning-button-icon>
@@ -332,7 +309,6 @@
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
                                 Remote Work Only (10)
-                                <!-- <lightning-helptext content="People who are Remote Work Only are not ready to return to their assigned location workplace." class="wdc-helptext slds-is-relative slds-m-left_x-small"></lightning-helptext> -->
                             </div>
                             <div class="slds-col slds-grow-none">
                                 <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action"></lightning-button-icon>
@@ -343,7 +319,6 @@
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
                                 Unavailable (2)
-                                <!-- <lightning-helptext content="People who are not yet cleared to return to their assigned location workplace." class="wdc-helptext slds-is-relative slds-m-left_x-small"></lightning-helptext> -->
                             </div>
                             <div class="slds-col slds-grow-none">
                                 <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action"></lightning-button-icon>
@@ -354,7 +329,6 @@
                         <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
                             <div class="slds-col">
                                 Unknown (1)
-                                <!-- <lightning-helptext content="People whose status is not known." class="wdc-helptext slds-is-relative slds-m-left_x-small"></lightning-helptext> -->
                             </div>
                             <div class="slds-col slds-grow-none">
                                 <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action"></lightning-button-icon>
@@ -364,7 +338,7 @@
                 </ul>
                 <!-- /Employee List -->
             </template>
-            <!-- /Sub-location Detail -->
+            <!-- /Sublocation Detail -->
         </div>
         <!-- / Body -->
     </article>

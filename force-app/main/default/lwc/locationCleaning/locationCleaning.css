@@ -28,6 +28,10 @@
     margin: 0;
 }
 
+.wdc-gauge_overdue.slds-progress-bar {
+    background-color: #d4504c;
+}
+
 /* Custom Table Styles */
 .wdc-location-list_all tbody tr td {
     padding-top: 1rem;

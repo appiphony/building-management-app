@@ -138,16 +138,22 @@
                             <td>
                                 <div class="slds-truncate">Floor 1</div>
                             </td>
-                            <td class="wdc-gauge">
+                            <td>
                                 <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
                                     <span>
                                         <strong>Next Cleaning in 4 Hours</strong>
                                     </span>
                                     <span>Last: Today 9:35AM</span>
                                 </div>
-                                <div class="wdc-gauge-container">
-                                    <lightning-progress-bar size="large" value="75" variant="circular"></lightning-progress-bar>
+                                <!-- <lightning-progress-bar size="large" value="75" variant="circular"></lightning-progress-bar> -->
+                                <!-- Gauge -->
+                                <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                    <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
+                                    <span class="slds-progress-bar__value" style="width:66%">
+                                      <span class="slds-assistive-text">Next Cleaning in 4 Hours</span>
+                                    </span>
                                 </div>
+                                <!-- /Gauge -->
                                 <div class="slds-p-top_x-small slds-text-title">
                                     <span>Frequency: 6 Hours</span>
                                 </div>
@@ -160,17 +166,25 @@
                             <td>
                                 <div class="slds-truncate">Floor 2</div>
                             </td>
-                            <td class="wdc-gauge">
+                            <td>
                                 <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
                                     <span>
-                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
                                         <strong>Cleaning Overdue</strong>
                                     </span>
                                     <span>Last: May 9 12:15PM</span>
                                 </div>
-                                <div class="wdc-gauge-container">
+                                <!-- <div class="wdc-gauge-container">
                                     <lightning-progress-bar size="large" value="0" variant="circular" class="wdc-gauge__gauge"></lightning-progress-bar>
+                                </div> -->
+                                <!-- Gauge -->
+                                <div class="wdc-gauge_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                    <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
+                                    <span class="slds-progress-bar__value" style="width:0">
+                                      <span class="slds-assistive-text">Cleaning Overdue</span>
+                                    </span>
                                 </div>
+                                <!-- /Gauge -->
                                 <div class="slds-p-top_x-small slds-text-title">
                                     <span>Frequency: 2 Hours</span>
                                 </div>
@@ -183,16 +197,24 @@
                             <td>
                                 <div class="slds-truncate">Floor 5</div>
                             </td>
-                            <td class="wdc-gauge">
+                            <td>
                                 <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
                                     <span>
                                         <strong>Next Cleaning in 2 Hours</strong>
                                     </span>
                                     <span>Last: Today 7:15AM </span>
                                 </div>
-                                <div class="wdc-gauge-container">
+                                <!-- <div class="wdc-gauge-container">
                                     <lightning-progress-bar size="large" value="15" variant="circular"></lightning-progress-bar>
+                                </div> -->
+                                <!-- Gauge -->
+                                <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                    <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
+                                    <span class="slds-progress-bar__value" style="width:25%">
+                                      <span class="slds-assistive-text">Next Cleaning in 2 Hours</span>
+                                    </span>
                                 </div>
+                                <!-- /Gauge -->
                                 <div class="slds-p-top_x-small slds-text-title">
                                     <span>Frequency: 7 Hours</span>
                                 </div>
@@ -268,8 +290,14 @@
                             <strong>Next Cleaning in 4 Hours</strong>
                         </span>
                     </div>
-                    <div class="wdc-gauge-container">
+                    <!-- <div class="wdc-gauge-container">
                         <lightning-progress-bar value="60" variant="circular" size="large"></lightning-progress-bar>
+                    </div> -->
+                    <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                        <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
+                        <span class="slds-progress-bar__value" style="width:66%">
+                          <span class="slds-assistive-text">Next Cleaning in 4 Hours</span>
+                        </span>
                     </div>
                 </div>
                 <!-- /Gauge -->

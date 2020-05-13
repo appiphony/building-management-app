@@ -49,6 +49,17 @@
     padding-left: 1rem;
 }
 
+.wdc-icon_drill-in {
+    opacity: 0;
+    transform: translateX(5px);
+    transition: all 100ms ease-out;
+}
+
+tr:hover .wdc-icon_drill-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 
 .wdc-location-list tbody tr td:first-child {
     font-size: 0.875rem;

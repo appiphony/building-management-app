@@ -22,6 +22,25 @@
         <div class="slds-card__body slds-card__body_inner slds-scrollable_y">
             <!-- No Location Selected -->
             <template if:true={noLocationView}>
+                <!-- Nav -->
+                <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
+                    <div class="slds-col">
+                        <!-- Nav -->
+                        <lightning-breadcrumbs class="">
+                            <lightning-breadcrumb
+                                label="All Locations"
+                                onclick={handleShowAllLocations}>
+                            </lightning-breadcrumb>
+                        </lightning-breadcrumbs>
+                        <!-- /Nav -->
+                    </div>
+                    <div class="slds-col">
+                        <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
+                            <lightning-menu-item value="locations-list" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
+                        </lightning-button-menu>
+                    </div>
+                </div>
+                <!-- /Nav -->
                 <table class="wdc-location-list_all slds-table slds-table_cell-buffer">
                     <thead class="">
                         <tr class="slds-line-height_reset">
@@ -33,6 +52,9 @@
                             </th>
                             <th scope="col" style="width: 1px;">
                                 <div class="slds-truncate" title="Clean Status">Clean Status</div>
+                            </th>
+                            <th scope="col" style="width: 1px;">
+                                <!-- Action Icon -->
                             </th>
                         </tr>
                     </thead>
@@ -47,6 +69,9 @@
                             <td>
                                 <span class="slds-text-color_destructive"><strong>Overdue</strong></span>
                             </td>
+                            <td>
+                                <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
+                            </td>
                         </tr>
                         <tr class="slds-hint-parent">
                             <td>
@@ -57,6 +82,9 @@
                             </td>
                             <td>
                                 <span class="slds-text-color_success"> Up to Date</span>
+                            </td>
+                            <td>
+                                <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -85,7 +113,8 @@
                     </div>
                     <div class="slds-col">
                         <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
-                            <lightning-menu-item value="sublocation-record" label="View Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
+                            <lightning-menu-item value="location-record" label="View Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
+                            <lightning-menu-item value="locations-list" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
                         </lightning-button-menu>
                     </div>
                 </div>
@@ -98,6 +127,9 @@
                             </th>
                             <th scope="col">
                                 <div class="slds-truncate" title="Sub-Location Status">Location Status</div>
+                            </th>
+                            <th>
+                                <!-- Action Icon -->
                             </th>
                         </tr>
                     </thead>
@@ -120,6 +152,9 @@
                                     <span>Frequency: 6 Hours</span>
                                 </div>
                             </td>
+                            <td>
+                                <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
+                            </td>
                         </tr>
                         <tr class="slds-hint-parent">
                             <td>
@@ -140,6 +175,9 @@
                                     <span>Frequency: 2 Hours</span>
                                 </div>
                             </td>
+                            <td>
+                                <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
+                            </td>
                         </tr>
                         <tr class="slds-hint-parent">
                             <td>
@@ -148,7 +186,6 @@
                             <td class="wdc-gauge">
                                 <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
                                     <span>
-                                        <!-- <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon> -->
                                         <strong>Next Cleaning in 2 Hours</strong>
                                     </span>
                                     <span>Last: Today 7:15AM </span>
@@ -159,6 +196,9 @@
                                 <div class="slds-p-top_x-small slds-text-title">
                                     <span>Frequency: 7 Hours</span>
                                 </div>
+                            </td>
+                            <td>
+                                <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -191,6 +231,7 @@
                     <div class="slds-col">
                         <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right">
                             <lightning-menu-item value="sublocation-record" label="View Sub-Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
+                            <lightning-menu-item value="locations-list" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
                         </lightning-button-menu>
                     </div>
                 </div>
@@ -226,7 +267,6 @@
                         <span>
                             <strong>Next Cleaning in 4 Hours</strong>
                         </span>
-                        <!-- <span>Last Cleaned: May 2</span> -->
                     </div>
                     <div class="wdc-gauge-container">
                         <lightning-progress-bar value="60" variant="circular" size="large"></lightning-progress-bar>

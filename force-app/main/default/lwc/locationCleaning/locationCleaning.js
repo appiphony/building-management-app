@@ -1,91 +1,136 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, wire, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-import { createMessageContext, releaseMessageContext, subscribe } from 'lightning/messageService';
+import { subscribe, unsubscribe, MessageContext, APPLICATION_SCOPE } from 'lightning/messageService';
 
 import getLocationData from '@salesforce/apex/locationCleaning.getLocationData';
+import getListViews from '@salesforce/apex/locationCleaning.getListViews';
+import getEmployeeCounts from '@salesforce/apex/locationCleaning.getEmployeeCounts';
  
-//will be part of core when GA, remove __c
-// import COMMAND_CENTER from "@salesforce/messageChannel/CommandCenterMessageChannel";
+//will be part of core when GA, replace back2work with lightning and remove __c
+import COMMAND_CENTER from "@salesforce/messageChannel/back2work__CommandCenterMessageChannel__c";
 
-export default class LocationCleaning extends LightningElement {
-    /// DEMO STATES - refactor or remove these ///
-    noLocationView = true;
-    locationView = false;
-    subLocationView = false;
+export default class LocationCleaning extends NavigationMixin(LightningElement) {
+    @wire(MessageContext)
+    messageContext;
+
+    subscription;
+
+    listViews;
 
     @track locationId;
-    /// END DEMO STATES ///
+    @track locationName;
 
-    handleShowAllLocations() {
-        this.noLocationView = true;
-        this.locationView = false;
-        this.subLocationView = false;
-    }
+    @track locationDatas = [];
 
-    handleShowLocation() {
-        this.noLocationView = false;
-        this.locationView = true;
-        this.subLocationView = false;
-    }
+    @track locationData = {};
+    @track sublocationData = {};
 
-    handleShowSubLocation() {
-        this.noLocationView = false;
-        this.locationView = false;
-        this.subLocationView = true;
-    }
-
-    context = createMessageContext();
-    subscription = null;
-    
     connectedCallback() {
-        this.getData();
-
         if (this.subscription) {
             return;
         }
 
         //subscribe to command center messages
-        // this.subscription = subscribe(this.context, COMMAND_CENTER, (message) => {
-        //     this.handleMessage(message);
-        // });
-    }
+        this.subscription = subscribe(this.messageContext, COMMAND_CENTER, message => {this.handleMessage(message)}, {scope: APPLICATION_SCOPE});
 
-    navigateToListView() {
-        // Navigate to the Contact object's Recent list view.
-        this[NavigationMixin.Navigate]({
-            type: 'standard__objectPage',
-            attributes: {
-                objectApiName: 'wdctest__Employee__c',
-                actionName: 'list'
-            },
-            state: {
-                // 'filterName' is a property on the page 'state'
-                // and identifies the target list view.
-                // It may also be an 18 character list view id.
-                filterName: 'Recent'
-            }
-        });
+        this.getLocationData();
+        this.getListViews();
     }
-
+    
     handleMessage(message) {
         if(message.EventSource == 'CommandCenter' && message.EventType == 'CC_LOCATION_CHANGE') {
-            //handle location change from command center
-            this.locationId = e.EventPayload.locationId;
-            let locationName = e.EventPayload.locationName;
 
-            this.getData();
+            //handle location change from command center
+            this.locationId = message.EventPayload.locationId;
+            this.locationName = message.EventPayload.locationName;
+
+            this.getLocationData();
        }
     }
 
-    getData(locationId) {
-        getLocationData({locationId : this.locationId})
-        .then(res => {
+    showLocation(event) {
+        let buildingId = event.currentTarget.dataset.id;
 
+        this.locationData = this.locationDatas.find(building => {
+            return building.Id == buildingId;
+        })
+
+        this.sublocationData = {};
+
+        this.locationId = this.locationData.wdcLocation__c;
+    }
+
+    showSublocation(event) {
+        let sublocationId = event.currentTarget.dataset.id;
+
+        getEmployeeCounts({sublocationId: sublocationId})
+        .then(res => {
+            let employeeData = JSON.parse(res);
+
+            let sublocationData = this.locationData.wdctest__Floors__r.records.find(flr => {
+                return flr.Id == sublocationId;
+            })
+
+            this.sublocationData = Object.assign(sublocationData, employeeData);
         })
     }
-    
+
+    getLocationData() {
+        getLocationData({locationId : this.locationId})
+        .then(res => {
+            this.locationDatas = JSON.parse(res);
+            this.locationData = this.locationId ? this.locationDatas[0] : {};
+            this.sublocationData = {};
+        })
+    }
+
+    getListViews() {
+        getListViews()
+        .then(res => {
+            this.listViews = JSON.parse(res);
+        })
+    }
+
+    nav(event) {
+        let value = event.detail.value ? event.detail.value : event.currentTarget.value;
+
+        let navData;
+
+        if(value.includes('|')) {
+            //list view
+            let data = value.split('|');
+
+            navData = {
+                type: 'standard__objectPage',
+                attributes: {
+                    objectApiName: data[0],
+                    actionName: 'list'
+                },
+                state: {
+                    filterName: data[1]
+                }
+            }
+        } else{
+            //record page
+            navData = {
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: value,
+                    actionName: 'view'
+                }
+            }
+        }
+
+        this[NavigationMixin.GenerateUrl](navData).then(url => {
+            window.open(url);
+        });
+
+    }
+
     disconnectedCallback() {
-        //unregister subscription
-        releaseMessageContext(this.context);
+        //unsubscribe on unrender
+        if (this.subscription) {
+            unsubscribe(this.subscription);
+        }
     }
 }

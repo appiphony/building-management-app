@@ -1,9 +1,8 @@
 :host {
+    /**** Command Center Custom Variables (Tokens) ****/
     --cc-brand_color: #00A1E0;
-    /* Font Colors */
     --cc-card-title_color: #091a3e; 
     --cc-card-subtitle_color: #335779;
-
 }
 
 .slds-card__header {
@@ -23,24 +22,31 @@
 }
 
 .slds-card__body {
-    /* padding: var(--lwc-spacingMedium, 1rem); */
     padding: 0;
     margin: 0;
 }
 
-/* Custom Table Styles */
-.wdc-location-list_all tbody tr td {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+.wdc-progress-bar_overdue.slds-progress-bar {
+    background-color: #d4504c;
 }
 
+
+
+/**** Custom Table Styles ****/
 .wdc-location-list_all tbody tr, 
 .wdc-location-list tbody tr {
     cursor: pointer;
 }
+
+.wdc-location-list_all tbody tr td,
 .wdc-location-list tbody tr td {
     padding-top: 1rem;
     padding-bottom: 1rem;
+}
+
+.wdc-location-list_all thead tr th:nth-last-child(2),
+.wdc-location-list_all thead tr th:last-child,
+.wdc-location-list tbody tr td {
     width: 1px;
 }
 
@@ -49,16 +55,24 @@
     padding-left: 1rem;
 }
 
+.wdc-icon_drill-in {
+    opacity: 0;
+    transform: translateX(5px);
+    transition: all 100ms ease-out;
+}
+
+tr:hover .wdc-icon_drill-in {
+    opacity: 1;
+    transform: translateX(0);
+}
 
 .wdc-location-list tbody tr td:first-child {
     font-size: 0.875rem;
 }
 
-/* Sub Location Detail */
-.wdc-employee-list li:hover {
-    background-color: rgb(243, 242, 242);
-}
 
+
+/**** Sublocation Detail Styles ****/
 .wdc-field-data .slds-form-element__label {
     color: var(--cc-card-title_color);
     /* font-size: var(--lwc-fontSize4, 14px); /* Internal Variable */
@@ -69,4 +83,20 @@
     color: var(--cc-card-title_color);
     /* font-size: var(--lwc-fontSize8, 24px); /* Internal Variable */
     font-size: 24px;
+}
+
+.wdc-helptext {
+    bottom: 4px;
+}
+
+.wdc-employee-list li:hover {
+    background-color: rgb(243, 242, 242);
+}
+
+.wdc-icon_list-action {
+    visibility: hidden;
+}
+
+li:hover .wdc-icon_list-action {
+    visibility: visible;
 }

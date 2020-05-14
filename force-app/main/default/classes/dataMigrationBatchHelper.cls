@@ -8,31 +8,32 @@ public with sharing class dataMigrationBatchHelper {
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAPPING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     wdctest__Building__c                     |  Location
-        Id                                   |      wdcext__Building__c *
+        wdcBuilding__c *                     |      Id
         Name                                 |      Name
         wdctest__Location__c                 |      Location
             wdctest__Location__Latitude__c   |          Location__Latitude__c
             wdctest__Location__Longitude__c  |          Location__Longitude__c
                                              |
     wdctest__Floor__c                        |  Location
-        Id                                   |      wdcext__Floor__c *
+        wdcFloor__c *                        |      Id
         Name                                 |      Name
         wdctest__Level__c                    |      LocationLevel
-        wdctest__Cleaning_Frequency_Days__c  |      wdcext__Cleaning_Frequency_Days__c
+        wdctest__Cleaning_Frequency_Days__c  |      wdcCleaning_Frequency_Days__c
         wdctest__Building__c                 |      ParentLocationId
                                              |
     wdctest__Employee__c                     |  back2work__Employee__c
-        Id                                   |      wdcext__Employee__c *
+        wdcEmployee__c *                     |      Id
         wdctest__First_Name__c               |      back2work__FirstName__c
         wdctest__Last_Name__c                |      back2work__LastName__c
         wdctest__Status__c                   |      back2work__WellnessStatus__c
         wdctest__Floor__c                    |      back2work__Location__c
                                              |
     wdctest__Cleaning__c **                  |  N/A
-        wdcext__Location__c
-    
+
+
     * Adding External Id fields to Building, Floor, and Employee in extension package to hold corresponding 
-    work.com record ids. These will be used to keep records in sync in triggers.
+    work.com record ids. These will be used to keep records in sync in triggers and ensure we dont inser duplicates
+    in initial data sync
 
     ** wdctest__Cleaning__c does not need to be duplicated to work.com object b/c no corresponding 
     object exists. Instead, just need to add lookup to Location in ext package.
@@ -58,8 +59,7 @@ public with sharing class dataMigrationBatchHelper {
                 insert parentLocation;
 
                 //update existing wdctest building with location id
-                //TODO: uncomment once added to package
-                //building.wdcLocation__c = parentLocation.Id;
+                building.wdcLocation__c = parentLocation.Id;
                 update building;
             }
 
@@ -70,8 +70,7 @@ public with sharing class dataMigrationBatchHelper {
             insert newSublocation;
 
             //update existing wdctest floor with sublocation id
-            //TODO: uncomment once added to package
-            //existingFloor.wdcLocation__c = newSublocation.Id;
+            existingFloor.wdcLocation__c = newSublocation.Id;
             update existingFloor;
 
             //create employees (Employee)
@@ -92,7 +91,7 @@ public with sharing class dataMigrationBatchHelper {
 
                 //need to get wellness status from map b/c values aren't exactly the same
                 if(String.isNotEmpty(employee.wdctest__Status__c)) {
-                    String wellnessStatus = back2workStatusByWdcTestStatus.get(employee.wdctest__Status__c);
+                    String wellnessStatus = config.back2workStatusByWdcTestStatus.get(employee.wdctest__Status__c);
                     newEmployee.put('back2work__WellnessStatus__c', wellnessStatus);
                 }
 
@@ -103,8 +102,7 @@ public with sharing class dataMigrationBatchHelper {
 
             //update existing wdctest employee records with wdc employee id
             for(wdctest__Employee__c employee : existingFloor.wdctest__Employees__r) {
-                //TODO: uncomment once added to package
-                //employee.wdcEmployee__c = newEmployeesByExistingId.get(employee.Id).Id;
+                employee.wdcEmployee__c = newEmployeesByExistingId.get(employee.Id).Id;
             }
 
             update existingFloor.wdctest__Employees__r;
@@ -114,31 +112,25 @@ public with sharing class dataMigrationBatchHelper {
         }
     }
 
-    public static void processTriggerRecords(Map<String, sObject> triggerNew, Map<String, sObject> recordsByTriggerObjId, Map<String, String> fieldMap, String objType) {
+    public static void processTriggerRecords(Map<String, sObject> triggerNew, Map<String, String> existingRecordIdByTriggerObjId, Map<String, String> fieldMap, String objType) {
+        List<sObject> recordsToUpsert = (List<sObject>)Type.forName('List<' + objType + '>').newInstance();
         for(String recordId : triggerNew.keySet()) {
-            sObject loc = (sObject)Type.forName(objType).newInstance();
+            sObject wdcRecord = (sObject)Type.forName(objType).newInstance();
 
-            if(recordsByTriggerObjId.containsKey(recordId)) {
+            if(existingRecordIdByTriggerObjId.containsKey(recordId)) {
                 //if corresponding location exists, update
-                loc = recordsByTriggerObjId.get(recordId);
-            } else{
-                //else, add to map
-                recordsByTriggerObjId.put(recordId, loc);
+                wdcRecord.put('Id', existingRecordIdByTriggerObjId.get(recordId));
             }
 
             Map<String, Object> recordMap = Trigger.newMap.get(recordId).getPopulatedFieldsAsMap();
 
             for(String field : recordMap.keySet()) {
                 if(fieldMap.containsKey(field)) {
-                    String locationField = fieldMap.get(field);
-                    loc.put(locationField, recordMap.get(field));
+                    wdcRecord.put(fieldMap.get(field), recordMap.get(field));
                 }
             }
+            recordsToUpsert.add(wdcRecord);
         }
-
-        List<sObject> recordsToUpsert = (List<sObject>)Type.forName('List<' + objType + '>').newInstance();
-        recordsToUpsert.addAll(recordsByTriggerObjId.values());
-
         upsert recordsToUpsert;
     }
 }

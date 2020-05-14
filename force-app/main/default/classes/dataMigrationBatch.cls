@@ -10,7 +10,7 @@ global class dataMigrationBatch implements Database.Batchable<sObject> {
                                     'FROM wdctest__Employees__r' + 
                                   '),' + 
                                   '(' + 
-                                    'SELECT Id, wdctest__Cleaning_Time__c, wdcext__Location__c ' +
+                                    'SELECT Id, wdctest__Cleaning_Time__c ' +
                                     'FROM wdctest__Cleanings__r' + 
                                   ') ' + 
                        'FROM wdctest__Floor__c';

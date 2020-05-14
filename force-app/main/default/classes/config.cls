@@ -9,14 +9,14 @@ public with sharing class config {
 
     //
     public static Map<String, String> locationFieldByBuildingField = new Map<String, String> {
-        'Id' => 'wdcext__Building__c',
+        'wdcBuilding__c' => 'Id',
         'Name' => 'Name',
         'wdctest__Location__Latitude__s' => 'Latitude',
         'wdctest__Location__Longitude__s' => 'Longitude'
     };
 
     public static Map<String, String> locationFieldByFloorField = new Map<String, String> {
-        'Id' => 'wdcext__Floor__c',
+        'wdcFloor__c' => 'Id',
         'Name' => 'Name',
         'wdctest__Level__c' => 'LocationLevel',
         'wdctest__Cleaning_Frequency_Days__c' => 'wdcext__Cleaning_Frequency_Days__c',
@@ -24,7 +24,7 @@ public with sharing class config {
     };
 
     public static Map<String, String> employeeFieldByB2WEmployeeField = new Map<String, String> {
-        'Id' => 'wdcext__Employee__c',
+        'wdcEmployee__c' => 'Id',
         'wdctest__First_Name__c' => 'back2work__FirstName__c',
         'wdctest__Last_Name__c' => 'back2work__LastName__c',
         'wdctest__Status__c' => 'back2work__WellnessStatus__c',

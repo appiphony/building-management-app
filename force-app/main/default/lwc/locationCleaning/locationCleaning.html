@@ -90,15 +90,14 @@
                             <!-- TODO -->
                             <lightning-breadcrumbs>
                                 <lightning-breadcrumb
-                                    label="All Locations"
-                                    onclick={handleShowAllLocations}>
+                                    label="All Locations">
                                 </lightning-breadcrumb>
                                 <lightning-breadcrumb
-                                    label="Location Name"
+                                    label={locationData.Name}
                                     onclick={handleShowLocation}>
                                 </lightning-breadcrumb>
                                 <lightning-breadcrumb
-                                    label="Sublocation Name"
+                                    label={sublocationData.Name}
                                     onclick={handleShowSubLocation}>
                                 </lightning-breadcrumb>
                             </lightning-breadcrumbs>
@@ -141,20 +140,33 @@
                                 </div>
                             </div>
                         </div>
+                        <template if:true={sublocationData.wdctest__Cleaning_Overdue__c}>
+                            <span>
+                                <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
+                                <strong>Cleaning Overdue</strong>
+                            </span>
+                        </template>
+                        <template if:false={sublocationData.wdctest__Cleaning_Overdue__c}>
+                            <span>
+                                <strong>Next Cleaning in {sublocationData.nextCleaning} Hours</strong>
+                            </span>
+                        </template>
+
                         <!-- Gauge -->
-                        <div class="slds-m-top_large">
-                            <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
-                                <span>
-                                    <strong>Next Cleaning in {sublocationData.nextCleaning} Hours</strong>
+                        <template if:true={sublocationData.wdctest__Cleaning_Overdue__c}>
+                            <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                <span class="slds-progress-bar__value" style="width:0">
+                                  <span class="slds-assistive-text">Cleaning Overdue</span>
                                 </span>
                             </div>
+                        </template>
+                        <template if:false={sublocationData.wdctest__Cleaning_Overdue__c}>
                             <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
-                                <!-- DEV NOTE: Need to pass back string for Style with caluclated Width value -->
                                 <span class="slds-progress-bar__value" style={sublocationData.barWidth}>
                                   <span class="slds-assistive-text">Next Cleaning in {sublocationData.nextCleaning} Hours</span>
                                 </span>
                             </div>
-                        </div>
+                        </template>
                         <!-- /Gauge -->
                     </div>
                     <!-- /Field Data -->
@@ -246,11 +258,10 @@
                             <!-- TODO -->
                             <lightning-breadcrumbs>
                                 <lightning-breadcrumb
-                                    label="All Locations"
-                                    onclick={handleShowAllLocations}>
+                                    label="All Locations">
                                 </lightning-breadcrumb>
                                 <lightning-breadcrumb
-                                    label="Location Name"
+                                    label={locationData.Name}
                                     onclick={handleShowLocation}>
                                 </lightning-breadcrumb>
                             </lightning-breadcrumbs>

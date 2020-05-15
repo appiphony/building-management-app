@@ -96,10 +96,6 @@ tr:hover .wdc-icon_drill-in {
     bottom: 4px;
 }
 
-.wdc-employee-list li:hover {
-    background-color: rgb(243, 242, 242);
-}
-
 .wdc-icon_list-action {
     visibility: hidden;
 }

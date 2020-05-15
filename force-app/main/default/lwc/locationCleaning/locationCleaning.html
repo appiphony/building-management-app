@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                             <div class="slds-col">
-                                <div class="wdc-field-data slds-form-element slds-m-bottom_xx-small">
+                                <div class="wdc-field-data slds-form-element">
                                     <div class="slds-form-element__label">
                                         Frequency
                                     </div>
@@ -139,34 +139,39 @@
                                 </div>
                             </div>
                         </div>
-                        <template if:true={sublocationData.wdctest__Cleaning_Overdue__c}>
-                            <span>
-                                <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
-                                <strong>Cleaning Overdue</strong>
-                            </span>
-                        </template>
-                        <template if:false={sublocationData.wdctest__Cleaning_Overdue__c}>
-                            <span>
-                                <strong>Next Cleaning in {sublocationData.nextCleaning} Hours</strong>
-                            </span>
-                        </template>
 
-                        <!-- Gauge -->
-                        <template if:true={sublocationData.wdctest__Cleaning_Overdue__c}>
-                            <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
-                                <span class="slds-progress-bar__value" style="width:0">
-                                  <span class="slds-assistive-text">Cleaning Overdue</span>
-                                </span>
+                        <div class="slds-m-top_large">
+                            <div class="slds-p-bottom_x-small slds-text-title">
+                                <template if:true={sublocationData.wdctest__Cleaning_Overdue__c}>
+                                    <span>
+                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
+                                        <strong>Cleaning Overdue</strong>
+                                    </span>
+                                </template>
+                                <template if:false={sublocationData.wdctest__Cleaning_Overdue__c}>
+                                    <span>
+                                        <strong>Next Cleaning in {sublocationData.nextCleaning} Hours</strong>
+                                    </span>
+                                </template>
                             </div>
-                        </template>
-                        <template if:false={sublocationData.wdctest__Cleaning_Overdue__c}>
-                            <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
-                                <span class="slds-progress-bar__value" style={sublocationData.barWidth}>
-                                  <span class="slds-assistive-text">Next Cleaning in {sublocationData.nextCleaning} Hours</span>
-                                </span>
-                            </div>
-                        </template>
-                        <!-- /Gauge -->
+                            <!-- Gauge -->
+                            <template if:true={sublocationData.wdctest__Cleaning_Overdue__c}>
+                                <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                    <span class="slds-progress-bar__value" style="width:0">
+                                      <span class="slds-assistive-text">Cleaning Overdue</span>
+                                    </span>
+                                </div>
+                            </template>
+                            <template if:false={sublocationData.wdctest__Cleaning_Overdue__c}>
+                                <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                    <span class="slds-progress-bar__value" style={sublocationData.barWidth}>
+                                      <span class="slds-assistive-text">Next Cleaning in {sublocationData.nextCleaning} Hours</span>
+                                    </span>
+                                </div>
+                            </template>
+                            <!-- /Gauge -->
+
+                        </div>
                     </div>
                     <!-- /Field Data -->
                     <!-- Employee List -->
@@ -195,7 +200,7 @@
                                     </template>
                                 </div>
                                 <div class="slds-col slds-grow-none">
-                                    <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Available" onclick={nav}></lightning-button-icon>
+                                    <lightning-button-icon icon-name="utility:open" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Available" onclick={nav}></lightning-button-icon>
                                 </div>
                             </div>
                         </li>
@@ -210,7 +215,7 @@
                                     </template>
                                 </div>
                                 <div class="slds-col slds-grow-none">
-                                    <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Remote" onclick={nav}></lightning-button-icon>
+                                    <lightning-button-icon icon-name="utility:open" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Remote" onclick={nav}></lightning-button-icon>
                                 </div>
                             </div>
                         </li>
@@ -225,7 +230,7 @@
                                     </template>
                                 </div>
                                 <div class="slds-col slds-grow-none">
-                                    <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Unavailable" onclick={nav}></lightning-button-icon>
+                                    <lightning-button-icon icon-name="utility:open" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Unavailable" onclick={nav}></lightning-button-icon>
                                 </div>
                             </div>
                         </li>
@@ -240,7 +245,7 @@
                                     </template>
                                 </div>
                                 <div class="slds-col slds-grow-none">
-                                    <lightning-button-icon icon-name="utility:list" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Unknown" onclick={nav}></lightning-button-icon>
+                                    <lightning-button-icon icon-name="utility:open" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Unknown" onclick={nav}></lightning-button-icon>
                                 </div>
                             </div>
                         </li>
@@ -288,59 +293,61 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <template for:each={locationData.wdctest__Floors__r.records} for:item="floorData">
-                                <tr key={floorData.Id} class="slds-hint-parent" 
-                                    data-id={floorData.Id} onclick={showSublocation}>
-                                    <td>
-                                        <div class="slds-truncate">{floorData.Name}</div>
-                                    </td>
-                                    <td>
-                                        <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
-                                            <template if:true={floorData.wdctest__Cleaning_Overdue__c}>
-                                                <span>
-                                                    <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
-                                                    <strong>Cleaning Overdue</strong>
+                            <template if:true={locationData.Id}>
+                                <template for:each={locationData.wdctest__Floors__r.records} for:item="floorData">
+                                    <tr key={floorData.Id} class="slds-hint-parent" 
+                                        data-id={floorData.Id} onclick={showSublocation}>
+                                        <td>
+                                            <div class="slds-truncate">{floorData.Name}</div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                                                <template if:true={floorData.wdctest__Cleaning_Overdue__c}>
+                                                    <span>
+                                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
+                                                        <strong>Cleaning Overdue</strong>
+                                                    </span>
+                                                </template>
+                                                <template if:false={floorData.wdctest__Cleaning_Overdue__c}>
+                                                    <span>
+                                                        <strong>Next Cleaning in {floorData.nextCleaning} Hours</strong>
+                                                    </span>
+                                                </template>
+                                                <span>Last: 
+                                                    <lightning-formatted-date-time value={floorData.lastCleaning}
+                                                                                    year="numeric"
+                                                                                    month="numeric"
+                                                                                    day="numeric"
+                                                                                    hour="2-digit"
+                                                                                    minute="2-digit">
+                                                    </lightning-formatted-date-time>
                                                 </span>
+                                            </div>
+                                            <!-- Gauge -->
+                                            <template if:true={floorData.wdctest__Cleaning_Overdue__c}>
+                                                <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                                    <span class="slds-progress-bar__value" style="width:0">
+                                                    <span class="slds-assistive-text">Cleaning Overdue</span>
+                                                    </span>
+                                                </div>
                                             </template>
                                             <template if:false={floorData.wdctest__Cleaning_Overdue__c}>
-                                                <span>
-                                                    <strong>Next Cleaning in {floorData.nextCleaning} Hours</strong>
-                                                </span>
+                                                <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                                    <span class="slds-progress-bar__value" style={floorData.barWidth}>
+                                                    <span class="slds-assistive-text">Next Cleaning in {floorData.nextCleaning} Hours</span>
+                                                    </span>
+                                                </div>
                                             </template>
-                                            <span>Last: 
-                                                <lightning-formatted-date-time value={floorData.lastCleaning}
-                                                                                year="numeric"
-                                                                                month="numeric"
-                                                                                day="numeric"
-                                                                                hour="2-digit"
-                                                                                minute="2-digit">
-                                                </lightning-formatted-date-time>
-                                            </span>
-                                        </div>
-                                        <!-- Gauge -->
-                                        <template if:true={floorData.wdctest__Cleaning_Overdue__c}>
-                                            <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
-                                                <span class="slds-progress-bar__value" style="width:0">
-                                                  <span class="slds-assistive-text">Cleaning Overdue</span>
-                                                </span>
+                                            <!-- /Gauge -->
+                                            <div class="slds-p-top_x-small slds-text-title">
+                                                <span>Frequency: {floorData.freqHrs} Hours</span>
                                             </div>
-                                        </template>
-                                        <template if:false={floorData.wdctest__Cleaning_Overdue__c}>
-                                            <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
-                                                <span class="slds-progress-bar__value" style={floorData.barWidth}>
-                                                  <span class="slds-assistive-text">Next Cleaning in {floorData.nextCleaning} Hours</span>
-                                                </span>
-                                            </div>
-                                        </template>
-                                        <!-- /Gauge -->
-                                        <div class="slds-p-top_x-small slds-text-title">
-                                            <span>Frequency: {floorData.freqHrs} Hours</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td>
+                                            <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
+                                        </td>
+                                    </tr>
+                                </template>
                             </template>
                         </tbody>
                     </table>

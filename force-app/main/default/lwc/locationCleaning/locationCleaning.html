@@ -1,7 +1,7 @@
 <template>
     <article class="slds-card">
         <!-- Header -->
-        <div class="slds-card__header slds-grid">
+        <div class="slds-card__header slds-grid slds-grid_vertical-align-center">
             <div class="slds-col">
                 <h2 class="slds-card__header-title">
                     Location Cleanliness
@@ -12,27 +12,23 @@
                     </h4>
                 </template>
             </div>
+            <div class="slds-col slds-grow-none">
+                <lightning-button-menu variant="border-filled" icon-size="medium" menu-alignment="right" onselect={nav}>
+                    <template if:true={sublocationData.Id}>
+                        <lightning-menu-item value={sublocationData.Id} label="View Sublocation" prefix-icon-name="utility:open"></lightning-menu-item>
+                    </template>
+                    <template if:true={locationId}>
+                        <lightning-menu-item value={locationData.Id} label="View Location" prefix-icon-name="utility:open"></lightning-menu-item>
+                    </template>
+                    <lightning-menu-item value="Location|All_Locations" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
+                </lightning-button-menu>
+            </div>
         </div>
         <!-- /Header -->
         <!-- Body -->
         <div class="slds-card__body slds-card__body_inner slds-scrollable_y">
             <!-- No Location Selected -->
             <template if:false={locationId}>
-                <!-- Nav -->
-                <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
-                    <div class="slds-col">
-                        <lightning-breadcrumbs>
-                            <lightning-breadcrumb label="All Locations">
-                            </lightning-breadcrumb>
-                        </lightning-breadcrumbs>
-                    </div>
-                    <div class="slds-col">
-                        <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right" onselect={nav}>
-                            <lightning-menu-item value="Location|All_Locations" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
-                        </lightning-button-menu>
-                    </div>
-                </div>
-                <!-- /Nav -->
                 <table class="wdc-location-list_all slds-table slds-table_cell-buffer">
                     <thead>
                         <tr class="slds-line-height_reset">
@@ -84,28 +80,16 @@
                 <!-- Sublocation Detail -->
                 <template if:true={sublocationData.Id}>
                     <!-- Nav -->
-                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
-                        <div class="slds-col">
-                            <lightning-breadcrumbs>
-                                <lightning-breadcrumb
-                                    label="All Locations"
-                                    data-value="All"
-                                    onclick={handleBreadcrumbClick}>
-                                </lightning-breadcrumb>
-                                <lightning-breadcrumb
-                                    label={locationData.Name}
-                                    onclick={handleBreadcrumbClick}>
-                                </lightning-breadcrumb>
-                                <lightning-breadcrumb
-                                    label={sublocationData.Name}>
-                                </lightning-breadcrumb>
-                            </lightning-breadcrumbs>
-                        </div>
-                        <div class="slds-col">
-                            <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right" onselect={nav}>
-                                <lightning-menu-item value={sublocationData.Id} label="View Sublocation Record" prefix-icon-name="utility:open"></lightning-menu-item>
-                                <lightning-menu-item value="Location|All_Locations" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
-                            </lightning-button-menu>
+                    <!-- DEV NOTE: Nav should only show up after drilling in to this view -->
+                    <div class="slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <!-- DEV NOTE: Nav should only show up after drilling in to this view -->
+                                <lightning-button-icon variant="border-filled" size="small" icon-name="utility:chevronleft"></lightning-button-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <span class="slds-text-title">{locationData.Name} > <strong>{sublocationData.Name}</strong></span>
+                            </div>
                         </div>
                     </div>
                     <!-- /Nav -->
@@ -257,24 +241,16 @@
                 <!-- Location View -->
                 <template if:false={sublocationData.Id}>
                     <!-- Nav -->
-                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
-                        <div class="slds-col">
-                            <lightning-breadcrumbs>
-                                <lightning-breadcrumb
-                                    label="All Locations"
-                                    data-value="All"
-                                    onclick={handleBreadcrumbClick}>
-                                </lightning-breadcrumb>
-                                <lightning-breadcrumb
-                                    label={locationData.Name}>
-                                </lightning-breadcrumb>
-                            </lightning-breadcrumbs>
-                        </div>
-                        <div class="slds-col">
-                            <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right" onselect={nav}>
-                                <lightning-menu-item value={locationData.Id} label="View Location Record" prefix-icon-name="utility:open"></lightning-menu-item>
-                                <lightning-menu-item value="Location|All_Locations" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
-                            </lightning-button-menu>
+                    <!-- DEV NOTE: Nav should only show up after drilling in to this view -->
+                    <div class="slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <!-- DEV NOTE: Hook up back button to nav to previous view -->
+                                <lightning-button-icon variant="border-filled" size="small" icon-name="utility:chevronleft"></lightning-button-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <span class="slds-text-title"><strong>{locationData.Name}</strong></span>
+                            </div>
                         </div>
                     </div>
                     <!-- /Nav -->

@@ -39,6 +39,7 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
     
     handleMessage(message) {
         if(message.EventSource == 'CommandCenter' && message.EventType == 'CC_LOCATION_CHANGE') {
+            this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
 
             //handle location change from command center
             this.locationId = message.EventPayload.locationId;
@@ -49,6 +50,7 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
     }
 
     showLocation(event) {
+        this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
         let buildingId = event.currentTarget.dataset.id;
 
         this.locationData = this.locationDatas.find(building => {
@@ -61,6 +63,7 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
     }
 
     showSublocation(event) {
+        this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
         let sublocationId = event.currentTarget.dataset.id;
 
         getEmployeeCounts({sublocationId: sublocationId})
@@ -85,6 +88,8 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
     }
 
     handleBreadcrumbClick(event) {
+        this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
+        
         this.sublocationData = {};
 
         if(event.currentTarget.dataset.value == 'All') {

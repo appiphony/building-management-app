@@ -5,6 +5,12 @@
     --cc-card-subtitle_color: #335779;
 }
 
+:host > .slds-card {
+    max-height: 30rem;
+    min-height: 30rem;
+    overflow: hidden;
+}
+
 .slds-card__header {
     margin-bottom: 0;
     padding: var(--lwc-spacingMedium, 1rem);
@@ -24,6 +30,7 @@
 .slds-card__body {
     padding: 0;
     margin: 0;
+    max-height: calc(30rem - 56px);
 }
 
 .wdc-progress-bar_overdue.slds-progress-bar {
@@ -87,10 +94,6 @@ tr:hover .wdc-icon_drill-in {
 
 .wdc-helptext {
     bottom: 4px;
-}
-
-.wdc-employee-list li:hover {
-    background-color: rgb(243, 242, 242);
 }
 
 .wdc-icon_list-action {

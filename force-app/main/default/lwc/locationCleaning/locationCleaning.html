@@ -1,5 +1,10 @@
 <template>
-    <article class="slds-card">
+    <article class="slds-card slds-is-relative">
+        <!-- Loading State -->
+        <template if:true={loading}>
+            <lightning-spinner></lightning-spinner>
+        </template>
+        <!-- /Loading State -->
         <!-- Header -->
         <div class="slds-card__header slds-grid slds-grid_vertical-align-center">
             <div class="slds-col">

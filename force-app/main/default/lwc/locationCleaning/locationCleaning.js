@@ -25,6 +25,8 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
     @track locationData = {};
     @track sublocationData = {};
 
+    @track loading;
+
     connectedCallback() {
         if (this.subscription) {
             return;

@@ -19,10 +19,10 @@
             </div>
             <div class="slds-col slds-grow-none">
                 <lightning-button-menu variant="border-filled" icon-size="medium" menu-alignment="right" onselect={nav}>
-                    <template if:true={sublocationData.Id}>
+                    <template if:true={sublocationData}>
                         <lightning-menu-item value={sublocationData.Id} label="View Sublocation" prefix-icon-name="utility:open"></lightning-menu-item>
                     </template>
-                    <template if:true={locationId}>
+                    <template if:true={locationData}>
                         <lightning-menu-item value={locationData.Id} label="View Location" prefix-icon-name="utility:open"></lightning-menu-item>
                     </template>
                     <lightning-menu-item value="Location|All_Locations" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
@@ -83,14 +83,12 @@
 
             <template if:true={locationId}>
                 <!-- Sublocation Detail -->
-                <template if:true={sublocationData.Id}>
+                <template if:true={sublocationData}>
                     <!-- Nav -->
-                    <!-- DEV NOTE: Nav should only show up after drilling in to this view -->
                     <div class="slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
                         <div class="slds-media slds-media_center">
                             <div class="slds-media__figure">
-                                <!-- DEV NOTE: Nav should only show up after drilling in to this view -->
-                                <lightning-button-icon variant="border-filled" size="small" icon-name="utility:chevronleft"></lightning-button-icon>
+                                <lightning-button-icon variant="border-filled" size="small" icon-name="utility:chevronleft" onclick={back}></lightning-button-icon>
                             </div>
                             <div class="slds-media__body">
                                 <span class="slds-text-title">{locationData.Name} > <strong>{sublocationData.Name}</strong></span>
@@ -244,20 +242,20 @@
                 <!-- /Sublocation Detail -->
 
                 <!-- Location View -->
-                <template if:false={sublocationData.Id}>
+                <template if:false={sublocationData}>
                     <!-- Nav -->
-                    <!-- DEV NOTE: Nav should only show up after drilling in to this view -->
-                    <div class="slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
-                        <div class="slds-media slds-media_center">
-                            <div class="slds-media__figure">
-                                <!-- DEV NOTE: Hook up back button to nav to previous view -->
-                                <lightning-button-icon variant="border-filled" size="small" icon-name="utility:chevronleft"></lightning-button-icon>
-                            </div>
-                            <div class="slds-media__body">
-                                <span class="slds-text-title"><strong>{locationData.Name}</strong></span>
+                    <template if:false={globalLocation}>
+                        <div class="slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure">
+                                    <lightning-button-icon variant="border-filled" size="small" icon-name="utility:chevronleft" data-backto="All" onclick={back}></lightning-button-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <span class="slds-text-title"><strong>{locationData.Name}</strong></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
                     <!-- /Nav -->
                     <table class="wdc-location-list slds-table slds-table_cell-buffer slds-table_header-hidden">
                          <thead class="slds-assistive-text">
@@ -274,7 +272,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <template if:true={locationData.Id}>
+                            <template if:true={locationData}>
                                 <template for:each={locationData.wdctest__Floors__r.records} for:item="floorData">
                                     <tr key={floorData.Id} class="slds-hint-parent" 
                                         data-id={floorData.Id} onclick={showSublocation}>

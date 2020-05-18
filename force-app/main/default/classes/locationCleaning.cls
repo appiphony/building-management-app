@@ -19,11 +19,10 @@ public with sharing class locationCleaning {
             buildingQuery += ' LIMIT 10';
         }
 
-        List<sObject> buildings = Database.query(buildingQuery);
-
         List<Map<String, Object>> buildingData = new List<Map<String, Object>>();
-        for(sObject bldg : buildings) {
+        for(sObject bldg : Database.query(buildingQuery)) {
             Map<String, Object> bldgMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(bldg));
+
             Map<String, Object> floorsMap = (Map<String, Object>)bldgMap.get('wdctest__Floors__r');
             List<Object> floors = (List<Object>)floorsMap.get('records');
 

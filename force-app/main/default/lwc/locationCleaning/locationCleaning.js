@@ -20,12 +20,14 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
     @track locationId;
     @track locationName;
 
+
     @track locationDatas = [];
 
-    @track locationData = {};
-    @track sublocationData = {};
+    @track locationData;
+    @track sublocationData;
 
-    @track loading;
+    @track globalLocation = true;
+    @track loading = true;
 
     connectedCallback() {
         if (this.subscription) {
@@ -41,31 +43,38 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
     
     handleMessage(message) {
         if(message.EventSource == 'CommandCenter' && message.EventType == 'CC_LOCATION_CHANGE') {
-            this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
+            this.loading = true;
 
-            //handle location change from command center
+            this.scrollTop();
+
             this.locationId = message.EventPayload.locationId;
             this.locationName = message.EventPayload.locationName;
+
+            this.globalLocation = this.locationId;
 
             this.getLocationData();
        }
     }
 
     showLocation(event) {
-        this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
+        this.globalLocation = false;
+
+        this.scrollTop();
+
         let buildingId = event.currentTarget.dataset.id;
 
         this.locationData = this.locationDatas.find(building => {
             return building.Id == buildingId;
         })
 
-        this.sublocationData = {};
+        this.sublocationData = null;
 
         this.locationId = this.locationData.wdcLocation__c;
     }
 
     showSublocation(event) {
-        this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
+        this.scrollTop();
+
         let sublocationId = event.currentTarget.dataset.id;
 
         getEmployeeCounts({sublocationId: sublocationId})
@@ -84,20 +93,25 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
         getLocationData({locationId : this.locationId})
         .then(res => {
             this.locationDatas = JSON.parse(res);
-            this.locationData = this.locationId ? this.locationDatas[0] : {};
-            this.sublocationData = {};
+            this.locationData = this.locationId ? this.locationDatas[0] : null;
+            this.sublocationData = null;
+            this.loading = false;
         })
     }
 
-    handleBreadcrumbClick(event) {
-        this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
-        
-        this.sublocationData = {};
+    back(event) {
+        this.scrollTop();
 
-        if(event.currentTarget.dataset.value == 'All') {
-            this.locationData = {};
+        this.sublocationData = null;
+
+        if(event.currentTarget.dataset.backto == 'All') {
+            this.locationData = null;
             this.locationId = null;
         }
+    }
+
+    scrollTop() {
+        this.template.querySelector('.slds-card__body.slds-scrollable_y').scrollTop = 0;
     }
 
     getListViews() {

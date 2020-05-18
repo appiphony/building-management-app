@@ -9,5 +9,5 @@ trigger floor on wdctest__Floor__c (before insert) {
     //force map to map<string, sObject> for helper method
     Map<String, sObject> triggerNew = (Map<String, sObject>)JSON.deserialize(JSON.serialize(Trigger.newMap), Type.forName('Map<String, sObject>'));
 
-    //dataMigrationBatchHelper.processTriggerRecords(triggerNew, locationIdByFloorId, config.locationFieldByFloorField, 'Schema.Location');
+    dataMigrationBatchHelper.processTriggerRecords(triggerNew, locationIdByFloorId, config.locationFieldByFloorField, 'Schema.Location');
 }

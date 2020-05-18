@@ -9,5 +9,5 @@ trigger building on wdctest__Building__c (after insert, after update) {
     //force map to map<string, sObject> for helper method
     Map<String, sObject> triggerNew = (Map<String, sObject>)JSON.deserialize(JSON.serialize(Trigger.newMap), Type.forName('Map<String, sObject>'));
 
-    //dataMigrationBatchHelper.processTriggerRecords(triggerNew, locationIdByBuildingId, config.locationFieldByBuildingField, 'Schema.Location');
+    dataMigrationBatchHelper.processTriggerRecords(triggerNew, locationIdByBuildingId, config.locationFieldByBuildingField, 'Schema.Location');
 }

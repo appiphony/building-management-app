@@ -39,6 +39,140 @@ public with sharing class dataMigrationBatchHelper {
     object exists. Instead, just need to add lookup to Location in ext package.
     */
 
+    public static void transferData() {
+        try{
+            //get all locations
+            Set<String> locationQueryFields = new Set<String>();
+            locationQueryFields.addAll(config.locationFieldByBuildingField.values());
+            locationQueryFields.addAll(config.locationFieldByFloorField.values());
+            locationQueryFields.add('Id');
+            locationQueryFields.add('ParentLocationId');
+    
+            List<String> locationFields = new List<String>();
+            locationFields.addAll(locationQueryFields);
+    
+            String locationQuery = 'SELECT ' + String.join(locationFields, ',') + 
+                                   ' FROM Location';
+            List<sObject> locations = Database.query(locationQuery);
+    
+            Map<String, wdctest__Building__c> newBuildingsByLocationId = new Map<String, wdctest__Building__c>();
+            Map<String, List<wdctest__Floor__c>> newFloorsByParentLocationId = new Map<String, List<wdctest__Floor__c>>();
+            //populate building and floor records based on locations
+            for(sObject loc : locations) {
+                if(loc.get('ParentLocationId') != null) {
+                    wdctest__Floor__c newFloor = new wdctest__Floor__c();
+                    for(String key : config.locationFieldByFloorField.keySet()) {
+                        String wdcField = config.locationFieldByFloorField.get(key);
+                        if(loc.get(wdcField) != null) {
+                            newFloor.put(key, loc.get(wdcField));
+                        }
+                    }
+                    
+                    if(newFloorsByParentLocationId.containsKey((String)loc.get('ParentLocationId'))) {
+                        newFloorsByParentLocationId.get((String)loc.get('ParentLocationId')).add(newFloor);
+                    } else{
+                        newFloorsByParentLocationId.put((String)loc.get('ParentLocationId'), new List<wdctest__Floor__c>{newFloor});
+                    }
+                } else{
+                    wdctest__Building__c newBuilding = new wdctest__Building__c();
+                    for(String key : config.locationFieldByBuildingField.keySet()) {
+                        String wdcField = config.locationFieldByBuildingField.get(key);
+                        if(loc.get(wdcField) != null) {
+                            newBuilding.put(key, loc.get(wdcField));
+                        }
+                    }
+                    newBuildingsByLocationId.put((String)loc.get('Id'), newBuilding);
+                }
+            }
+            insert newBuildingsByLocationId.values();
+        
+            List<wdctest__Floor__c> newFloors = new List<wdctest__Floor__c>();
+            //populate parent building field on floors
+            for(String key : newFloorsByParentLocationId.keySet()) {
+                wdctest__Building__c parentBuilding = newBuildingsByLocationId.get(key);
+                for(wdctest__Floor__c flr : newFloorsByParentLocationId.get(key)) {
+                    flr.put('wdctest__Building__c', parentBuilding.Id);
+                    newFloors.add(flr);
+                }
+            }
+            insert newFloors;
+    
+            //get all employees
+            Set<String> employeeQueryFields = new Set<String>();
+            employeeQueryFields.addAll(config.employeeFieldByB2WEmployeeField.values());
+            employeeQueryFields.add('Id');
+    
+            List<String> employeeFields = new List<String>();
+            employeeFields.addAll(employeeQueryFields);
+    
+            String employeeQuery = 'SELECT ' + String.join(employeeFields, ',') + 
+                                   ' FROM back2work__Employee__c';
+            List<sObject> employees = Database.query(employeeQuery);
+    
+            Map<String, List<wdctest__Employee__c>> newEmployeesByLocationId = new Map<String, List<wdctest__Employee__c>>();
+
+            Map<String, String> wdcStatusByb2wStatus = new Map<String, String>();
+            for(String key : config.back2workStatusByWdcTestStatus.keySet()) {
+                wdcStatusByb2wStatus.put(config.back2workStatusByWdcTestStatus.get(key), key);
+            }
+
+            //populate employee records
+            for(sObject emp : employees) {
+                wdctest__Employee__c newEmployee = new wdctest__Employee__c();
+                for(String key : config.employeeFieldByB2WEmployeeField.keySet()) {
+                    String wdcField = config.employeeFieldByB2WEmployeeField.get(key);
+                    if(emp.get(wdcField) != null) {
+                        if(key == 'wdctest__Status__c') {
+                            newEmployee.put(key, wdcStatusByb2wStatus.get((String)emp.get(wdcField)));
+                        } else{
+                            newEmployee.put(key, emp.get(wdcField));
+                        }
+                    }
+                }
+    
+                if(newEmployeesByLocationId.containsKey((String)emp.get('back2work__Location__c'))) {
+                    newEmployeesByLocationId.get((String)emp.get('back2work__Location__c')).add(newEmployee);
+                } else{
+                    newEmployeesByLocationId.put((String)emp.get('back2work__Location__c'), new List<wdctest__Employee__c>{newEmployee});
+                }
+            }
+
+            //build map of locationId => floorId
+            Map<String, String> floorIdByLocationId = new Map<String, String>();
+            for(sObject flrs : newFloors) {
+                floorIdByLocationId.put((String)flr.get('wdcLocation__c'), flr.Id);
+            }
+
+            List<wdctest__Employee__c> newEmployees = new List<wdctest__Employee__c>();
+            for(String locId : newEmployeesByLocationId.keySet()) {
+                String floorId;
+                if(floorIdByLocationId.containsKey(locId)) {
+                    floorId = floorIdByLocationId.get(locId);
+                } else if(newFloorsByParentLocationId.containsKey(locId)) {
+                    floorId = (String)newFloorsByParentLocationId.get(locId).get(0).get('Id');
+                }
+
+                for(wdctest__Employee__c emp : newEmployeesByLocationId.get(locId)) {
+                    emp.put('wdctest__Floor__c', floorId);
+                    newEmployees.add(emp);
+                }
+            }
+            insert newEmployees;   
+        } catch (Exception e) {
+            System.debug('*********** message: ' + e.getMessage());
+            System.debug('*********** stack: ' + e.getStackTraceString());
+        }
+    }
+
+    public static void createCleanings() {
+        delete [SELECT Id FROM wdctest__Cleaning__c];
+        List<wdctest__Cleaning__c> cleanings = new List<wdctest__Cleaning__c>();
+        for(wdctest__Floor__c flr : [SELECT Id FROM wdctest__Floor__c]) {
+            cleanings.add(new wdctest__Cleaning__c(wdctest__Floor__c = flr.Id, wdctest__Cleaning_Time__c = DateTime.now()));
+        }
+        insert cleanings;
+    }
+
     public static void processRecords(List<wdctest__Floor__c> sublocations) {
         try{
 
@@ -136,8 +270,8 @@ public with sharing class dataMigrationBatchHelper {
                     System.debug('*********** wdcField: ' + wdcField);
                     System.debug('*********** wdcRecord.get(wdcField): ' + wdcRecord.get(wdcField));
                     System.debug('*********** recordMap.get(field): ' + recordMap.get(field));
-                    if(fieldMap.containsKey(field) && field != 'Id' && wdcRecord.get(wdcField) != recordMap.get(field)) {
-                        wdcRecord.put(fieldMap.get(field), recordMap.get(field));
+                    if(fieldMap.containsKey(field) && wdcField != 'Id' && wdcRecord.get(wdcField) != recordMap.get(field)) {
+                        wdcRecord.put(wdcField, recordMap.get(field));
                         addToList = true;
                     }   
                 }

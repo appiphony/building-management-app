@@ -18,9 +18,7 @@ public with sharing class config {
     public static Map<String, String> locationFieldByFloorField = new Map<String, String> {
         'wdcLocation__c' => 'Id',
         'Name' => 'Name',
-        'wdctest__Level__c' => 'LocationLevel',
-        'wdctest__Cleaning_Frequency_Days__c' => 'wdcext__Cleaning_Frequency_Days__c',
-        'wdctest__Building__c' => 'ParentLocationId'
+        'wdctest__Level__c' => 'LocationLevel'
     };
 
     public static Map<String, String> employeeFieldByB2WEmployeeField = new Map<String, String> {

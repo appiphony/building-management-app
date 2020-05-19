@@ -2,6 +2,7 @@ trigger wdcLocation on Location (after insert, after update) {
     Map<String, sObject> floorLocationsById = new Map<String, sObject>();
     Map<String, sObject> buildingLocationsById = new Map<String, sObject>();
 
+    //separate floors from buildings
     for(Schema.Location loc : Trigger.new) {
         sObject locSobject = (sObject)JSON.deserialize(JSON.serialize(loc), Type.forName('sObject'));
         if(String.isNotEmpty(loc.ParentLocationId)) {
@@ -12,7 +13,8 @@ trigger wdcLocation on Location (after insert, after update) {
             buildingLocationsById.put(loc.Id, locSobject);
         }
     }
-    
+
+    //build proper field maps based on config file
     Map<String, String> buildingFieldByLocationField = new Map<String, String>();
     for(String key : config.locationFieldByBuildingField.keySet()) {
         buildingFieldByLocationField.put(config.locationFieldByBuildingField.get(key), key);
@@ -33,7 +35,6 @@ trigger wdcLocation on Location (after insert, after update) {
     List<wdctest__Building__c> bldgs = Database.query('SELECT ' + String.join(buildingFieldByLocationField.values(), ',') +
                                                       ' FROM wdctest__Building__c' +
                                                       ' WHERE wdcLocation__c = :bldgLocations');
-
 
 
     Map<String, sObject> floorByLocationId = new Map<String, sObject>();

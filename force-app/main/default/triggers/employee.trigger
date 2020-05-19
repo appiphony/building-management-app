@@ -9,5 +9,5 @@ trigger employee on wdctest__Employee__c (before insert) {
     //force map to map<string, sObject> for helper method
     Map<String, sObject> triggerNew = (Map<String, sObject>)JSON.deserialize(JSON.serialize(Trigger.newMap), Type.forName('Map<String, sObject>'));
 
-    dataMigrationBatchHelper.processTriggerRecords(triggerNew, b2wEmployeeIdByEmployeeId, config.employeeFieldByB2WEmployeeField, 'back2work__Employee__c');
+    //dataMigrationBatchHelper.processTriggerRecords(triggerNew, b2wEmployeeIdByEmployeeId, config.employeeFieldByB2WEmployeeField, 'back2work__Employee__c');
 }

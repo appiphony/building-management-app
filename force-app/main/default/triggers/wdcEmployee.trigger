@@ -19,5 +19,5 @@ trigger wdcEmployee on back2work__Employee__c (after insert, after update) {
         b2WEmployeeFieldByEmployeeField.put(config.employeeFieldByB2WEmployeeField.get(key), key);
     }
 
-    dataMigrationBatchHelper.processTriggerRecords(triggerNew, wdcEmployeeIdByEmployeeId, b2WEmployeeFieldByEmployeeField, 'wdctest__Employee__c');
+    //dataMigrationBatchHelper.processTriggerRecords(triggerNew, wdcEmployeeIdByEmployeeId, b2WEmployeeFieldByEmployeeField, 'wdctest__Employee__c');
 }

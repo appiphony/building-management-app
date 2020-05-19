@@ -21,7 +21,7 @@ public with sharing class locationCleaning {
 
         List<Map<String, Object>> buildingData = new List<Map<String, Object>>();
         for(sObject bldg : Database.query(buildingQuery)) {
-            Map<String, Object> bldgMap = bldg.getPopulatedFieldsAsMap();
+            Map<String, Object> bldgMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(bldg));
 
             if(bldgMap.containsKey('wdctest__Floors__r')) {
                 Map<String, Object> floorsMap = (Map<String, Object>)bldgMap.get('wdctest__Floors__r');

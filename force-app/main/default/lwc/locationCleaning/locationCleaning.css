@@ -30,7 +30,6 @@
 .slds-card__body {
     padding: 0;
     margin: 0;
-    max-height: calc(30rem - 68px);
 }
 
 .wdc-progress-bar_overdue.slds-progress-bar {

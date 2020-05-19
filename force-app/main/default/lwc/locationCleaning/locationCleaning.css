@@ -30,7 +30,7 @@
 .slds-card__body {
     padding: 0;
     margin: 0;
-    max-height: calc(30rem - 56px);
+    max-height: calc(30rem - 68px);
 }
 
 .wdc-progress-bar_overdue.slds-progress-bar {
@@ -89,7 +89,8 @@
 .wdc-field-data .slds-form-element__control {
     color: var(--cc-card-title_color);
     /* font-size: var(--lwc-fontSize8, 24px); /* Internal Variable */
-    font-size: 24px;
+    /* font-size: var(--lwc-fontSize7, 20px); /* Internal Variable */
+    font-size: 20px;
 }
 
 .wdc-helptext {

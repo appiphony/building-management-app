@@ -79,6 +79,28 @@ tr:hover .wdc-icon_drill-in {
 
 
 
+/**** Location List Styles ****/
+.wdc-location-list__item {
+    cursor: pointer;
+}
+
+.wdc-location-list__item:hover {
+    background-color: rgb(243, 242, 242);
+}
+
+.wdc-icon_drill-in {
+    opacity: 0;
+    transform: translateX(5px);
+    transition: all 100ms ease-out;
+}
+
+.wdc-location-list__item:hover .wdc-icon_drill-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+
 /**** Sublocation Detail Styles ****/
 .wdc-field-data .slds-form-element__label {
     color: var(--cc-card-title_color);

@@ -265,19 +265,12 @@
                                     class="wdc-location-list__item slds-grid slds-wrap slds-grid_vertical-align-center slds-p-around_medium slds-border_top"
                                     data-id={floorData.Id}
                                     onclick={showSublocation}>
-                                    <div class="slds-col slds-size_1-of-1 slds-m-bottom_x-small">
-                                        <div class="slds-truncate slds-text-title_caps" title={floorData.Name}><strong>{floorData.Name}</strong></div>
-                                        <!-- <div class="slds-truncate slds-text-heading_small" title={floorData.Name}>{floorData.Name}</div> -->
+                                    <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                                        <div class="slds-truncate slds-text-title_caps" title={floorData.Name}>{floorData.Name}</div>
                                     </div>
                                     <div class="slds-col slds-size_1-of-1">
                                         <div class="slds-grid slds-grid_vertical-align-center slds-gutters_direct-x-small">
                                             <div class="slds-col">
-                                                <!-- <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small">
-                                                    <span class="slds-text-size_small">
-                                                        Next Cleaning in 2 Hours
-                                                    </span>
-                                                    <span class="slds-text-title">Last: Today 8:15AM </span>
-                                                </div> -->
                                                 <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
                                                     <template if:true={floorData.wdctest__Cleaning_Overdue__c}>
                                                         <span>

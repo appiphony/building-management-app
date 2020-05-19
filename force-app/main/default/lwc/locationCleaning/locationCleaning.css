@@ -40,26 +40,18 @@
 
 
 /**** Custom Table Styles ****/
-.wdc-location-list_all tbody tr, 
-.wdc-location-list tbody tr {
+.wdc-location-list_all tbody tr {
     cursor: pointer;
 }
 
-.wdc-location-list_all tbody tr td,
-.wdc-location-list tbody tr td {
+.wdc-location-list_all tbody tr td {
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
 
 .wdc-location-list_all thead tr th:nth-last-child(2),
-.wdc-location-list_all thead tr th:last-child,
-.wdc-location-list tbody tr td {
+.wdc-location-list_all thead tr th:last-child {
     width: 1px;
-}
-
-.wdc-location-list tbody tr td:nth-child(2) {
-    width: unset;
-    padding-left: 1rem;
 }
 
 .wdc-icon_drill-in {
@@ -68,13 +60,10 @@
     transition: all 100ms ease-out;
 }
 
-tr:hover .wdc-icon_drill-in {
+.wdc-location-list_all tr:hover .wdc-icon_drill-in,
+.wdc-location-list__item:hover .wdc-icon_drill-in {
     opacity: 1;
     transform: translateX(0);
-}
-
-.wdc-location-list tbody tr td:first-child {
-    font-size: 0.875rem;
 }
 
 
@@ -86,17 +75,6 @@ tr:hover .wdc-icon_drill-in {
 
 .wdc-location-list__item:hover {
     background-color: rgb(243, 242, 242);
-}
-
-.wdc-icon_drill-in {
-    opacity: 0;
-    transform: translateX(5px);
-    transition: all 100ms ease-out;
-}
-
-.wdc-location-list__item:hover .wdc-icon_drill-in {
-    opacity: 1;
-    transform: translateX(0);
 }
 
 

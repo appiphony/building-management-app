@@ -21,39 +21,41 @@ public with sharing class locationCleaning {
 
         List<Map<String, Object>> buildingData = new List<Map<String, Object>>();
         for(sObject bldg : Database.query(buildingQuery)) {
-            Map<String, Object> bldgMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(bldg));
+            Map<String, Object> bldgMap = bldg.getPopulatedFieldsAsMap();
 
-            Map<String, Object> floorsMap = (Map<String, Object>)bldgMap.get('wdctest__Floors__r');
-            List<Object> floors = (List<Object>)floorsMap.get('records');
+            if(bldgMap.containsKey('wdctest__Floors__r')) {
+                Map<String, Object> floorsMap = (Map<String, Object>)bldgMap.get('wdctest__Floors__r');
+                List<Object> floors = (List<Object>)floorsMap.get('records');
 
-            //formatting data for frontend
-            Boolean needsCleaning = false;
-            for(Object flr : floors) {
-                Map<String, Object> flrMap = (Map<String, Object>)flr;
+                //formatting data for frontend
+                Boolean needsCleaning = false;
+                for(Object flr : floors) {
+                    Map<String, Object> flrMap = (Map<String, Object>)flr;
 
-                if((Boolean)flrMap.get('wdctest__Cleaning_Overdue__c')) {
-                    needsCleaning = true;
+                    if((Boolean)flrMap.get('wdctest__Cleaning_Overdue__c')) {
+                        needsCleaning = true;
+                    }
+
+                    Decimal cleaningFreq = (Decimal)flrMap.get('wdctest__Cleaning_Frequency_Days__c');
+                    Decimal daysSinceLastClean = (Decimal)flrMap.get('wdctest__Days_Since_Last_Cleaning__c');
+
+                    Decimal nextCleaning = (cleaningFreq - daysSinceLastClean) * 24; //convert from days to hrs
+                    Decimal freqHrs = cleaningFreq * 24; //convert from days to hrs
+
+                    Decimal barWidthPercentage = (nextCleaning/freqHrs) * 100;
+                    String barWidthStyle = 'width:' + barWidthPercentage.setScale(2, RoundingMode.HALF_EVEN) + '%;';
+
+                    flrMap.put('nextCleaning', nextCleaning.setScale(2, RoundingMode.HALF_EVEN));
+                    flrMap.put('freqHrs', freqHrs.setScale(2, RoundingMode.HALF_EVEN));
+                    flrMap.put('barWidth', barWidthStyle);
+
+                    String lastCleaningStr = (String)flrMap.get('wdctest__Last_Cleaning_Time__c');
+                    DateTime lastCleaning = DateTime.valueOf(lastCleaningStr.replace('T', ' '));
+                    flrMap.put('lastCleaning', lastCleaning.getTime());
                 }
 
-                Decimal cleaningFreq = (Decimal)flrMap.get('wdctest__Cleaning_Frequency_Days__c');
-                Decimal daysSinceLastClean = (Decimal)flrMap.get('wdctest__Days_Since_Last_Cleaning__c');
-
-                Decimal nextCleaning = (cleaningFreq - daysSinceLastClean) * 24; //convert from days to hrs
-                Decimal freqHrs = cleaningFreq * 24; //convert from days to hrs
-
-                Decimal barWidthPercentage = (nextCleaning/freqHrs) * 100;
-                String barWidthStyle = 'width:' + barWidthPercentage.setScale(2, RoundingMode.HALF_EVEN) + '%;';
-
-                flrMap.put('nextCleaning', nextCleaning.setScale(2, RoundingMode.HALF_EVEN));
-                flrMap.put('freqHrs', freqHrs.setScale(2, RoundingMode.HALF_EVEN));
-                flrMap.put('barWidth', barWidthStyle);
-
-                String lastCleaningStr = (String)flrMap.get('wdctest__Last_Cleaning_Time__c');
-                DateTime lastCleaning = DateTime.valueOf(lastCleaningStr.replace('T', ' '));
-                flrMap.put('lastCleaning', lastCleaning.getTime());
+                bldgMap.put('needsCleaning', needsCleaning);
             }
-
-            bldgMap.put('needsCleaning', needsCleaning);
 
             buildingData.add(bldgMap);
         }

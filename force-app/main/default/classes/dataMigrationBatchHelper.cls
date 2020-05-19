@@ -112,24 +112,42 @@ public with sharing class dataMigrationBatchHelper {
         }
     }
 
-    public static void processTriggerRecords(Map<String, sObject> triggerNew, Map<String, String> existingRecordIdByTriggerObjId, Map<String, String> fieldMap, String objType) {
+    public static void processTriggerRecords(Map<String, sObject> triggerNew, Map<String, sObject> existingRecordByTriggerObjId, Map<String, String> fieldMap, String objType) {
+        System.debug('******* objType: ' + objType);
+        System.debug('******* existingRecordByTriggerObjId: ' + existingRecordByTriggerObjId);
+
         List<sObject> recordsToUpsert = (List<sObject>)Type.forName('List<' + objType + '>').newInstance();
         for(String recordId : triggerNew.keySet()) {
+            System.debug('******* recordId: ' + recordId);
             sObject wdcRecord = (sObject)Type.forName(objType).newInstance();
 
-            if(existingRecordIdByTriggerObjId.containsKey(recordId)) {
+            if(existingRecordByTriggerObjId.containsKey(recordId)) {
                 //if corresponding location exists, update
-                wdcRecord.put('Id', existingRecordIdByTriggerObjId.get(recordId));
+                wdcRecord = existingRecordByTriggerObjId.get(recordId);
+                System.debug('********* EXISTING: ' + wdcRecord);
             }
 
-            Map<String, Object> recordMap = Trigger.newMap.get(recordId).getPopulatedFieldsAsMap();
-
+            Map<String, Object> recordMap = TriggerNew.get(recordId).getPopulatedFieldsAsMap();
+            Boolean addToList = false;
             for(String field : recordMap.keySet()) {
+                System.debug('*********** field: ' + field);
                 if(fieldMap.containsKey(field)) {
-                    wdcRecord.put(fieldMap.get(field), recordMap.get(field));
+                    String wdcField = fieldMap.get(field);
+                    System.debug('*********** wdcField: ' + wdcField);
+                    System.debug('*********** wdcRecord.get(wdcField): ' + wdcRecord.get(wdcField));
+                    System.debug('*********** recordMap.get(field): ' + recordMap.get(field));
+                    if(fieldMap.containsKey(field) && field != 'Id' && wdcRecord.get(wdcField) != recordMap.get(field)) {
+                        wdcRecord.put(fieldMap.get(field), recordMap.get(field));
+                        addToList = true;
+                    }   
                 }
             }
-            recordsToUpsert.add(wdcRecord);
+            System.debug('********** addToList: ' + addToList);
+            System.debug('********** wdcRecord.Id : ' + wdcRecord.Id);
+            if(wdcRecord.Id == null || addToList) {
+                System.debug('**** ADDED ****');
+                recordsToUpsert.add(wdcRecord);   
+            }
         }
         upsert recordsToUpsert;
     }

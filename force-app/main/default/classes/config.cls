@@ -9,14 +9,14 @@ public with sharing class config {
 
     //
     public static Map<String, String> locationFieldByBuildingField = new Map<String, String> {
-        'wdcBuilding__c' => 'Id',
+        'wdcLocation__c' => 'Id',
         'Name' => 'Name',
         'wdctest__Location__Latitude__s' => 'Latitude',
         'wdctest__Location__Longitude__s' => 'Longitude'
     };
 
     public static Map<String, String> locationFieldByFloorField = new Map<String, String> {
-        'wdcFloor__c' => 'Id',
+        'wdcLocation__c' => 'Id',
         'Name' => 'Name',
         'wdctest__Level__c' => 'LocationLevel',
         'wdctest__Cleaning_Frequency_Days__c' => 'wdcext__Cleaning_Frequency_Days__c',

@@ -1,4 +1,4 @@
-trigger wdcLocation on Location (before insert) {
+trigger wdcLocation on Location (after insert, after update) {
     Map<String, sObject> floorLocationsById = new Map<String, sObject>();
     Map<String, sObject> buildingLocationsById = new Map<String, sObject>();
 
@@ -12,31 +12,7 @@ trigger wdcLocation on Location (before insert) {
             buildingLocationsById.put(loc.Id, locSobject);
         }
     }
-
-    List<wdctest__Floor__c> floors = [SELECT Id, wdcLocation__c
-                                      FROM wdctest__Floor__c
-                                      WHERE wdcLocation__c = :floorLocationsById.keySet()];
-
-    List<wdctest__Building__c> bldgs = [SELECT Id, wdcLocation__c
-                                        FROM wdctest__Building__c
-                                        WHERE wdcLocation__c = :buildingLocationsById.keySet()];
-
-
-
-    Map<String, String> locationIdByFloorId = new Map<String, String>();
-    Map<String, String> locationIdByBuildingId = new Map<String, String>();
-    for(wdctest__Floor__c flr : floors) {
-        if(String.isNotEmpty(flr.wdcLocation__c)) {
-            locationIdByFloorId.put(flr.Id, flr.wdcLocation__c);
-        }
-    }
-
-    for(wdctest__Building__c bldg : bldgs) {
-        if(String.isNotEmpty(bldg.wdcLocation__c)) {
-            locationIdByBuildingId.put(bldg.Id, bldg.wdcLocation__c);
-        }
-    }
-
+    
     Map<String, String> buildingFieldByLocationField = new Map<String, String>();
     for(String key : config.locationFieldByBuildingField.keySet()) {
         buildingFieldByLocationField.put(config.locationFieldByBuildingField.get(key), key);
@@ -47,6 +23,33 @@ trigger wdcLocation on Location (before insert) {
         floorFieldByLocationField.put(config.locationFieldByFloorField.get(key), key);
     }
 
-    dataMigrationBatchHelper.processTriggerRecords(buildingLocationsById, locationIdByBuildingId, buildingFieldByLocationField, 'wdctest__Building__c');
-    dataMigrationBatchHelper.processTriggerRecords(floorLocationsById, locationIdByFloorId, floorFieldByLocationField, 'wdctest__Floor__c');
+    Set<String> floorLocations = floorLocationsById.keySet();
+    Set<String> bldgLocations = buildingLocationsById.keySet();
+
+    List<wdctest__Floor__c> floors = Database.query('SELECT ' + String.join(floorFieldByLocationField.values(), ',') + 
+                                                    ' FROM wdctest__Floor__c' +
+                                                    ' WHERE wdcLocation__c = :floorLocations');
+
+    List<wdctest__Building__c> bldgs = Database.query('SELECT ' + String.join(buildingFieldByLocationField.values(), ',') +
+                                                      ' FROM wdctest__Building__c' +
+                                                      ' WHERE wdcLocation__c = :bldgLocations');
+
+
+
+    Map<String, sObject> floorByLocationId = new Map<String, sObject>();
+    Map<String, sObject> buildingByLocationId = new Map<String, sObject>();
+    for(wdctest__Floor__c flr : floors) {
+        if(String.isNotEmpty(flr.wdcLocation__c)) {
+            floorByLocationId.put(flr.wdcLocation__c, flr);
+        }
+    }
+
+    for(wdctest__Building__c bldg : bldgs) {
+        if(String.isNotEmpty(bldg.wdcLocation__c)) {
+            buildingByLocationId.put(bldg.wdcLocation__c, bldg);
+        }
+    }
+
+    dataMigrationBatchHelper.processTriggerRecords(buildingLocationsById, buildingByLocationId, buildingFieldByLocationField, 'wdctest__Building__c');
+    dataMigrationBatchHelper.processTriggerRecords(floorLocationsById, floorByLocationId, floorFieldByLocationField, 'wdctest__Floor__c');
 }

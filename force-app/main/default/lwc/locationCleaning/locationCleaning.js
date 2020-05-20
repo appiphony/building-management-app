@@ -97,6 +97,9 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
             this.sublocationData = null;
             this.loading = false;
         })
+        .catch(error => {
+            debugger
+        })
     }
 
     back(event) {

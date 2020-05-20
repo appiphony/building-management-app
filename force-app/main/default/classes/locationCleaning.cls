@@ -1,13 +1,10 @@
 public with sharing class locationCleaning {
-
     @AuraEnabled
-    public static String getLocationData(String locationId) {
-        //get buildings based on location id
-        String buildingQuery = 'SELECT Id, Name , wdctest__Total_Employees__c, wdcLocation__c, ' +
+    public static String getBarChartData(String locationId) {
+        String buildingQuery = 'SELECT Id, Name,' +
                                '(' + 
-                                   'SELECT Id, Name, wdctest__Cleaning_Frequency_Days__c, wdctest__Cleaning_Overdue__c, ' + 
-                                       'wdctest__Days_Since_Last_Cleaning__c, wdctest__Last_Cleaning_Time__c, wdctest__Total_Employees__c ' + 
-                                   'FROM wdctest__Floors__r' + 
+                                   'SELECT Id, wdctest__Cleaning_Overdue__c, wdctest__Total_Employees__c ' + 
+                                   'FROM wdctest__Floors__r ORDER BY Name ASC' + 
                                ')' + 
                                'FROM wdctest__Building__c';
 
@@ -16,7 +13,82 @@ public with sharing class locationCleaning {
             Id recordId = (Id)locationId;
             buildingQuery += ' WHERE wdcLocation__c = :recordId';
         } else{
-            buildingQuery += ' LIMIT 10';
+            buildingQuery += ' ORDER BY Name ASC LIMIT 10';
+        }
+
+        List<String> buildingLabels = new List<String>();
+        List<Integer> atRiskEmployees = new List<Integer>();
+        List<Integer> safeEmployees = new List<Integer>();
+
+        for(wdctest__Building__c bldg : Database.query(buildingQuery)) {
+            buildingLabels.add(bldg.Name);
+            Integer atRisk = 0;
+            Integer safe = 0;
+            for(wdctest__Floor__c flr : bldg.wdctest__Floors__r) {
+                if(flr.wdctest__Cleaning_Overdue__c) {
+                    atRisk += Integer.valueOf(flr.wdctest__Total_Employees__c);
+                } else{
+                    safe += Integer.valueOf(flr.wdctest__Total_Employees__c);
+                }
+            }
+            atRiskEmployees.add(atRisk);
+            safeEmployees.add(safe);
+        }
+        Map<String, Object> data = new Map<String, Object>{
+            'labels' => buildingLabels,
+            'atRiskData' => atRiskEmployees,
+            'safeData' => safeEmployees
+        };
+
+        return JSON.serialize(data);
+    }
+
+    @AuraEnabled
+    public static String getPieChartData(String locationId) {
+        String query = 'SELECT COUNT(Id) floors, wdctest__Cleaning_Overdue__c' + 
+                               ' FROM wdctest__Floor__c';
+
+        if(String.isNotEmpty(locationId)) {
+            //cast to id for safety
+            Id recordId = (Id)locationId;
+            query += ' WHERE wdctest__Building__r.wdcLocation__c = :recordId';
+        }
+
+        query += ' GROUP BY wdctest__Cleaning_Overdue__c';
+
+        Map<String, Integer> numFloorsByStatus = new Map<String, Integer> {
+            'clean' => 0,
+            'dirty' => 0
+        };
+
+        for(AggregateResult ar : Database.query(query)) {
+            if((Boolean)ar.get('wdctest__Cleaning_Overdue__c')) {
+                numFloorsByStatus.put('dirty', (Integer)ar.get('floors'));
+            } else{
+                numFloorsByStatus.put('clean', (Integer)ar.get('floors'));
+            }
+        }
+
+        return JSON.serialize(numFloorsByStatus);
+    }
+
+    @AuraEnabled
+    public static String getLocationData(String locationId) {
+        //get buildings based on location id
+        String buildingQuery = 'SELECT Id, Name , wdctest__Total_Employees__c, wdcLocation__c, ' +
+                               '(' + 
+                                   'SELECT Id, Name, wdctest__Cleaning_Frequency_Days__c, wdctest__Cleaning_Overdue__c, ' + 
+                                       'wdctest__Days_Since_Last_Cleaning__c, wdctest__Last_Cleaning_Time__c, wdctest__Total_Employees__c ' + 
+                                   'FROM wdctest__Floors__r ORDER BY wdctest__Level__c ASC, Name ASC' + 
+                               ')' + 
+                               'FROM wdctest__Building__c';
+
+        if(String.isNotEmpty(locationId)) {
+            //cast to id for safety
+            Id recordId = (Id)locationId;
+            buildingQuery += ' WHERE wdcLocation__c = :recordId';
+        } else{
+            buildingQuery += ' ORDER BY Name ASC LIMIT 10';
         }
 
         List<Map<String, Object>> buildingData = new List<Map<String, Object>>();

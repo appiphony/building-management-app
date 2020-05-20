@@ -160,6 +160,22 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
 
     }
 
+    navToRelated() {
+        let navData = {
+            type: 'standard__recordRelationshipPage',
+            attributes: {
+                recordId: this.sublocationData.Id,
+                objectApiName: 'wdctest__Floor__c',
+                relationshipApiName: 'wdctest__Employees__r',
+                actionName: 'view'
+            }
+        }
+
+        this[NavigationMixin.GenerateUrl](navData).then(url => {
+            window.open(url);
+        });
+    }
+
     disconnectedCallback() {
         //unsubscribe on unrender
         if (this.subscription) {

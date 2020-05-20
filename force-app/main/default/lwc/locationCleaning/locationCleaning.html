@@ -179,63 +179,43 @@
                     </div>
                     <ul class="wdc-employee-list slds-m-top_x-small">
                         <li>
-                            <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
-                                <div class="slds-col">
-                                    <template if:true={sublocationData.Available}>
-                                        Available to Work ({sublocationData.Available})
-                                    </template>
-                                    <template if:false={sublocationData.Available}>
-                                        Available to Work (0)
-                                    </template>
-                                </div>
-                                <div class="slds-col slds-grow-none">
-                                    <lightning-button-icon icon-name="utility:open" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Available" onclick={nav}></lightning-button-icon>
-                                </div>
+                            <div class="slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                                <template if:true={sublocationData.Available}>
+                                    Available to Work ({sublocationData.Available})
+                                </template>
+                                <template if:false={sublocationData.Available}>
+                                    Available to Work (0)
+                                </template>
                             </div>
                         </li>
                         <li>
-                            <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
-                                <div class="slds-col">
-                                    <template if:true={sublocationData.Remote}>
-                                        Remote Work Only ({sublocationData.Remote})
-                                    </template>
-                                    <template if:false={sublocationData.Remote}>
-                                        Remote Work Only (0)
-                                    </template>
-                                </div>
-                                <div class="slds-col slds-grow-none">
-                                    <lightning-button-icon icon-name="utility:open" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Remote" onclick={nav}></lightning-button-icon>
-                                </div>
+                            <div class="slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                                <template if:true={sublocationData.Remote}>
+                                    Remote Work Only ({sublocationData.Remote})
+                                </template>
+                                <template if:false={sublocationData.Remote}>
+                                    Remote Work Only (0)
+                                </template>
                             </div>
                         </li>
                         <li>
-                            <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
-                                <div class="slds-col">
-                                    <template if:true={sublocationData.Unavailable}>
-                                        Unavailable ({sublocationData.Unavailable})
-                                    </template>
-                                    <template if:false={sublocationData.Unavailable}>
-                                        Unavailable (0)
-                                    </template>
-                                </div>
-                                <div class="slds-col slds-grow-none">
-                                    <lightning-button-icon icon-name="utility:open" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Unavailable" onclick={nav}></lightning-button-icon>
-                                </div>
+                            <div class="slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                                <template if:true={sublocationData.Unavailable}>
+                                    Unavailable ({sublocationData.Unavailable})
+                                </template>
+                                <template if:false={sublocationData.Unavailable}>
+                                    Unavailable (0)
+                                </template>
                             </div>
                         </li>
                         <li>
-                            <div class="slds-grid slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
-                                <div class="slds-col">
-                                    <template if:true={sublocationData.Unknown}>
-                                        Unknown ({sublocationData.Unknown})
-                                    </template>
-                                    <template if:false={sublocationData.Unknown}>
-                                        Unknown (0)
-                                    </template>
-                                </div>
-                                <div class="slds-col slds-grow-none">
-                                    <lightning-button-icon icon-name="utility:open" variant="bare" class="wdc-icon_list-action" value="wdctest__Employee__c|Unknown" onclick={nav}></lightning-button-icon>
-                                </div>
+                            <div class="slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                                <template if:true={sublocationData.Unknown}>
+                                    Unknown ({sublocationData.Unknown})
+                                </template>
+                                <template if:false={sublocationData.Unknown}>
+                                    Unknown (0)
+                                </template>
                             </div>
                         </li>
                     </ul>

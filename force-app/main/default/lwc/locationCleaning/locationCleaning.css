@@ -95,11 +95,3 @@
 .wdc-helptext {
     bottom: 4px;
 }
-
-.wdc-icon_list-action {
-    visibility: hidden;
-}
-
-li:hover .wdc-icon_list-action {
-    visibility: visible;
-}

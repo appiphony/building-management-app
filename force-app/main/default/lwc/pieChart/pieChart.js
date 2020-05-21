@@ -26,7 +26,7 @@ export default class pieChart extends LightningElement {
         data: {
             labels: ['Clean', 'Overdue'],
             datasets: [{
-                backgroundColor:['#215CA0', '#D4504C'],
+                backgroundColor:['#52B7D9', '#E16032'],
                 data:[]
             }]
         },

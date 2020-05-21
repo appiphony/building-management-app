@@ -28,12 +28,12 @@ export default class barChart extends LightningElement {
             datasets: [{
                 label: 'At Risk Employees',
                 data: [],
-                backgroundColor: '#D4504C'
+                backgroundColor: '#E16032'
             },
             {
                 label: 'Safe Employees',
                 data: [],
-                backgroundColor: '#215CA0'
+                backgroundColor: '#52B7D9'
             }]
         },
         options: {

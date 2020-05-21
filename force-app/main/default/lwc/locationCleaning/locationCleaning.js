@@ -73,8 +73,6 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
     }
 
     showSublocation(event) {
-        this.scrollTop();
-
         let sublocationId = event.currentTarget.dataset.id;
 
         getEmployeeCounts({sublocationId: sublocationId})
@@ -86,6 +84,8 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
             })
 
             this.sublocationData = Object.assign(sublocationData, employeeData);
+
+            this.scrollTop();
         })
     }
 

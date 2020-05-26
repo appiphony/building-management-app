@@ -2,6 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>48.0</apiVersion>
     <isExposed>true</isExposed>
+    <masterLabel>Location Cleaning</masterLabel>
     <targets>
         <target>lightning__RecordPage</target>
         <target>lightning__AppPage</target>

@@ -4,7 +4,7 @@ import { loadScript } from 'lightning/platformResourceLoader';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import { subscribe, unsubscribe, MessageContext, APPLICATION_SCOPE } from 'lightning/messageService';
-import COMMAND_CENTER from "@salesforce/messageChannel/back2work__CommandCenterMessageChannel__c";
+import COMMAND_CENTER from "@salesforce/messageChannel/lightning__CommandCenterMessageChannel";
 
 import getBarChartData from '@salesforce/apex/locationCleaning.getBarChartData';
 
@@ -61,7 +61,7 @@ export default class barChart extends LightningElement {
     handleMessage(message) {
         if(message.EventSource == 'CommandCenter' && message.EventType == 'CC_LOCATION_CHANGE') {
             this.locationId = message.EventPayload.locationId;
-            this.locationName = message.EventPayload.locationName;
+            this.locationName = message.EventPayload.locationName ? message.EventPayload.locationName : 'All Locations';
 
             this.getChartData();
        }

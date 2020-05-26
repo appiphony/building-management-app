@@ -20,7 +20,6 @@ global class dataMigrationBatch implements Database.Batchable<sObject> {
 
     global void execute(Database.BatchableContext BC, List<sObject> scope) {
         //process sublocation and related records
-        dataMigrationBatchHelper.processRecords(scope);
     }
 
     global void finish(Database.BatchableContext BC) {

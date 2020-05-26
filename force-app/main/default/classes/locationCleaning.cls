@@ -11,7 +11,7 @@ public with sharing class locationCleaning {
         if(String.isNotEmpty(locationId)) {
             //cast to id for safety
             Id recordId = (Id)locationId;
-            buildingQuery += ' WHERE wdcLocation__c = :recordId';
+            buildingQuery += ' WHERE wdctestext__wdcLocation__c = :recordId';
         } else{
             buildingQuery += ' ORDER BY Name ASC LIMIT 10';
         }
@@ -51,7 +51,7 @@ public with sharing class locationCleaning {
         if(String.isNotEmpty(locationId)) {
             //cast to id for safety
             Id recordId = (Id)locationId;
-            query += ' WHERE wdctest__Building__r.wdcLocation__c = :recordId';
+            query += ' WHERE wdctest__Building__r.wdctestext__wdcLocation__c = :recordId';
         }
 
         query += ' GROUP BY wdctest__Cleaning_Overdue__c';
@@ -75,7 +75,7 @@ public with sharing class locationCleaning {
     @AuraEnabled
     public static String getLocationData(String locationId) {
         //get buildings based on location id
-        String buildingQuery = 'SELECT Id, Name , wdctest__Total_Employees__c, wdcLocation__c, ' +
+        String buildingQuery = 'SELECT Id, Name , wdctest__Total_Employees__c, wdctestext__wdcLocation__c, ' +
                                '(' + 
                                    'SELECT Id, Name, wdctest__Cleaning_Frequency_Days__c, wdctest__Cleaning_Overdue__c, ' + 
                                        'wdctest__Days_Since_Last_Cleaning__c, wdctest__Last_Cleaning_Time__c, wdctest__Total_Employees__c ' + 
@@ -86,7 +86,7 @@ public with sharing class locationCleaning {
         if(String.isNotEmpty(locationId)) {
             //cast to id for safety
             Id recordId = (Id)locationId;
-            buildingQuery += ' WHERE wdcLocation__c = :recordId';
+            buildingQuery += ' WHERE wdctestext__wdcLocation__c = :recordId';
         } else{
             buildingQuery += ' ORDER BY Name ASC LIMIT 10';
         }

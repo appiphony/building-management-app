@@ -7,7 +7,7 @@ import getListViews from '@salesforce/apex/locationCleaning.getListViews';
 import getEmployeeCounts from '@salesforce/apex/locationCleaning.getEmployeeCounts';
  
 //will be part of core when GA, replace back2work with lightning and remove __c
-import COMMAND_CENTER from "@salesforce/messageChannel/back2work__CommandCenterMessageChannel__c";
+import COMMAND_CENTER from "@salesforce/messageChannel/lightning__CommandCenterMessageChannel";
 
 export default class LocationCleaning extends NavigationMixin(LightningElement) {
     @wire(MessageContext)
@@ -69,7 +69,7 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
 
         this.sublocationData = null;
 
-        this.locationId = this.locationData.wdcLocation__c;
+        this.locationId = this.locationData.wdctestext__wdcLocation__c;
     }
 
     showSublocation(event) {

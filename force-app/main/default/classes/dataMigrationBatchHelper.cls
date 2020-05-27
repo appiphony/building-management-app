@@ -1,21 +1,23 @@
-global with sharing class dataMigrationBatchHelper {
+global without sharing class dataMigrationBatchHelper {
 
     global static void transferData() {
         try{
+
             //get all locations
             Set<String> locationQueryFields = new Set<String>();
             locationQueryFields.addAll(config.locationFieldByBuildingField.values());
             locationQueryFields.addAll(config.locationFieldByFloorField.values());
             locationQueryFields.add('Id');
             locationQueryFields.add('ParentLocationId');
-    
+            locationQueryFields.add('RootLocationId');
+
             List<String> locationFields = new List<String>();
             locationFields.addAll(locationQueryFields);
-    
+
             String locationQuery = 'SELECT ' + String.join(locationFields, ',') + 
                                    ' FROM Location';
             List<sObject> locations = Database.query(locationQuery);
-    
+
             Map<String, wdctest__Building__c> newBuildingsByLocationId = new Map<String, wdctest__Building__c>();
             Map<String, List<wdctest__Floor__c>> newFloorsByParentLocationId = new Map<String, List<wdctest__Floor__c>>();
             //populate building and floor records based on locations
@@ -30,10 +32,10 @@ global with sharing class dataMigrationBatchHelper {
                     }
                     newFloor.put('wdctestext__wdcLocation__c', (String)loc.get('Id'));
 
-                    if(newFloorsByParentLocationId.containsKey((String)loc.get('ParentLocationId'))) {
-                        newFloorsByParentLocationId.get((String)loc.get('ParentLocationId')).add(newFloor);
+                    if(newFloorsByParentLocationId.containsKey((String)loc.get('RootLocationId'))) {
+                        newFloorsByParentLocationId.get((String)loc.get('RootLocationId')).add(newFloor);
                     } else{
-                        newFloorsByParentLocationId.put((String)loc.get('ParentLocationId'), new List<wdctest__Floor__c>{newFloor});
+                        newFloorsByParentLocationId.put((String)loc.get('RootLocationId'), new List<wdctest__Floor__c>{newFloor});
                     }
                 } else{
                     wdctest__Building__c newBuilding = new wdctest__Building__c();
@@ -62,20 +64,20 @@ global with sharing class dataMigrationBatchHelper {
                 }
             }
             insert newFloors;
-    
+
             //get all employees
             Set<String> employeeQueryFields = new Set<String>();
             employeeQueryFields.addAll(config.b2WEmployeeFieldByemployeeField.values());
             employeeQueryFields.add('Id');
             employeeQueryFields.add('LocationId');
-    
+
             List<String> employeeFields = new List<String>();
             employeeFields.addAll(employeeQueryFields);
-    
+
             String employeeQuery = 'SELECT ' + String.join(employeeFields, ',') + 
                                    ' FROM Employee';
             List<sObject> employees = Database.query(employeeQuery);
-    
+
             Map<String, List<wdctest__Employee__c>> newEmployeesByLocationId = new Map<String, List<wdctest__Employee__c>>();
 
             Map<String, String> wdcStatusByb2wStatus = new Map<String, String>();
@@ -102,7 +104,7 @@ global with sharing class dataMigrationBatchHelper {
                 }
 
                 newEmployee.put('wdctestext__wdcEmployee__c', (String)emp.get('Id'));
-    
+
                 if(newEmployeesByLocationId.containsKey((String)emp.get('LocationId'))) {
                     newEmployeesByLocationId.get((String)emp.get('LocationId')).add(newEmployee);
                 } else{
@@ -148,6 +150,8 @@ global with sharing class dataMigrationBatchHelper {
             }
             insert sfTowerFloors;
 
+            createCleanings();
+
             List<Employee> sfTowerEmployees = new List<Employee>();
             for(Integer i = 0; i < config.employeeFirstNames.size(); i++) {
                 String firstName = config.employeeFirstNames.get(i);
@@ -167,15 +171,14 @@ global with sharing class dataMigrationBatchHelper {
                 sfTowerEmployees.add(emp);
             }
             insert sfTowerEmployees;
-
-            createCleanings();
-        } catch (Exception e) {
-            System.debug('*********** message: ' + e.getMessage());
-            System.debug('*********** stack: ' + e.getStackTraceString());
+        } catch(Exception e) {
+            insert new Error__c(
+                Message__c=e.getMessage() + '\n' + e.getLineNumber() + '\n' + e.getStackTraceString()
+            );
         }
     }
 
-    public static void createCleanings() {
+    global static void createCleanings() {
         delete [SELECT Id FROM wdctest__Cleaning__c];
         List<wdctest__Cleaning__c> cleanings = new List<wdctest__Cleaning__c>();
         for(wdctest__Floor__c flr : [SELECT Id FROM wdctest__Floor__c]) {

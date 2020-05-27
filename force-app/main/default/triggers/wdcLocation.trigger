@@ -125,6 +125,12 @@ trigger wdcLocation on Location (after insert, after update) {
                     //only upsert if has building 
                     String bldgId = buildingIdByParentLocationId.get(locRecord.ParentLocationId);
                     wdcRecord.put('wdctest__Building__c', bldgId);
+
+                    //populate with random cleaning freq if null
+                    if(wdcRecord.get('wdctest__Cleaning_Frequency_Days__c') == null) {
+                        Integer freqIndex = Integer.valueOf(Math.random()*config.frequencies.size());
+                        wdcRecord.put('wdctest__Cleaning_Frequency_Days__c', config.frequencies.get(freqIndex));
+                    }
                     flrsToUpsert.add(wdcRecord);
                 }
             }

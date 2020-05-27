@@ -1,5 +1,4 @@
 trigger building on wdctest__Building__c (after insert, after update) {
-
     Map<String, String> buildingIdBylocationId = new Map<String, String>();
     Map<String, Schema.Location> locationByBuildingId = new Map<String, Schema.Location>();
 

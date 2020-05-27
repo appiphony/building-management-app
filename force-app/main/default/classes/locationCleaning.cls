@@ -13,7 +13,7 @@ public with sharing class locationCleaning {
             Id recordId = (Id)locationId;
             buildingQuery += ' WHERE wdctestext__wdcLocation__c = :recordId';
         } else{
-            buildingQuery += ' ORDER BY Name ASC LIMIT 10';
+            buildingQuery += ' WHERE wdctest__Total_Employees__c != 0 ORDER BY Name ASC LIMIT 10';
         }
 
         List<String> buildingLabels = new List<String>();
@@ -74,65 +74,74 @@ public with sharing class locationCleaning {
 
     @AuraEnabled
     public static String getLocationData(String locationId) {
-        //get buildings based on location id
-        String buildingQuery = 'SELECT Id, Name , wdctest__Total_Employees__c, wdctestext__wdcLocation__c, ' +
-                               '(' + 
-                                   'SELECT Id, Name, wdctest__Cleaning_Frequency_Days__c, wdctest__Cleaning_Overdue__c, ' + 
-                                       'wdctest__Days_Since_Last_Cleaning__c, wdctest__Last_Cleaning_Time__c, wdctest__Total_Employees__c ' + 
-                                   'FROM wdctest__Floors__r ORDER BY wdctest__Level__c ASC, Name ASC' + 
-                               ')' + 
-                               'FROM wdctest__Building__c';
+        try{
 
-        if(String.isNotEmpty(locationId)) {
-            //cast to id for safety
-            Id recordId = (Id)locationId;
-            buildingQuery += ' WHERE wdctestext__wdcLocation__c = :recordId';
-        } else{
-            buildingQuery += ' ORDER BY Name ASC LIMIT 10';
-        }
+            //get buildings based on location id
+            String buildingQuery = 'SELECT Id, Name , wdctest__Total_Employees__c, wdctestext__wdcLocation__c, ' +
+                                   '(' + 
+                                       'SELECT Id, Name, wdctest__Cleaning_Frequency_Days__c, wdctest__Cleaning_Overdue__c, ' + 
+                                           'wdctest__Days_Since_Last_Cleaning__c, wdctest__Last_Cleaning_Time__c, wdctest__Total_Employees__c ' + 
+                                       'FROM wdctest__Floors__r ORDER BY wdctest__Level__c ASC, Name ASC' + 
+                                   ')' + 
+                                   'FROM wdctest__Building__c';
 
-        List<Map<String, Object>> buildingData = new List<Map<String, Object>>();
-        for(sObject bldg : Database.query(buildingQuery)) {
-            Map<String, Object> bldgMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(bldg));
-
-            if(bldgMap.containsKey('wdctest__Floors__r')) {
-                Map<String, Object> floorsMap = (Map<String, Object>)bldgMap.get('wdctest__Floors__r');
-                List<Object> floors = (List<Object>)floorsMap.get('records');
-
-                //formatting data for frontend
-                Boolean needsCleaning = false;
-                for(Object flr : floors) {
-                    Map<String, Object> flrMap = (Map<String, Object>)flr;
-
-                    if((Boolean)flrMap.get('wdctest__Cleaning_Overdue__c')) {
-                        needsCleaning = true;
-                    }
-
-                    Decimal cleaningFreq = (Decimal)flrMap.get('wdctest__Cleaning_Frequency_Days__c');
-                    Decimal daysSinceLastClean = (Decimal)flrMap.get('wdctest__Days_Since_Last_Cleaning__c');
-
-                    Decimal nextCleaning = (cleaningFreq - daysSinceLastClean) * 24; //convert from days to hrs
-                    Decimal freqHrs = cleaningFreq * 24; //convert from days to hrs
-
-                    Decimal barWidthPercentage = (nextCleaning/freqHrs) * 100;
-                    String barWidthStyle = 'width:' + barWidthPercentage.setScale(2, RoundingMode.HALF_EVEN) + '%;';
-
-                    flrMap.put('nextCleaning', nextCleaning.setScale(2, RoundingMode.HALF_EVEN));
-                    flrMap.put('freqHrs', freqHrs.setScale(2, RoundingMode.HALF_EVEN));
-                    flrMap.put('barWidth', barWidthStyle);
-
-                    String lastCleaningStr = (String)flrMap.get('wdctest__Last_Cleaning_Time__c');
-                    DateTime lastCleaning = DateTime.valueOf(lastCleaningStr.replace('T', ' '));
-                    flrMap.put('lastCleaning', lastCleaning.getTime());
-                }
-
-                bldgMap.put('needsCleaning', needsCleaning);
+            if(String.isNotEmpty(locationId)) {
+                //cast to id for safety
+                Id recordId = (Id)locationId;
+                buildingQuery += ' WHERE wdctestext__wdcLocation__c = :recordId';
+            } else{
+                buildingQuery += ' WHERE wdctest__Total_Employees__c != 0 ORDER BY Name ASC LIMIT 10';
             }
 
-            buildingData.add(bldgMap);
-        }
+            List<Map<String, Object>> buildingData = new List<Map<String, Object>>();
+            for(sObject bldg : Database.query(buildingQuery)) {
+                Map<String, Object> bldgMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(bldg));
 
-        return JSON.serialize(buildingData);
+                if(bldgMap.containsKey('wdctest__Floors__r')) {
+                    Map<String, Object> floorsMap = (Map<String, Object>)bldgMap.get('wdctest__Floors__r');
+                    List<Object> floors = (List<Object>)floorsMap.get('records');
+
+                    //formatting data for frontend
+                    Boolean needsCleaning = false;
+                    for(Object flr : floors) {
+                        Map<String, Object> flrMap = (Map<String, Object>)flr;
+
+                        if((Boolean)flrMap.get('wdctest__Cleaning_Overdue__c')) {
+                            needsCleaning = true;
+                        }
+
+                        Decimal cleaningFreq = (Decimal)flrMap.get('wdctest__Cleaning_Frequency_Days__c');
+                        Decimal daysSinceLastClean = (Decimal)flrMap.get('wdctest__Days_Since_Last_Cleaning__c');
+
+                        Decimal nextCleaning = (cleaningFreq - daysSinceLastClean) * 24; //convert from days to hrs
+                        Decimal freqHrs = cleaningFreq * 24; //convert from days to hrs
+
+                        Decimal barWidthPercentage = (nextCleaning/freqHrs) * 100;
+                        String barWidthStyle = 'width:' + barWidthPercentage.setScale(2, RoundingMode.HALF_EVEN) + '%;';
+
+                        flrMap.put('nextCleaning', nextCleaning.setScale(2, RoundingMode.HALF_EVEN));
+                        flrMap.put('freqHrs', freqHrs.setScale(2, RoundingMode.HALF_EVEN));
+                        flrMap.put('barWidth', barWidthStyle);
+
+                        String lastCleaningStr = (String)flrMap.get('wdctest__Last_Cleaning_Time__c');
+                        DateTime lastCleaning = DateTime.valueOf(lastCleaningStr.replace('T', ' '));
+                        flrMap.put('lastCleaning', lastCleaning.getTime());
+                    }
+
+                    bldgMap.put('needsCleaning', needsCleaning);
+                }
+
+                buildingData.add(bldgMap);
+            }
+
+            return JSON.serialize(buildingData);
+            } catch(Exception e) {
+                String message = e.getMessage() + '\n' + e.getLineNumber() + '\n' + e.getStackTraceString();
+                insert new Error__c(
+                    Message__c=message
+                );
+                return message;
+            }
     }
 
     @AuraEnabled

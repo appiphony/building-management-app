@@ -2,6 +2,8 @@ global without sharing class dataMigrationBatchHelper {
 
     global static void transferData() {
         try{
+            //delete existing buildings and sync data
+            delete [SELECT Id FROM wdctest__Building__c];
 
             //get all locations
             Set<String> locationQueryFields = new Set<String>();

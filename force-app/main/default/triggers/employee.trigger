@@ -39,12 +39,23 @@ trigger employee on wdctest__Employee__c (after insert, after update) {
     for(String recordId : Trigger.newMap.keySet()) {
         sObject wdcRecord = (sObject)Type.forName(objType).newInstance();
 
+        Map<String, Object> recordMap = Trigger.newMap.get(recordId).getPopulatedFieldsAsMap();
+
         if(existingRecordByTriggerObjId.containsKey(recordId)) {
-            //if corresponding location exists, update
+            //if corresponding employee exists, update
             wdcRecord = existingRecordByTriggerObjId.get(recordId);
+        } else{
+            String firstName = recordMap.get('wdctest__First_Name__c');
+            String lastName = recordMap.get('wdctest__Last_Name__c');
+
+            //populate required fields
+            wdcRecord.put('Email', firstName.deleteWhitespace() + lastName.deleteWhitespace() + '@example.com');
+            wdcRecord.put('EmployeeStatus', 'Active');
+            wdcRecord.put('StatusAsOf', Date.today());
+            wdcRecord.put('WorkerType', 'Employee');
+            wdcRecord.put('EmployeeNumber', firstName.deleteWhitespace() + lastName.deleteWhitespace() + String.valueOf(Integer.valueOf(Math.random()*100000)));
         }
 
-        Map<String, Object> recordMap = Trigger.newMap.get(recordId).getPopulatedFieldsAsMap();
         Boolean addToList = false;
         for(String field : recordMap.keySet()) {
             if(fieldMap.containsKey(field)) {

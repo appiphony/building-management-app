@@ -45,8 +45,8 @@ trigger employee on wdctest__Employee__c (after insert, after update) {
             //if corresponding employee exists, update
             wdcRecord = existingRecordByTriggerObjId.get(recordId);
         } else{
-            String firstName = recordMap.get('wdctest__First_Name__c');
-            String lastName = recordMap.get('wdctest__Last_Name__c');
+            String firstName = (String)recordMap.get('wdctest__First_Name__c');
+            String lastName = (String)recordMap.get('wdctest__Last_Name__c');
 
             //populate required fields
             wdcRecord.put('Email', firstName.deleteWhitespace() + lastName.deleteWhitespace() + '@example.com');

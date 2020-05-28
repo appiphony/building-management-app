@@ -1,0 +1,83 @@
+:host > .slds-card {
+    max-height: 30rem;
+    min-height: 30rem;
+    overflow: hidden;
+}
+
+.slds-card__header {
+    margin-bottom: 0;
+    padding: var(--lwc-spacingMedium, 1rem);
+}
+
+.slds-card__header .wdc-subtitle {
+    /* font-size: var(--lwc-fontSize2, 12px); /* Internal Variable */
+    font-size: 12px;
+}
+
+.slds-card__body {
+    padding: 0;
+    margin: 0;
+}
+
+.wdc-progress-bar_overdue.slds-progress-bar {
+    background-color: #d4504c;
+}
+
+
+
+/**** Custom Table Styles ****/
+.wdc-location-list_all tbody tr {
+    cursor: pointer;
+}
+
+.wdc-location-list_all tbody tr td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.wdc-location-list_all thead tr th:nth-last-child(2),
+.wdc-location-list_all thead tr th:last-child {
+    width: 1px;
+}
+
+.wdc-icon_drill-in {
+    opacity: 0;
+    transform: translateX(5px);
+    transition: all 100ms ease-out;
+}
+
+.wdc-location-list_all tr:hover .wdc-icon_drill-in,
+.wdc-location-list__item:hover .wdc-icon_drill-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+
+/**** Location List Styles ****/
+.wdc-location-list__item {
+    cursor: pointer;
+}
+
+.wdc-location-list__item:hover {
+    background-color: rgb(243, 242, 242);
+}
+
+
+
+/**** Sublocation Detail Styles ****/
+.wdc-field-data .slds-form-element__label {
+    color: var(--cc-card-title_color);
+    /* font-size: var(--lwc-fontSize4, 14px); /* Internal Variable */
+    font-size: 14px;
+}
+
+.wdc-field-data .slds-form-element__control {
+    color: var(--cc-card-title_color);
+    /* font-size: var(--lwc-fontSize7, 20px); /* Internal Variable */
+    font-size: 20px;
+}
+
+.wdc-helptext {
+    bottom: 4px;
+}

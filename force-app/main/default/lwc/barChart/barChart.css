@@ -1,0 +1,12 @@
+:host {
+    /**** Command Center Custom Variables (Tokens) ****/
+    --cc-brand_color: #00A1E0;
+    --cc-card-title_color: #091a3e; 
+    --cc-card-subtitle_color: #335779;
+}
+
+:host > .slds-card {
+    max-height: 30rem;
+    min-height: 30rem;
+    overflow: hidden;
+}

@@ -1,39 +1,49 @@
 @isTest
 public with sharing class tst_locationCleaning {
-    @isTest static void test_getBarChartData() {
+    @testSetup static void testSetup() {
         Schema.Location parentLocation = new Schema.Location(
-            Name='Tower'
+            Name='Building'
         );
         insert parentLocation;
 
+        Schema.Location childLocation = new Schema.Location(
+            Name='Floor',
+            ParentLocationId=parentLocation.Id
+        );
+        insert childLocation;
+
+        Employee emp = new Employee(
+            FirstName='Test',
+            LastName='Test',
+            EmployeeNumber='test12345',
+            WorkerType='Employee',
+            Email='test@test.com',
+            StatusAsOf=Date.today(),
+            EmployeeStatus='Active',
+            LocationId=childLocation.Id
+        );
+        insert emp;
+    }
+
+    @isTest static void test_getBarChartData() {
         Test.startTest();
-        locationCleaning.getBarChartData(parentLocation.Id);
+        locationCleaning.getBarChartData([SELECT Id FROM Location WHERE Name='Building'].Id);
         Test.stopTest();
 
         System.assert(true);
     }
 
     @isTest static void test_getPieChartData() {
-        Schema.Location parentLocation = new Schema.Location(
-            Name='Tower'
-        );
-        insert parentLocation;
-
         Test.startTest();
-        locationCleaning.getPieChartData(parentLocation.Id);
+        locationCleaning.getPieChartData([SELECT Id FROM Location WHERE Name='Building'].Id);
         Test.stopTest();
 
         System.assert(true);
     }
 
     @isTest static void test_getLocationData() {
-        Schema.Location parentLocation = new Schema.Location(
-            Name='Tower'
-        );
-        insert parentLocation;
-
         Test.startTest();
-        locationCleaning.getLocationData(parentLocation.Id);
+        locationCleaning.getLocationData([SELECT Id FROM Location WHERE Name='Building'].Id);
         Test.stopTest();
 
         System.assert(true);

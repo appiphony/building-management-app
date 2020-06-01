@@ -5,8 +5,8 @@
     <externalId>false</externalId>
     <label>Work.com Employee</label>
     <referenceTo>Employee</referenceTo>
-    <relationshipLabel>Employees</relationshipLabel>
-    <relationshipName>Employees</relationshipName>
+    <relationshipLabel>WDC Employees</relationshipLabel>
+    <relationshipName>WDC_Employees</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

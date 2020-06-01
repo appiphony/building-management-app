@@ -86,10 +86,9 @@ trigger employee on Employee__c (after insert, after update) {
         }
 
         if(wdcRecord.Id == null || addToList) {
-            System.debug('******** ADDED **********');
             recordsToUpsert.add(wdcRecord);   
         }
     }
-    System.debug('***** employee recordsToUpsert: ' + recordsToUpsert);
+
     upsert recordsToUpsert;
 }

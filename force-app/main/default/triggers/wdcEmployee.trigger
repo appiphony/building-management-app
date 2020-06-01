@@ -106,7 +106,5 @@ trigger wdcEmployee on Employee (after insert, after update) {
 
     upsert recordsToUpsert;
     } catch(Exception e) {
-        System.debug('*************** message: ' + e.getMessage());
-        System.debug('*************** stack: ' + e.getStackTraceString());
     }
 }

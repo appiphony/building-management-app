@@ -6,7 +6,7 @@ The goal of this app is to aid in tracking location cleanliness. This app consis
 
 Follow these steps to set up an org with our app
 
-There are ways that you can configure an org with our app. The first is by installing the base unmanaged package and then the extension unmanaged package. The second is by pushing the base-master branch from this repo into an org, followed by pushing the extension-master branch. In both cases, you will need to have an org with work.com enabled and the Command Center managed package installed. Follow the steps below to get up and running.
+There are 2 ways that you can configure an org with our app. The first is by installing the base unmanaged package and then the extension unmanaged package. The second is by pushing the `base-master` branch from this repo into an org, followed by pushing the `extension-master` branch. In both cases, you will need to have an org with work.com enabled and the Command Center managed package installed. Follow the steps below to get up and running.
 
 ### Using Unmanaged Packages
 1) Create new org with work.com enabled and Command Center managed package installed. Refer to this doc for instructions: https://salesforce.quip.com/UiuYAvbyZAKQ

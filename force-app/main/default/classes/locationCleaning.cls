@@ -175,4 +175,19 @@ public with sharing class locationCleaning {
         return JSON.serialize(employeeCounts);
 
     }
+
+    @AuraEnabled
+    public static void resetCleaningData() {
+        //delete all previous cleanings
+        delete [SELECT Id FROM Cleaning__c];
+
+        //create new cleanings for floors
+        List<Cleaning__c> cleanings = new List<Cleaning__c>();
+        for(Floor__c flr : [SELECT Id FROM Floor__c]) {
+            Integer minutes = Integer.valueOf(Math.random() * 60 * -24);
+            DateTime cleanTime = DateTime.now().addMinutes(minutes);
+            cleanings.add(new Cleaning__c(Floor__c = flr.Id, Cleaning_Time__c = cleanTime));
+        }
+        insert cleanings;
+    }
 }

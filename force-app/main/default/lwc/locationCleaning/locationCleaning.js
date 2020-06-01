@@ -69,7 +69,7 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
 
         this.sublocationData = null;
 
-        this.locationId = this.locationData.wdctestext__wdcLocation__c;
+        this.locationId = this.locationData.wdcLocation__c;
     }
 
     showSublocation(event) {
@@ -79,7 +79,7 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
         .then(res => {
             let employeeData = JSON.parse(res);
 
-            let sublocationData = this.locationData.wdctest__Floors__r.records.find(flr => {
+            let sublocationData = this.locationData.Floors__r.records.find(flr => {
                 return flr.Id == sublocationId;
             })
 
@@ -165,8 +165,8 @@ export default class LocationCleaning extends NavigationMixin(LightningElement) 
             type: 'standard__recordRelationshipPage',
             attributes: {
                 recordId: this.sublocationData.Id,
-                objectApiName: 'wdctest__Floor__c',
-                relationshipApiName: 'wdctest__Employees__r',
+                objectApiName: 'Floor__c',
+                relationshipApiName: 'Employees__r',
                 actionName: 'view'
             }
         }

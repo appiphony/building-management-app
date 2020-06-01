@@ -1,10 +1,10 @@
-trigger floor on wdctest__Floor__c (after insert, after update) {
+trigger floor on Floor__c (after insert, after update) {
     Map<String, String> floorIdBylocationId = new Map<String, String>();
     Map<String, Schema.Location> locationByFloorId = new Map<String, Schema.Location>();
 
-    for(wdctest__Floor__c flr : Trigger.new) {
-        if(String.isNotEmpty(flr.wdctestext__wdcLocation__c)) {
-            floorIdBylocationId.put(flr.wdctestext__wdcLocation__c, flr.Id);
+    for(Floor__c flr : Trigger.new) {
+        if(String.isNotEmpty(flr.wdcLocation__c)) {
+            floorIdBylocationId.put(flr.wdcLocation__c, flr.Id);
         }
     }
 

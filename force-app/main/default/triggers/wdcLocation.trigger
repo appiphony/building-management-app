@@ -16,8 +16,8 @@ trigger wdcLocation on Location (after insert, after update) {
     }
 
     //get all buildings that are parents of floors
-    for(wdctest__Building__c bldg : [SELECT Id, wdctestext__wdcLocation__c FROM wdctest__Building__c WHERE wdctestext__wdcLocation__c =: buildingIdByParentLocationId.keySet()]) {
-        buildingIdByParentLocationId.put(bldg.wdctestext__wdcLocation__c, bldg.Id);
+    for(Building__c bldg : [SELECT Id, wdcLocation__c FROM Building__c WHERE wdcLocation__c =: buildingIdByParentLocationId.keySet()]) {
+        buildingIdByParentLocationId.put(bldg.wdcLocation__c, bldg.Id);
     }
 
     //build proper field maps based on config file
@@ -33,14 +33,14 @@ trigger wdcLocation on Location (after insert, after update) {
 
     Set<String> bldgFields = new Set<String>();
     bldgFields.addAll(buildingFieldByLocationField.values());
-    bldgFields.add('wdctestext__wdcLocation__c');
+    bldgFields.add('wdcLocation__c');
 
     List<String> bldgQueryFields = new List<String>();
     bldgQueryFields.addAll(bldgFields);
 
     Set<String> flrFields = new Set<String>();
     flrFields.addAll(floorFieldByLocationField.values());
-    flrFields.add('wdctestext__wdcLocation__c');
+    flrFields.add('wdcLocation__c');
 
     List<String> flrQueryFields = new List<String>();
     flrQueryFields.addAll(flrFields);
@@ -49,30 +49,30 @@ trigger wdcLocation on Location (after insert, after update) {
     Set<String> bldgLocations = buildingLocationsById.keySet();
     Set<String> floorLocations = floorLocationsById.keySet();
 
-    List<wdctest__Building__c> bldgs = Database.query('SELECT ' + String.join(bldgQueryFields, ',') +
-                                                      ' FROM wdctest__Building__c' +
-                                                      ' WHERE wdctestext__wdcLocation__c = :bldgLocations');
+    List<Building__c> bldgs = Database.query('SELECT ' + String.join(bldgQueryFields, ',') +
+                                                      ' FROM Building__c' +
+                                                      ' WHERE wdcLocation__c = :bldgLocations');
 
-    List<wdctest__Floor__c> floors = Database.query('SELECT ' + String.join(flrQueryFields, ',') + 
-                                                    ' FROM wdctest__Floor__c' +
-                                                    ' WHERE wdctestext__wdcLocation__c = :floorLocations');
+    List<Floor__c> floors = Database.query('SELECT ' + String.join(flrQueryFields, ',') + 
+                                                    ' FROM Floor__c' +
+                                                    ' WHERE wdcLocation__c = :floorLocations');
 
     Map<String, sObject> buildingByLocationId = new Map<String, sObject>();
     Map<String, sObject> floorByLocationId = new Map<String, sObject>();
-    for(wdctest__Building__c bldg : bldgs) {
-        if(String.isNotEmpty(bldg.wdctestext__wdcLocation__c)) {
-            buildingByLocationId.put(bldg.wdctestext__wdcLocation__c, bldg);
+    for(Building__c bldg : bldgs) {
+        if(String.isNotEmpty(bldg.wdcLocation__c)) {
+            buildingByLocationId.put(bldg.wdcLocation__c, bldg);
         }
     }
 
-    for(wdctest__Floor__c flr : floors) {
-        if(String.isNotEmpty(flr.wdctestext__wdcLocation__c)) {
-            floorByLocationId.put(flr.wdctestext__wdcLocation__c, flr);
+    for(Floor__c flr : floors) {
+        if(String.isNotEmpty(flr.wdcLocation__c)) {
+            floorByLocationId.put(flr.wdcLocation__c, flr);
         }
     }
 
-    String bldgObjType = 'wdctest__Building__c';
-    String flrObjType = 'wdctest__Floor__c';
+    String bldgObjType = 'Building__c';
+    String flrObjType = 'Floor__c';
 
     List<sObject> bldgsToUpsert = (List<sObject>)Type.forName('List<' + bldgObjType + '>').newInstance();
     List<sObject> flrsToUpsert = (List<sObject>)Type.forName('List<' + flrObjType + '>').newInstance();
@@ -100,8 +100,8 @@ trigger wdcLocation on Location (after insert, after update) {
             }
         }
 
-        if(wdcRecord.get('wdctestext__wdcLocation__c') == null || (String)wdcRecord.get('wdctestext__wdcLocation__c') != locRecord.Id) {
-            wdcRecord.put('wdctestext__wdcLocation__c', locRecord.Id);
+        if(wdcRecord.get('wdcLocation__c') == null || (String)wdcRecord.get('wdcLocation__c') != locRecord.Id) {
+            wdcRecord.put('wdcLocation__c', locRecord.Id);
             addToList = true;
         }
 
@@ -116,7 +116,6 @@ trigger wdcLocation on Location (after insert, after update) {
             }
         }
 
-        System.debug('***** addToList: ' + addToList);
         if(wdcRecord.get('Id') == null || addToList) {
             if(locRecord.ParentLocationId == null) {
                 bldgsToUpsert.add(wdcRecord);
@@ -124,20 +123,19 @@ trigger wdcLocation on Location (after insert, after update) {
                 if(String.isNotEmpty(locRecord.ParentLocationId) && buildingIdByParentLocationId.containsKey(locRecord.ParentLocationId)) {
                     //only upsert if has building 
                     String bldgId = buildingIdByParentLocationId.get(locRecord.ParentLocationId);
-                    wdcRecord.put('wdctest__Building__c', bldgId);
+                    wdcRecord.put('Building__c', bldgId);
 
                     //populate with random cleaning freq if null
-                    if(wdcRecord.get('wdctest__Cleaning_Frequency_Days__c') == null) {
+                    if(wdcRecord.get('Cleaning_Frequency_Days__c') == null) {
                         Integer freqIndex = Integer.valueOf(Math.random()*config.frequencies.size());
-                        wdcRecord.put('wdctest__Cleaning_Frequency_Days__c', config.frequencies.get(freqIndex));
+                        wdcRecord.put('Cleaning_Frequency_Days__c', config.frequencies.get(freqIndex));
                     }
                     flrsToUpsert.add(wdcRecord);
                 }
             }
         }
     }
-    System.debug('***** bldgsToUpsert: ' + bldgsToUpsert);
-    System.debug('***** flrsToUpsert: ' + flrsToUpsert);
+
     upsert bldgsToUpsert;
     upsert flrsToUpsert;
 }

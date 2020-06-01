@@ -1,11 +1,11 @@
 trigger wdcEmployee on Employee (after insert, after update) {
     try{
 
-    Map<String, wdctest__Employee__c> employeeByWdcEmployeeId = new Map<String, wdctest__Employee__c>();
+    Map<String, Employee__c> employeeByWdcEmployeeId = new Map<String, Employee__c>();
     Map<String, String> floorIdByLocationId = new Map<String, String>();
     Set<Id> wdcEmpIds = Trigger.newMap.keySet();
 
-    //get all related wdctest__Employee__c records that exist
+    //get all related Employee__c records that exist
     //go thru all trigger.new and check if record exists, use it else new
     //for status field, need to get value from config map
     //for floor field, need to get floors with locations that are on emps
@@ -13,22 +13,22 @@ trigger wdcEmployee on Employee (after insert, after update) {
     Set<String> empFields = new Set<String>();
     empFields.addAll(config.b2WEmployeeFieldByemployeeField.keySet());
     empFields.add('Id');
-    empFields.add('wdctest__Floor__c');
-    empFields.add('wdctest__Floor__r.wdctestext__wdcLocation__c');
-    empFields.add('wdctestext__wdcEmployee__c');
+    empFields.add('Floor__c');
+    empFields.add('Floor__r.wdcLocation__c');
+    empFields.add('wdcEmployee__c');
 
     List<String> queryFields = new List<String>();
     queryFields.addAll(empFields);
 
     String query = 'SELECT ' + String.join(queryFields, ',') + 
-                   ' FROM wdctest__Employee__c' + 
-                   ' WHERE wdctestext__wdcEmployee__c =: wdcEmpIds';
+                   ' FROM Employee__c' + 
+                   ' WHERE wdcEmployee__c =: wdcEmpIds';
 
-    List<wdctest__Employee__c> emps = Database.query(query);
+    List<Employee__c> emps = Database.query(query);
 
-    for(wdctest__Employee__c emp : emps) {
-        if(String.isNotEmpty(emp.wdctestext__wdcEmployee__c)) {
-            employeeByWdcEmployeeId.put(emp.wdctestext__wdcEmployee__c, emp);
+    for(Employee__c emp : emps) {
+        if(String.isNotEmpty(emp.wdcEmployee__c)) {
+            employeeByWdcEmployeeId.put(emp.wdcEmployee__c, emp);
         }
     }
 
@@ -36,8 +36,8 @@ trigger wdcEmployee on Employee (after insert, after update) {
         floorIdByLocationId.put(emp.LocationId, '');
     }
 
-    for(wdctest__Floor__c flr : [SELECT Id, wdctestext__wdcLocation__c FROM wdctest__Floor__c WHERE wdctestext__wdcLocation__c =: floorIdByLocationId.keySet()]) {
-        floorIdByLocationId.put(flr.wdctestext__wdcLocation__c, flr.Id);
+    for(Floor__c flr : [SELECT Id, wdcLocation__c FROM Floor__c WHERE wdcLocation__c =: floorIdByLocationId.keySet()]) {
+        floorIdByLocationId.put(flr.wdcLocation__c, flr.Id);
     }
 
 
@@ -46,7 +46,7 @@ trigger wdcEmployee on Employee (after insert, after update) {
         fieldMap.put(config.b2WEmployeeFieldByemployeeField.get(key), key);
     }
 
-    String objType = 'wdctest__Employee__c';
+    String objType = 'Employee__c';
 
     List<sObject> recordsToUpsert = (List<sObject>)Type.forName('List<' + objType + '>').newInstance();
     for(String recordId : Trigger.newMap.keySet()) {
@@ -82,29 +82,28 @@ trigger wdcEmployee on Employee (after insert, after update) {
             }
         }
 
-        if(wdcRecord.get('wdctestext__wdcEmployee__c') == null || recordId != recordMap.get('wdctestext__wdcEmployee__c')) {
-            wdcRecord.put('wdctestext__wdcEmployee__c', recordId);
+        if(wdcRecord.get('wdcEmployee__c') == null || recordId != recordMap.get('wdcEmployee__c')) {
+            wdcRecord.put('wdcEmployee__c', recordId);
             addToList = true;
         }
 
         Id locId = Trigger.newMap.get(recordId).LocationId;
         if(String.isNotEmpty(locId)) {
             Id flrId = floorIdByLocationId.get(locId);
-            if(flrId != (Id)wdcRecord.get('wdctest__Floor__c')) {
-                wdcRecord.put('wdctest__Floor__c', flrId);
+            if(flrId != (Id)wdcRecord.get('Floor__c')) {
+                wdcRecord.put('Floor__c', flrId);
                 addToList = true;
             }
         }
 
         if(wdcRecord.Id == null || addToList) {
-            System.debug('******** ADDED **********');
-            if(wdcRecord.get('wdctest__Status__c') == null) {
-                wdcRecord.put('wdctest__Status__c', 'Unknown');
+            if(wdcRecord.get('Status__c') == null) {
+                wdcRecord.put('Status__c', 'Unknown');
             }
             recordsToUpsert.add(wdcRecord);   
         }
     }
-    System.debug('***** wdcEmployee recordsToUpsert: ' + recordsToUpsert);
+
     upsert recordsToUpsert;
     } catch(Exception e) {
         System.debug('*************** message: ' + e.getMessage());

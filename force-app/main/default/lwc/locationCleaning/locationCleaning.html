@@ -71,7 +71,7 @@
                                         <div class="slds-truncate">{locationData.Name}</div>
                                     </td>
                                     <td>
-                                        {locationData.wdctest__Total_Employees__c}
+                                        {locationData.Total_Employees__c}
                                     </td>
                                     <td>
                                         <template if:true={locationData.needsCleaning}>
@@ -142,27 +142,27 @@
 
                         <div class="slds-m-top_large">
                             <div class="slds-p-bottom_x-small slds-text-title">
-                                <template if:true={sublocationData.wdctest__Cleaning_Overdue__c}>
+                                <template if:true={sublocationData.Cleaning_Overdue__c}>
                                     <span>
                                         <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
                                         <strong>Cleaning Overdue</strong>
                                     </span>
                                 </template>
-                                <template if:false={sublocationData.wdctest__Cleaning_Overdue__c}>
+                                <template if:false={sublocationData.Cleaning_Overdue__c}>
                                     <span>
                                         <strong>Next Cleaning in {sublocationData.nextCleaning} Hours</strong>
                                     </span>
                                 </template>
                             </div>
                             <!-- Gauge -->
-                            <template if:true={sublocationData.wdctest__Cleaning_Overdue__c}>
+                            <template if:true={sublocationData.Cleaning_Overdue__c}>
                                 <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
                                     <span class="slds-progress-bar__value" style="width:0">
                                       <span class="slds-assistive-text">Cleaning Overdue</span>
                                     </span>
                                 </div>
                             </template>
-                            <template if:false={sublocationData.wdctest__Cleaning_Overdue__c}>
+                            <template if:false={sublocationData.Cleaning_Overdue__c}>
                                 <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
                                     <span class="slds-progress-bar__value" style={sublocationData.barWidth}>
                                       <span class="slds-assistive-text">Next Cleaning in {sublocationData.nextCleaning} Hours</span>
@@ -254,14 +254,14 @@
                     <div class="wdc-location-list">
                         <template if:true={locationData}>
                             <!-- Empty State -->
-                            <template if:false={locationData.wdctest__Floors__r.records.length}>
+                            <template if:false={locationData.Floors__r.records.length}>
                                 <div class="slds-p-around_large slds-text-align_center slds-text-color_weak">
                                     <em>No sublocations to show for this location</em>
                                 </div>
                             </template>
                             <!-- /Empty State -->
-                            <template if:true={locationData.wdctest__Floors__r.records.length}>
-                                <template for:each={locationData.wdctest__Floors__r.records} for:item="floorData">
+                            <template if:true={locationData.Floors__r.records.length}>
+                                <template for:each={locationData.Floors__r.records} for:item="floorData">
                                     <div key={floorData.Id} 
                                         class="wdc-location-list__item slds-grid slds-wrap slds-grid_vertical-align-center slds-p-around_medium slds-border_top"
                                         data-id={floorData.Id}
@@ -273,13 +273,13 @@
                                             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_direct-x-small">
                                                 <div class="slds-col">
                                                     <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
-                                                        <template if:true={floorData.wdctest__Cleaning_Overdue__c}>
+                                                        <template if:true={floorData.Cleaning_Overdue__c}>
                                                             <span>
                                                                 <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
                                                                 <strong>Cleaning Overdue</strong>
                                                             </span>
                                                         </template>
-                                                        <template if:false={floorData.wdctest__Cleaning_Overdue__c}>
+                                                        <template if:false={floorData.Cleaning_Overdue__c}>
                                                             <span>
                                                                 <strong>Next Cleaning in {floorData.nextCleaning} Hours</strong>
                                                             </span>
@@ -295,14 +295,14 @@
                                                         </span>
                                                     </div>
                                                     <!-- Gauge -->
-                                                    <template if:true={floorData.wdctest__Cleaning_Overdue__c}>
+                                                    <template if:true={floorData.Cleaning_Overdue__c}>
                                                         <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
                                                             <span class="slds-progress-bar__value" style="width:0">
                                                             <span class="slds-assistive-text">Cleaning Overdue</span>
                                                             </span>
                                                         </div>
                                                     </template>
-                                                    <template if:false={floorData.wdctest__Cleaning_Overdue__c}>
+                                                    <template if:false={floorData.Cleaning_Overdue__c}>
                                                         <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
                                                             <span class="slds-progress-bar__value" style={floorData.barWidth}>
                                                             <span class="slds-assistive-text">Next Cleaning in {floorData.nextCleaning} Hours</span>

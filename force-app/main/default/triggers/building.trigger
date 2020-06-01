@@ -1,10 +1,10 @@
-trigger building on wdctest__Building__c (after insert, after update) {
+trigger building on Building__c (after insert, after update) {
     Map<String, String> buildingIdBylocationId = new Map<String, String>();
     Map<String, Schema.Location> locationByBuildingId = new Map<String, Schema.Location>();
 
-    for(wdctest__Building__c bldg : Trigger.new) {
-        if(String.isNotEmpty(bldg.wdctestext__wdcLocation__c)) {
-            buildingIdBylocationId.put(bldg.wdctestext__wdcLocation__c, bldg.Id);
+    for(Building__c bldg : Trigger.new) {
+        if(String.isNotEmpty(bldg.wdcLocation__c)) {
+            buildingIdBylocationId.put(bldg.wdcLocation__c, bldg.Id);
         }
     }
 

@@ -10,8 +10,8 @@ public with sharing class config {
     //
     public static Map<String, String> locationFieldByBuildingField = new Map<String, String> {
         'Name' => 'Name',
-        'wdctest__Location__Latitude__s' => 'Latitude',
-        'wdctest__Location__Longitude__s' => 'Longitude'
+        'Location__Latitude__s' => 'Latitude',
+        'Location__Longitude__s' => 'Longitude'
     };
 
     public static Map<String, String> locationFieldByFloorField = new Map<String, String> {
@@ -19,9 +19,9 @@ public with sharing class config {
     };
 
     public static Map<String, String> b2WEmployeeFieldByemployeeField = new Map<String, String> {
-        'wdctest__First_Name__c' => 'FirstName',
-        'wdctest__Last_Name__c' => 'LastName',
-        'wdctest__status__c' => 'CurrentWellnessStatus'
+        'First_Name__c' => 'FirstName',
+        'Last_Name__c' => 'LastName',
+        'Status__c' => 'CurrentWellnessStatus'
     };
 
     public static List<Decimal> frequencies = new List<Decimal>{0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2};

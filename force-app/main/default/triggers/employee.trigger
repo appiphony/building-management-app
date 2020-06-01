@@ -1,15 +1,15 @@
-trigger employee on wdctest__Employee__c (after insert, after update) {
+trigger employee on Employee__c (after insert, after update) {
     Map<String, String> employeeIdByb2wEmployeeId = new Map<String, String>();
     Map<String, String> locationIdByFloorId = new Map<String, String>();
-    for(wdctest__Employee__c emp : Trigger.new) {
-        if(String.isNotEmpty(emp.wdctestext__wdcEmployee__c)) {
-            employeeIdByb2wEmployeeId.put(emp.wdctestext__wdcEmployee__c, emp.Id);
-            locationIdByFloorId.put(emp.wdctest__Floor__c, '');
+    for(Employee__c emp : Trigger.new) {
+        if(String.isNotEmpty(emp.wdcEmployee__c)) {
+            employeeIdByb2wEmployeeId.put(emp.wdcEmployee__c, emp.Id);
+            locationIdByFloorId.put(emp.Floor__c, '');
         }
     }
 
-    for(wdctest__FLoor__c flr : [SELECT Id, wdctestext__wdcLocation__c FROM wdctest__Floor__c WHERE Id =: locationIdByFloorId.keySet()]) {
-        locationIdByFloorId.put(flr.Id, flr.wdctestext__wdcLocation__c);
+    for(FLoor__c flr : [SELECT Id, wdcLocation__c FROM Floor__c WHERE Id =: locationIdByFloorId.keySet()]) {
+        locationIdByFloorId.put(flr.Id, flr.wdcLocation__c);
     }
 
     Set<String> b2wEmpFields = new Set<String>();
@@ -45,8 +45,8 @@ trigger employee on wdctest__Employee__c (after insert, after update) {
             //if corresponding employee exists, update
             wdcRecord = existingRecordByTriggerObjId.get(recordId);
         } else{
-            String firstName = (String)recordMap.get('wdctest__First_Name__c');
-            String lastName = (String)recordMap.get('wdctest__Last_Name__c');
+            String firstName = (String)recordMap.get('First_Name__c');
+            String lastName = (String)recordMap.get('Last_Name__c');
 
             //populate required fields
             wdcRecord.put('Email', firstName.deleteWhitespace() + lastName.deleteWhitespace() + '@example.com');
@@ -61,7 +61,7 @@ trigger employee on wdctest__Employee__c (after insert, after update) {
             if(fieldMap.containsKey(field)) {
                 String wdcField = fieldMap.get(field);
                 if(fieldMap.containsKey(field) && wdcField != 'Id') {
-                    if(field == 'wdctest__Status__c') {
+                    if(field == 'Status__c') {
                         String value = config.back2workStatusByWdcTestStatus.get((String)recordMap.get(field));
                         if(wdcRecord.get(wdcField) != value) {
                             wdcRecord.put(wdcField, value);
@@ -75,7 +75,7 @@ trigger employee on wdctest__Employee__c (after insert, after update) {
             }
         }
 
-        Id flrId = Trigger.newMap.get(recordId).wdctest__Floor__c;
+        Id flrId = Trigger.newMap.get(recordId).Floor__c;
 
         if(String.isNotEmpty(flrId)) {
             Id locId = locationIdByFloorId.get(flrId);

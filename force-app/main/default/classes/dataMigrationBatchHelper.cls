@@ -117,8 +117,6 @@ global without sharing class dataMigrationBatchHelper {
             //build map of locationId => floorId
             Map<String, String> floorIdByLocationId = new Map<String, String>();
             for(sObject flr : newFloors) {
-                System.debug('########### locId: ' + (String)flr.get('wdctestext__wdcLocation__c'));
-                System.debug('########### frId: ' + flr.Id);
                 floorIdByLocationId.put((String)flr.get('wdctestext__wdcLocation__c'), flr.Id);
             }
 
@@ -139,40 +137,6 @@ global without sharing class dataMigrationBatchHelper {
                 }
             }
             insert newEmployees;
-
-            //insert new locations and employees for sf tower
-            Schema.Location sfTower = [SELECT Id FROM Location WHERE Name='Tower'];
-            List<Schema.Location> sfTowerFloors = new List<Schema.Location>();
-            for(Integer i = 0; i < config.floorsToInsert.size(); i++) {
-                Schema.Location flr = new Schema.Location(
-                    Name='Salesforce Tower-Floor ' + config.floorsToInsert.get(i),
-                    ParentLocationId=sfTower.Id
-                );
-                sfTowerFloors.add(flr);
-            }
-            insert sfTowerFloors;
-
-            createCleanings();
-
-            List<Employee> sfTowerEmployees = new List<Employee>();
-            for(Integer i = 0; i < config.employeeFirstNames.size(); i++) {
-                String firstName = config.employeeFirstNames.get(i);
-                String lastName = config.employeeLastNames.get(i);
-                Integer flrIndex = Integer.valueOf(Math.random()*sfTowerFloors.size());
-
-                Employee emp = new Employee(
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Email = firstName.deleteWhitespace() + lastName.deleteWhitespace() + '@example.com',
-                    LocationId = sfTowerFloors.get(flrIndex).Id,
-                    EmployeeStatus = 'Active',
-                    StatusAsOf = Date.today(),
-                    WorkerType = 'Employee',
-                    EmployeeNumber = firstName.deleteWhitespace() + lastName.deleteWhitespace() + String.valueOf(Integer.valueOf(Math.random()*100000))
-                );
-                sfTowerEmployees.add(emp);
-            }
-            insert sfTowerEmployees;
         } catch(Exception e) {
             insert new Error__c(
                 Message__c=e.getMessage() + '\n' + e.getLineNumber() + '\n' + e.getStackTraceString()

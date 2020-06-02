@@ -13,15 +13,15 @@ There are 2 ways that you can configure an org with our app. The first is by ins
 2) Install our unmanaged Building Maintenance Base package (https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5w000005qoKM)
 3) Run script to generate work.com data from WorkDotCom-Partners github (https://github.com/forcedotcom/WorkDotCom-Partners)
 4) Install our unmanaged Building Maintenance Extension package (https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4S000000gquw)
-5) Checkout extension-master brnach and run sfdx force:apex:execute -f ./dx-utils/apex-scripts/convertData.apex to create data for our objs from existing work.com data
+5) Checkout `extension-master` branch and run `sfdx force:apex:execute -f ./dx-utils/apex-scripts/convertData.apex` to create data for our objs from existing work.com data
 6) Clone Command Center page and drag Location Cleaning, Employee Risk by Location, and Clean Status by Floor Components onto the page and save
 7) (Optional) Drag Reset Cleaning Data componenent onto page to reset cleaning records for floors
 
 ### Using Scratch Org
 1) Create new org with work.com enabled and Command Center managed package installed. Refer to this doc for instructions: https://salesforce.quip.com/UiuYAvbyZAKQ
-2) Checkout base-master branch and push to your scratch org
+2) Checkout `base-master` branch and push to your scratch org
 3) Run script to generate work.com data from WorkDotCom-Partners github (https://github.com/forcedotcom/WorkDotCom-Partners)
-4) Checkout extension-master and push to your scratch org
-5) Run sfdx force:apex:execute -f ./dx-utils/apex-scripts/convertData.apex to create data for our objs from existing work.com data
+4) Checkout `extension-master` and push to your scratch org
+5) Run `sfdx force:apex:execute -f ./dx-utils/apex-scripts/convertData.apex` to create data for our objs from existing work.com data
 6) Clone Command Center page and drag Location Cleaning, Employee Risk by Location, and Clean Status by Floor Components onto the page and save
 7) (Optional) Drag Reset Cleaning Data componenent onto page to reset cleaning records for floors

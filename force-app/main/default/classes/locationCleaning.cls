@@ -96,7 +96,7 @@ public with sharing class locationCleaning {
                                    '(' + 
                                        'SELECT Id, Name, Cleaning_Frequency_Days__c, Cleaning_Overdue__c, ' + 
                                            'Days_Since_Last_Cleaning__c, Last_Cleaning_Time__c, Total_Employees__c ' + 
-                                       'FROM Floors__r ORDER BY Level__c ASC, Name ASC' + 
+                                       'FROM Floors__r ORDER BY Name ASC' + 
                                    ')' + 
                                    'FROM Building__c';
 

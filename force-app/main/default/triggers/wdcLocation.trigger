@@ -18,8 +18,9 @@ trigger wdcLocation on Location (after insert, after update) {
         }
 
         //get all buildings that are parents of floors
-        for(Building__c bldg : [SELECT Id, wdcLocation__c FROM Building__c WHERE wdcLocation__c =: buildingIdByParentLocationId.keySet()]) {
-            buildingIdByParentLocationId.put(bldg.wdcLocation__c, bldg.Id);
+        Set<String> parentLocationIds = buildingIdByParentLocationId.keySet();
+        for(sObject bldg : Database.query('SELECT Id, wdcLocation__c FROM Building__c WHERE wdcLocation__c =: parentLocationIds')) {
+            buildingIdByParentLocationId.put((String)bldg.get('wdcLocation__c'), (String)bldg.Id);
         }
 
         //build proper field maps based on config file
@@ -51,25 +52,27 @@ trigger wdcLocation on Location (after insert, after update) {
         Set<String> bldgLocations = buildingLocationsById.keySet();
         Set<String> floorLocations = floorLocationsById.keySet();
 
-        List<Building__c> bldgs = Database.query('SELECT ' + String.join(bldgQueryFields, ',') +
+        List<sObject> bldgs = Database.query('SELECT ' + String.join(bldgQueryFields, ',') +
                                                           ' FROM Building__c' +
                                                           ' WHERE wdcLocation__c = :bldgLocations');
 
-        List<Floor__c> floors = Database.query('SELECT ' + String.join(flrQueryFields, ',') + 
+        List<sObject> floors = Database.query('SELECT ' + String.join(flrQueryFields, ',') + 
                                                         ' FROM Floor__c' +
                                                         ' WHERE wdcLocation__c = :floorLocations');
 
         Map<String, sObject> buildingByLocationId = new Map<String, sObject>();
         Map<String, sObject> floorByLocationId = new Map<String, sObject>();
-        for(Building__c bldg : bldgs) {
-            if(String.isNotEmpty(bldg.wdcLocation__c)) {
-                buildingByLocationId.put(bldg.wdcLocation__c, bldg);
+        for(sObject bldg : bldgs) {
+            String wdcLoction = (String)bldg.get('wdcLocation__c');
+            if(String.isNotEmpty(wdcLoction)) {
+                buildingByLocationId.put(wdcLoction, bldg);
             }
         }
 
-        for(Floor__c flr : floors) {
-            if(String.isNotEmpty(flr.wdcLocation__c)) {
-                floorByLocationId.put(flr.wdcLocation__c, flr);
+        for(sObject flr : floors) {
+            String wdcLoction = (String)flr.get('wdcLocation__c');
+            if(String.isNotEmpty(wdcLoction)) {
+                floorByLocationId.put(wdcLoction, flr);
             }
         }
 

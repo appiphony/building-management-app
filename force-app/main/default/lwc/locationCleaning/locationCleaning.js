@@ -5,8 +5,7 @@ import { subscribe, unsubscribe, MessageContext, APPLICATION_SCOPE } from 'light
 import getLocationData from '@salesforce/apex/locationCleaning.getLocationData';
 import getListViews from '@salesforce/apex/locationCleaning.getListViews';
 import getEmployeeCounts from '@salesforce/apex/locationCleaning.getEmployeeCounts';
- 
-//will be part of core when GA, replace back2work with lightning and remove __c
+
 import COMMAND_CENTER from "@salesforce/messageChannel/lightning__CommandCenterMessageChannel";
 
 export default class LocationCleaning extends NavigationMixin(LightningElement) {

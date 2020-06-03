@@ -21,15 +21,22 @@ public with sharing class locationCleaning {
             List<Integer> atRiskEmployees = new List<Integer>();
             List<Integer> safeEmployees = new List<Integer>();
 
-            for(Building__c bldg : Database.query(buildingQuery)) {
-                buildingLabels.add(bldg.Name);
+            for(sObject bldg : Database.query(buildingQuery)) {
+                Map<String, Object> bldgMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(bldg));
+
+                buildingLabels.add((String)bldgMap.get('Name'));
+
                 Integer atRisk = 0;
                 Integer safe = 0;
-                for(Floor__c flr : bldg.Floors__r) {
-                    if(flr.Cleaning_Overdue__c) {
-                        atRisk += Integer.valueOf(flr.Total_Employees__c);
+                Map<String, Object> floorsMap = (Map<String, Object>)bldgMap.get('Floors__r');
+                List<Object> floors = (List<Object>)floorsMap.get('records');
+
+                for(Object flr : floors) {
+                    Map<String, Object> floorMap = (Map<String, Object>)flr;
+                    if((Boolean)floorMap.get('Cleaning_Overdue__c')) {
+                        atRisk += Integer.valueOf(floorMap.get('Total_Employees__c'));
                     } else{
-                        safe += Integer.valueOf(flr.Total_Employees__c);
+                        safe += Integer.valueOf(floorMap.get('Total_Employees__c'));
                     }
                 }
                 atRiskEmployees.add(atRisk);
@@ -181,10 +188,12 @@ public with sharing class locationCleaning {
 
         Map<String, Object> employeeCounts = new Map<String, Object>();
 
-        for(AggregateResult res : [SELECT count(Id) employees, Status__c status
-                                   FROM Employee__c 
-                                   WHERE Floor__c =: floorId
-                                   GROUP BY Status__c]) {
+        String queryString = 'SELECT count(Id) employees, Status__c status' + 
+                             ' FROM Employee__c ' + 
+                             ' WHERE Floor__c =: floorId' + 
+                             ' GROUP BY Status__c';
+
+        for(AggregateResult res : Database.query(queryString)) {
             employeeCounts.put((String)res.get('status'), res.get('employees'));
         }
 
@@ -195,14 +204,18 @@ public with sharing class locationCleaning {
     @AuraEnabled
     public static void resetCleaningData() {
         //delete all previous cleanings
-        delete [SELECT Id FROM Cleaning__c];
+        delete Database.query('SELECT Id FROM Cleaning__c');
 
         //create new cleanings for floors
-        List<Cleaning__c> cleanings = new List<Cleaning__c>();
-        for(Floor__c flr : [SELECT Id FROM Floor__c]) {
+        List<sObject> cleanings = (List<sObject>)Type.forName('List<Cleaning__c>').newInstance();
+        for(sObject flr : Database.query('SELECT Id FROM Floor__c')) {
             Integer minutes = Integer.valueOf(Math.random() * 60 * -24);
             DateTime cleanTime = DateTime.now().addMinutes(minutes);
-            cleanings.add(new Cleaning__c(Floor__c = flr.Id, Cleaning_Time__c = cleanTime));
+
+            sObject cleaning = (sObject)Type.forName('Cleaning__c').newInstance();
+            cleaning.put('Floor__c', (String)flr.get('Id'));
+            cleaning.put('Cleaning_Time__c', cleanTime);
+            cleanings.add(cleaning);
         }
         insert cleanings;
     }

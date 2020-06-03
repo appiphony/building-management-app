@@ -26,24 +26,30 @@ public with sharing class tst_locationCleaning {
     }
 
     @isTest static void test_getBarChartData() {
+        String name = 'Building';
+        sObject bldg = Database.query('SELECT Id FROM Location WHERE Name=:name');
         Test.startTest();
-        locationCleaning.getBarChartData([SELECT Id FROM Location WHERE Name='Building'].Id);
+        locationCleaning.getBarChartData((String)bldg.get('Id'));
         Test.stopTest();
 
         System.assert(true);
     }
 
     @isTest static void test_getPieChartData() {
+        String name = 'Building';
+        sObject bldg = Database.query('SELECT Id FROM Location WHERE Name=:name');
         Test.startTest();
-        locationCleaning.getPieChartData([SELECT Id FROM Location WHERE Name='Building'].Id);
+        locationCleaning.getPieChartData((String)bldg.get('Id'));
         Test.stopTest();
 
         System.assert(true);
     }
 
     @isTest static void test_getLocationData() {
+        String name = 'Building';
+        sObject bldg = Database.query('SELECT Id FROM Location WHERE Name=:name');
         Test.startTest();
-        locationCleaning.getLocationData([SELECT Id FROM Location WHERE Name='Building'].Id);
+        locationCleaning.getLocationData((String)bldg.get('Id'));
         Test.stopTest();
 
         System.assert(true);

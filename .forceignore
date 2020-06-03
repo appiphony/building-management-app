@@ -21,7 +21,10 @@ force-app/main/default/profiles/*
 force-app/main/default/layouts/*
 
 force-app/main/default/objects/*
+
 !force-app/main/default/objects/Building__c
+
 !force-app/main/default/objects/Floor__c
+
 !force-app/main/default/objects/Employee__c
 !force-app/main/default/objects/Error__c

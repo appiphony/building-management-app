@@ -1,6 +1,6 @@
 trigger wdcEmployee on Employee (after insert, after update) {
     try{
-        Map<String, Employee__c> employeeByWdcEmployeeId = new Map<String, Employee__c>();
+        Map<String, sObject> employeeByWdcEmployeeId = (Map<String, sObject>) Type.forName('Map<String, Employee__c>').newInstance();
         Map<String, String> floorIdByLocationId = new Map<String, String>();
         Set<Id> wdcEmpIds = Trigger.newMap.keySet();
 
@@ -23,11 +23,12 @@ trigger wdcEmployee on Employee (after insert, after update) {
                        ' FROM Employee__c' + 
                        ' WHERE wdcEmployee__c =: wdcEmpIds';
 
-        List<Employee__c> emps = Database.query(query);
+        List<sObject> emps = Database.query(query);
 
-        for(Employee__c emp : emps) {
-            if(String.isNotEmpty(emp.wdcEmployee__c)) {
-                employeeByWdcEmployeeId.put(emp.wdcEmployee__c, emp);
+        for(sObject emp : emps) {
+            String wdcEmployee = (String)emp.get('wdcEmployee__c');
+            if(String.isNotEmpty(wdcEmployee)) {
+                employeeByWdcEmployeeId.put(wdcEmployee, emp);
             }
         }
 
@@ -35,8 +36,9 @@ trigger wdcEmployee on Employee (after insert, after update) {
             floorIdByLocationId.put(emp.LocationId, '');
         }
 
-        for(Floor__c flr : [SELECT Id, wdcLocation__c FROM Floor__c WHERE wdcLocation__c =: floorIdByLocationId.keySet()]) {
-            floorIdByLocationId.put(flr.wdcLocation__c, flr.Id);
+        Set<String> locationIds = floorIdByLocationId.keySet();
+        for(sObject flr : Database.query('SELECT Id, wdcLocation__c FROM Floor__c WHERE wdcLocation__c =: locationIds')) {
+            floorIdByLocationId.put((String)flr.get('wdcLocation__c'), (String)flr.get('Id'));
         }
 
 
@@ -45,11 +47,9 @@ trigger wdcEmployee on Employee (after insert, after update) {
             fieldMap.put(config.b2WEmployeeFieldByemployeeField.get(key), key);
         }
 
-        String objType = 'Employee__c';
-
-        List<sObject> recordsToUpsert = (List<sObject>)Type.forName('List<' + objType + '>').newInstance();
+        List<sObject> recordsToUpsert = (List<sObject>)Type.forName('List<Employee__c>').newInstance();
         for(String recordId : Trigger.newMap.keySet()) {
-            sObject wdcRecord = (sObject)Type.forName(objType).newInstance();
+            sObject wdcRecord = (sObject)Type.forName('Employee__c').newInstance();
 
             if(employeeByWdcEmployeeId.containsKey(recordId)) {
                 //if corresponding location exists, update

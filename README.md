@@ -6,13 +6,13 @@ The goal of this app is to aid in tracking location cleanliness. This app consis
 
 Follow these steps to set up an org with our app
 
-There are 2 ways that you can configure an org with our app. The first is by installing the base unmanaged package and then the extension unmanaged package. The second is by pushing the `base-master` branch from this repo into an org, followed by pushing the `extension-master` branch. In both cases, you will need to have an org with work.com enabled and the Command Center managed package installed. Follow the steps below to get up and running.
+There are 2 ways that you can configure an org with our app. The first is by installing the base managed package and then the extension unmanaged package. The second is by pushing the `base-master` branch from this repo into an org, followed by pushing the `extension-master` branch. In both cases, you will need to have an org with work.com enabled and the Command Center managed package installed. Follow the steps below to get up and running.
 
 ### Using Unmanaged Packages
 1) Create new org with work.com enabled and Command Center managed package installed. Refer to this doc for instructions: https://salesforce.quip.com/UiuYAvbyZAKQ
 2) Run script to generate work.com data from WorkDotCom-Partners github (https://github.com/forcedotcom/WorkDotCom-Partners)
-3) Install our unmanaged Building Maintenance Base package (https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5w000005qoKM)
-4) Install our unmanaged Building Maintenance Extension package (https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4S000000grmh)
+3) Install our managed Building Maintenance Base package (https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5w000004Lpu3)
+4) Install our unmanaged Building Maintenance Extension package (https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4S000000hQe7)
 5) Checkout `extension-master` branch and run `sfdx force:apex:execute -f ./dx-utils/apex-scripts/convertData.apex` to create data for our objs from existing work.com data
 6) Clone Command Center page and drag Location Cleaning, Employee Risk by Location, and Clean Status by Floor Components onto the page and save
 7) (Optional) Drag Reset Cleaning Data componenent onto page to reset cleaning records for floors

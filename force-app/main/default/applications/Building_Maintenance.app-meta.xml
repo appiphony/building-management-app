@@ -17,5 +17,5 @@
     <tabs>Employee__c</tabs>
     <tabs>Cleaning__c</tabs>
     <uiType>Lightning</uiType>
-    <utilityBar>Building_Manaintenance_UtilityBar</utilityBar>
+    <utilityBar>Building_Management_UtilityBar</utilityBar>
 </CustomApplication>

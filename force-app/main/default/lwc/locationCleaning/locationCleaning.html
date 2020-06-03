@@ -1,0 +1,334 @@
+<template>
+    <article class="slds-card slds-is-relative slds-grid slds-grid_vertical">
+        <!-- Loading State -->
+        <template if:true={loading}>
+            <lightning-spinner size="small"></lightning-spinner>
+        </template>
+        <!-- /Loading State -->
+        <!-- Header -->
+        <div class="slds-card__header slds-border_bottom slds-col slds-no-flex">
+            <div class="slds-grid slds-grid_vertical-align-center">
+                <div class="slds-col">
+                    <h2 class="slds-card__header-title">
+                        Location Cleanliness
+                    </h2>
+                    <template if:true={locationName}>
+                        <h4 class="wdc-subtitle slds-text-color_weak slds-m-top_xxx-small">
+                            {locationName}
+                        </h4>
+                    </template>
+                </div>
+                <div class="slds-col slds-grow-none">
+                    <lightning-button-menu variant="border-filled" icon-size="medium" menu-alignment="right" onselect={nav}>
+                        <template if:true={sublocationData}>
+                            <lightning-menu-item value={sublocationData.Id} label="View Sublocation" prefix-icon-name="utility:open"></lightning-menu-item>
+                        </template>
+                        <template if:true={locationData}>
+                            <lightning-menu-item value={locationData.Id} label="View Location" prefix-icon-name="utility:open"></lightning-menu-item>
+                        </template>
+                        <lightning-menu-item value="Building__c|All" label="View All Locations" prefix-icon-name="utility:list"></lightning-menu-item>
+                    </lightning-button-menu>
+                </div>
+            </div>
+        </div>
+        <!-- /Header -->
+        <!-- Body -->
+        <div class="slds-card__body slds-card__body_inner slds-scrollable_y slds-col">
+            <!-- No Location Selected -->
+            <template if:false={locationId}>
+                <!-- Empty State -->
+                <template if:false={loading}>
+                    <template if:false={locationDatas.length}>
+                        <div class="slds-p-around_large slds-text-align_center slds-text-color_weak">
+                            <em>No locations to show</em>
+                        </div>
+                    </template>
+                </template>
+                <!-- /Empty State -->
+                <template if:true={locationDatas.length}>
+                    <table class="wdc-location-list_all slds-table slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-line-height_reset slds-border_bottom">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Location Name">Location Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Employees">Employees</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Cleaning Status">Cleaning Status</div>
+                                </th>
+                                <th scope="col">
+                                    <!-- Action Icon -->
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={locationDatas} for:item="locationData">
+                                <tr key={locationData.Id} class="slds-hint-parent"
+                                    data-id={locationData.Id} onclick={showLocation}>
+                                    <td>
+                                        <div class="slds-truncate">{locationData.Name}</div>
+                                    </td>
+                                    <td>
+                                        {locationData.Total_Employees__c}
+                                    </td>
+                                    <td>
+                                        <template if:true={locationData.needsCleaning}>
+                                            <span class="slds-text-color_destructive">
+                                                <strong>Overdue</strong>
+                                            </span>
+                                        </template>
+                                        <template if:false={locationData.needsCleaning}>
+                                            <span class="slds-text-color_success">Up to Date</span>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </template>
+            </template>
+            <!-- /No Location Selected -->
+
+            <template if:true={locationId}>
+                <!-- Sublocation Detail -->
+                <template if:true={sublocationData}>
+                    <!-- Nav -->
+                    <div class="slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-button-icon variant="border-filled" size="small" icon-name="utility:chevronleft" onclick={back}></lightning-button-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <span class="slds-text-title">{locationData.Name} > <strong>{sublocationData.Name}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Nav -->
+                    <!-- Field Data -->
+                    <div class="slds-p-horizontal_medium slds-m-top_medium slds-m-bottom_x-large">
+                        <div class="slds-grid slds-grid_align-space slds-grid_vertical-align-end slds-gutters_direct">
+                            <div class="slds-col">
+                                <div class="wdc-field-data slds-form-element">
+                                    <div class="slds-form-element__label">
+                                        Last Cleaned
+                                    </div>
+                                    <div class="slds-form-element__control">
+                                        <lightning-formatted-date-time value={sublocationData.lastCleaning}
+                                                                        year="2-digit"
+                                                                        month="numeric"
+                                                                        day="numeric"
+                                                                        hour="2-digit"
+                                                                        minute="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col">
+                                <div class="wdc-field-data slds-form-element">
+                                    <div class="slds-form-element__label">
+                                        Frequency
+                                    </div>
+                                    <div class="slds-form-element__control">
+                                        {sublocationData.freqHrs} Hours
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-m-top_large">
+                            <div class="slds-p-bottom_x-small slds-text-title">
+                                <template if:true={sublocationData.Cleaning_Overdue__c}>
+                                    <span>
+                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
+                                        <strong>Cleaning Overdue</strong>
+                                    </span>
+                                </template>
+                                <template if:false={sublocationData.Cleaning_Overdue__c}>
+                                    <span>
+                                        <strong>Next Cleaning in {sublocationData.nextCleaning} Hours</strong>
+                                    </span>
+                                </template>
+                            </div>
+                            <!-- Gauge -->
+                            <template if:true={sublocationData.Cleaning_Overdue__c}>
+                                <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                    <span class="slds-progress-bar__value" style="width:0">
+                                      <span class="slds-assistive-text">Cleaning Overdue</span>
+                                    </span>
+                                </div>
+                            </template>
+                            <template if:false={sublocationData.Cleaning_Overdue__c}>
+                                <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                    <span class="slds-progress-bar__value" style={sublocationData.barWidth}>
+                                      <span class="slds-assistive-text">Next Cleaning in {sublocationData.nextCleaning} Hours</span>
+                                    </span>
+                                </div>
+                            </template>
+                            <!-- /Gauge -->
+
+                        </div>
+                    </div>
+                    <!-- /Field Data -->
+                    <!-- Employee List -->
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-horizontal_medium">
+                        <div class="slds-col">
+                            <h4 class="slds-text-title_caps">
+                                Employees by Status
+                                <lightning-helptext content="People who are Available to Work are ready to return to their assigned location workplace. People who are Remote Work Only or Unavailable are not ready to return to their assigned location workplace." class="wdc-helptext slds-is-relative slds-m-left_xx-small"></lightning-helptext>
+                            </h4>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button-menu variant="border-filled" icon-size="small" menu-alignment="right" onselect={navToRelated}>
+                                <lightning-menu-item label="View All Employees" prefix-icon-name="utility:list"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </div>
+                    </div>
+                    <ul class="wdc-employee-list slds-m-top_x-small">
+                        <li>
+                            <div class="slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                                <template if:true={sublocationData.Available}>
+                                    Available to Work ({sublocationData.Available})
+                                </template>
+                                <template if:false={sublocationData.Available}>
+                                    Available to Work (0)
+                                </template>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                                <template if:true={sublocationData.Remote}>
+                                    Remote Work Only ({sublocationData.Remote})
+                                </template>
+                                <template if:false={sublocationData.Remote}>
+                                    Remote Work Only (0)
+                                </template>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                                <template if:true={sublocationData.Unavailable}>
+                                    Unavailable ({sublocationData.Unavailable})
+                                </template>
+                                <template if:false={sublocationData.Unavailable}>
+                                    Unavailable (0)
+                                </template>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="slds-p-vertical_small slds-p-horizontal_medium slds-border_top">
+                                <template if:true={sublocationData.Unknown}>
+                                    Unknown ({sublocationData.Unknown})
+                                </template>
+                                <template if:false={sublocationData.Unknown}>
+                                    Unknown (0)
+                                </template>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- /Employee List -->
+                </template>
+                <!-- /Sublocation Detail -->
+
+                <!-- Location View -->
+                <template if:false={sublocationData}>
+                    <!-- Nav -->
+                    <template if:false={globalLocation}>
+                        <div class="slds-p-top_small slds-p-horizontal_small slds-m-bottom_small">
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure">
+                                    <lightning-button-icon variant="border-filled" size="small" icon-name="utility:chevronleft" data-backto="All" onclick={back}></lightning-button-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <span class="slds-text-title"><strong>{locationData.Name}</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <!-- /Nav -->
+                    <!-- New Location list -->
+                    <div class="wdc-location-list">
+                        <template if:true={locationData}>
+                            <!-- Empty State -->
+                            <template if:false={locationData.Floors__r.records.length}>
+                                <div class="slds-p-around_large slds-text-align_center slds-text-color_weak">
+                                    <em>No sublocations to show for this location</em>
+                                </div>
+                            </template>
+                            <!-- /Empty State -->
+                            <template if:true={locationData.Floors__r.records.length}>
+                                <template for:each={locationData.Floors__r.records} for:item="floorData">
+                                    <div key={floorData.Id} 
+                                        class="wdc-location-list__item slds-grid slds-wrap slds-grid_vertical-align-center slds-p-around_medium slds-border_top"
+                                        data-id={floorData.Id}
+                                        onclick={showSublocation}>
+                                        <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                                            <div class="slds-truncate slds-text-title_caps" title={floorData.Name}>{floorData.Name}</div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <div class="slds-grid slds-grid_vertical-align-center slds-gutters_direct-x-small">
+                                                <div class="slds-col">
+                                                    <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-text-title">
+                                                        <template if:true={floorData.Cleaning_Overdue__c}>
+                                                            <span>
+                                                                <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small" variant="error"></lightning-icon>
+                                                                <strong>Cleaning Overdue</strong>
+                                                            </span>
+                                                        </template>
+                                                        <template if:false={floorData.Cleaning_Overdue__c}>
+                                                            <span>
+                                                                <strong>Next Cleaning in {floorData.nextCleaning} Hours</strong>
+                                                            </span>
+                                                        </template>
+                                                        <span>Last:&nbsp;
+                                                            <lightning-formatted-date-time value={floorData.lastCleaning}
+                                                                                            year="2-digit"
+                                                                                            month="numeric"
+                                                                                            day="numeric"
+                                                                                            hour="2-digit"
+                                                                                            minute="2-digit">
+                                                            </lightning-formatted-date-time>
+                                                        </span>
+                                                    </div>
+                                                    <!-- Gauge -->
+                                                    <template if:true={floorData.Cleaning_Overdue__c}>
+                                                        <div class="wdc-progress-bar_overdue slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                                            <span class="slds-progress-bar__value" style="width:0">
+                                                            <span class="slds-assistive-text">Cleaning Overdue</span>
+                                                            </span>
+                                                        </div>
+                                                    </template>
+                                                    <template if:false={floorData.Cleaning_Overdue__c}>
+                                                        <div class="slds-progress-bar slds-progress-bar_large slds-progress-bar_circular" role="progressbar">
+                                                            <span class="slds-progress-bar__value" style={floorData.barWidth}>
+                                                            <span class="slds-assistive-text">Next Cleaning in {floorData.nextCleaning} Hours</span>
+                                                            </span>
+                                                        </div>
+                                                    </template>
+                                                    <!-- /Gauge -->
+                                                    <div class="slds-p-top_x-small slds-text-title">
+                                                        <span>Frequency: {floorData.freqHrs} Hours</span>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-grow-none">
+                                                    <lightning-icon icon-name="utility:chevronright" size="x-small" class="wdc-icon_drill-in"></lightning-icon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                        </template>
+                    </div>
+                    <!-- /New Location list -->
+                </template>
+                <!-- /Location View -->
+            </template>
+        </div>
+        <!-- / Body -->
+    </article>
+</template>

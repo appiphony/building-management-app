@@ -1,0 +1,8 @@
+<template>
+    <lightning-card title="Cleaning Data">
+        <template if:true={loading}>
+            <lightning-spinner size="small"></lightning-spinner>
+        </template>
+        <lightning-button label="Reset" slot="actions" onclick={resetCleaningData}></lightning-button>
+    </lightning-card>
+</template>

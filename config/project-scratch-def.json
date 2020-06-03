@@ -1,5 +1,17 @@
 {
-  "orgName": "jakeleiby company",
-  "edition": "Developer",
-  "features": []
+  "orgName": "WORKDOTCOM",
+  "edition": "Enterprise",
+  "language": "en_US",
+  "settings": {
+      "lightningExperienceSettings": {
+          "enableS1DesktopEnabled": true
+      },
+      "surveySettings": {
+          "enableSurvey": true
+      },
+      "communitiesSettings": {
+          "enableNetworksEnabled": true
+      }
+  },
+  "features": ["PlatformEncryption", "Communities", "WorkplaceCommandCenterUser", "ForceComPlatform"]
 }

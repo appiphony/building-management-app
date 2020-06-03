@@ -13,7 +13,7 @@ There are 2 ways that you can configure an org with our app. The first is by ins
 2) Run script to generate work.com data from WorkDotCom-Partners github (https://github.com/forcedotcom/WorkDotCom-Partners)
 3) Install our managed Building Maintenance Base package (https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5w000004Lpu3)
 4) Install our unmanaged Building Maintenance Extension package (https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4S000000hQe7)
-5) Checkout `master` branch and run `sfdx force:apex:execute -f ./dx-utils/apex-scripts/convertData.apex` to create data for our objs from existing work.com data
+5) Checkout `extension-master` branch and run `sfdx force:apex:execute -f ./dx-utils/apex-scripts/convertData.apex` to create data for our objs from existing work.com data
 6) Clone Command Center page and drag Location Cleaning, Employee Risk by Location, and Clean Status by Floor Components onto the page and save
 7) (Optional) Drag Reset Cleaning Data componenent onto page to reset cleaning records for floors
 

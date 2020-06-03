@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#215CA0</headerColor>
+        <logo>wdc_buildingmaintenanceicon</logo>
+        <logoVersion>1</logoVersion>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <description>View when and how often work locations are being cleaned</description>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <label>Building Maintenance</label>
+    <navType>Standard</navType>
+    <tabs>Building__c</tabs>
+    <tabs>Floor__c</tabs>
+    <tabs>Employee__c</tabs>
+    <tabs>Cleaning__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Building_Manaintenance_UtilityBar</utilityBar>
+</CustomApplication>

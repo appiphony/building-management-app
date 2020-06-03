@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Last_Cleaning_Time__c</fullName>
+    <externalId>false</externalId>
+    <label>Last Cleaning Time</label>
+    <summarizedField>Cleaning__c.Cleaning_Time__c</summarizedField>
+    <summaryForeignKey>Cleaning__c.Floor__c</summaryForeignKey>
+    <summaryOperation>max</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>
